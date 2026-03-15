@@ -1,0 +1,1617 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ObraDigitalMX — Cotizador Profesional de Obra</title>
+  <meta name="description"
+    content="Calcula el presupuesto de tu obra de construcción con precios actualizados de Tlaxcala y Puebla 2026. Materiales, mano de obra y desglose completo.">
+  <style>
+    /* ═══════════════════════════════════════════════ */
+    /* ═══ VARIABLES DEL SISTEMA DE DISEÑO ═══ */
+    /* ═══════════════════════════════════════════════ */
+    :root {
+      --primary: #1B2B4B;
+      --accent: #F97316;
+      --accent-hover: #EA6A0E;
+      --success: #10B981;
+      --background: #F8FAFC;
+      --white: #FFFFFF;
+      --text-primary: #1B2B4B;
+      --text-secondary: #6B7280;
+      --border: #E5E7EB;
+      --error: #EF4444;
+      --shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
+    }
+
+    /* ═══════════════════════════════════════════════ */
+    /* ═══ RESET Y BASE ═══ */
+    /* ═══════════════════════════════════════════════ */
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+      font-size: 16px;
+      color: var(--text-primary);
+      background: var(--background);
+      line-height: 1.5;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ═══════════════════════════════════════════════ */
+    /* ═══ HEADER ═══ */
+    /* ═══════════════════════════════════════════════ */
+    .app-header {
+      background: var(--primary);
+      color: var(--white);
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .app-header .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+    }
+
+    .app-header .logo .hex {
+      color: var(--accent);
+      font-size: 26px;
+      line-height: 1;
+    }
+
+    .app-header .subtitle {
+      font-size: 13px;
+      opacity: 0.7;
+      font-weight: 400;
+    }
+
+    /* ═══════════════════════════════════════════════ */
+    /* ═══ CONTENIDO PRINCIPAL ═══ */
+    /* ═══════════════════════════════════════════════ */
+    .app-main {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      padding: 32px 16px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 680px;
+    }
+
+    /* ═══════════════════════════════════════════════ */
+    /* ═══ PANTALLAS ═══ */
+    /* ═══════════════════════════════════════════════ */
+    .screen {
+      display: none;
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    .screen.active {
+      display: block;
+      animation: fadeInUp 0.3s ease forwards;
+    }
+
+    @keyframes fadeInUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* ═══════════════════════════════════════════════ */
+    /* ═══ TARJETAS ═══ */
+    /* ═══════════════════════════════════════════════ */
+    .card {
+      background: var(--white);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+
+    /* ═══════════════════════════════════════════════ */
+    /* ═══ TIPOGRAFÍA ═══ */
+    /* ═══════════════════════════════════════════════ */
+    h1 {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 8px;
+    }
+
+    h2 {
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--primary);
+      margin-bottom: 16px;
+    }
+
+    h3 {
+      font-size: 17px;
+      font-weight: 600;
+      color: var(--primary);
+      margin-bottom: 12px;
+    }
+
+    .text-secondary {
+      color: var(--text-secondary);
+      font-size: 14px;
+    }
+
+    .text-small {
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+
+    /* ═══════════════════════════════════════════════ */
+    /* ═══ FORMULARIO ═══ */
+    /* ═══════════════════════════════════════════════ */
+    .form-group {
+      margin-bottom: 24px;
+    }
+
+    .form-group label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 8px;
+      font-size: 15px;
+    }
+
+    .form-group input[type="number"] {
+      width: 100%;
+      height: 48px;
+      border-radius: 8px;
+      border: 1.5px solid var(--border);
+      padding: 0 16px;
+      font-size: 16px;
+      font-family: inherit;
+      color: var(--text-primary);
+      background: var(--white);
+      transition: border-color 0.2s;
+      outline: none;
+    }
+
+    .form-group input[type="number"]:focus {
+      border-color: var(--accent);
+    }
+
+    .form-group input[type="number"].input-error {
+      border-color: var(--error);
+    }
+
+    .error-msg {
+      color: var(--error);
+      font-size: 13px;
+      margin-top: 6px;
+      display: none;
+    }
+
+    .error-msg.visible {
+      display: block;
+    }
+
+    /* ═══ Pill Buttons (Recámaras / Baños) ═══ */
+    .pill-group {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .pill-btn {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      background: var(--white);
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--text-primary);
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .pill-btn:hover {
+      border-color: var(--accent);
+      background: #FFF7ED;
+    }
+
+    .pill-btn.selected {
+      background: var(--accent);
+      color: var(--white);
+      border-color: var(--accent);
+      box-shadow: 0 2px 8px rgba(249, 115, 22, 0.3);
+    }
+
+    /* ═══ Card Selector (Acabado / Cimentación) ═══ */
+    .card-selector {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .select-card {
+      flex: 1;
+      min-width: 140px;
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      cursor: pointer;
+      text-align: center;
+      background: var(--white);
+      transition: all 0.2s;
+      position: relative;
+    }
+
+    .select-card:hover {
+      border-color: var(--accent);
+      background: #FFF7ED;
+    }
+
+    .select-card.selected {
+      border-color: var(--accent);
+      background: #FFF7ED;
+      box-shadow: 0 0 0 1px var(--accent);
+    }
+
+    .select-card .card-title {
+      font-weight: 600;
+      font-size: 15px;
+      margin-bottom: 4px;
+    }
+
+    .select-card .card-sub {
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+
+    .select-card .badge {
+      position: absolute;
+      top: -10px;
+      right: -6px;
+      background: var(--accent);
+      color: white;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 20px;
+      letter-spacing: 0.5px;
+    }
+
+    .select-card .checkmark {
+      display: none;
+      color: var(--accent);
+      font-size: 20px;
+      margin-top: 8px;
+    }
+
+    .select-card.selected .checkmark {
+      display: block;
+    }
+
+    /* ═══ Toggle Switch ═══ */
+    .toggle-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 0;
+    }
+
+    .toggle-switch {
+      width: 52px;
+      height: 28px;
+      background: var(--border);
+      border-radius: 14px;
+      cursor: pointer;
+      position: relative;
+      transition: background 0.2s;
+      flex-shrink: 0;
+    }
+
+    .toggle-switch.on {
+      background: var(--accent);
+    }
+
+    .toggle-switch .toggle-knob {
+      width: 22px;
+      height: 22px;
+      background: white;
+      border-radius: 50%;
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      transition: transform 0.2s;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+    }
+
+    .toggle-switch.on .toggle-knob {
+      transform: translateX(24px);
+    }
+
+    .bardeo-sub {
+      display: none;
+      margin-top: 16px;
+    }
+
+    .bardeo-sub.visible {
+      display: block;
+    }
+
+    /* ═══ Submit Button ═══ */
+    .btn-submit {
+      width: 100%;
+      height: 56px;
+      background: var(--accent);
+      color: var(--white);
+      border: none;
+      border-radius: 12px;
+      font-size: 17px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      letter-spacing: 0.3px;
+    }
+
+    .btn-submit:hover {
+      background: var(--accent-hover);
+    }
+
+    .btn-submit:active {
+      transform: scale(0.98);
+    }
+
+    .btn-submit .spinner {
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      display: none;
+    }
+
+    .btn-submit.loading .spinner {
+      display: inline-block;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* ═══════════════════════════════════════════════ */
+    /* ═══ PANTALLA DE CARGA ═══ */
+    /* ═══════════════════════════════════════════════ */
+    .loading-screen {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 400px;
+      gap: 24px;
+      text-align: center;
+    }
+
+    .loading-bars {
+      display: flex;
+      gap: 6px;
+      align-items: flex-end;
+      height: 48px;
+    }
+
+    .loading-bars span {
+      width: 8px;
+      background: var(--accent);
+      border-radius: 4px;
+      animation: barPulse 1s ease-in-out infinite;
+    }
+
+    .loading-bars span:nth-child(1) {
+      height: 20px;
+      animation-delay: 0s;
+    }
+
+    .loading-bars span:nth-child(2) {
+      height: 32px;
+      animation-delay: 0.15s;
+    }
+
+    .loading-bars span:nth-child(3) {
+      height: 44px;
+      animation-delay: 0.3s;
+    }
+
+    .loading-bars span:nth-child(4) {
+      height: 32px;
+      animation-delay: 0.45s;
+    }
+
+    .loading-bars span:nth-child(5) {
+      height: 20px;
+      animation-delay: 0.6s;
+    }
+
+    @keyframes barPulse {
+
+      0%,
+      100% {
+        opacity: 0.3;
+        transform: scaleY(0.6);
+      }
+
+      50% {
+        opacity: 1;
+        transform: scaleY(1);
+      }
+    }
+
+    .loading-text {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--primary);
+    }
+
+    .loading-sub {
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+
+    /* ═══════════════════════════════════════════════ */
+    /* ═══ RESULTADOS ═══ */
+    /* ═══════════════════════════════════════════════ */
+    .result-hero {
+      border-left: 5px solid var(--accent);
+      padding: 24px;
+      background: linear-gradient(135deg, #FFF7ED 0%, var(--white) 100%);
+    }
+
+    .result-hero .label {
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin-bottom: 4px;
+    }
+
+    .result-hero .total {
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--primary);
+      line-height: 1.2;
+    }
+
+    .result-hero .meta {
+      margin-top: 12px;
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.8;
+    }
+
+    /* ═══ Tablas ═══ */
+    .table-wrapper {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      margin: 0 -24px;
+      padding: 0 24px;
+    }
+
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+
+    .data-table thead th {
+      background: var(--primary);
+      color: var(--white);
+      padding: 12px 10px;
+      text-align: left;
+      font-weight: 600;
+      font-size: 13px;
+      white-space: nowrap;
+    }
+
+    .data-table thead th:first-child {
+      border-radius: 8px 0 0 0;
+    }
+
+    .data-table thead th:last-child {
+      border-radius: 0 8px 0 0;
+    }
+
+    .data-table tbody td {
+      padding: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .data-table tbody tr:nth-child(even) {
+      background: #F8FAFC;
+    }
+
+    .data-table tbody tr.row-total {
+      font-weight: 700;
+      background: #F0F4F8;
+    }
+
+    .data-table tbody tr.row-total td {
+      border-top: 2px solid var(--primary);
+    }
+
+    .text-right {
+      text-align: right;
+    }
+
+    /* ═══ Resumen Financiero ═══ */
+    .finance-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      font-size: 15px;
+    }
+
+    .finance-row.divider {
+      border-top: 1px dashed var(--border);
+      margin-top: 4px;
+      padding-top: 14px;
+    }
+
+    .finance-row.grand-total {
+      border-top: 3px solid var(--primary);
+      margin-top: 8px;
+      padding-top: 16px;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    /* ═══ Action Buttons ═══ */
+    .action-buttons {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .btn-action {
+      flex: 1;
+      min-width: 200px;
+      height: 48px;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s;
+      border: 2px solid transparent;
+    }
+
+    .btn-print {
+      background: var(--white);
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .btn-print:hover {
+      background: #FFF7ED;
+    }
+
+    .btn-new {
+      background: #F0F4F8;
+      color: var(--text-secondary);
+      border-color: var(--border);
+    }
+
+    .btn-new:hover {
+      background: var(--border);
+    }
+
+    /* ═══ Disclaimer ═══ */
+    .disclaimer {
+      font-size: 12px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      padding: 16px 0;
+      text-align: center;
+    }
+
+    /* ═══════════════════════════════════════════════ */
+    /* ═══ FOOTER ═══ */
+    /* ═══════════════════════════════════════════════ */
+    .app-footer {
+      background: var(--primary);
+      color: var(--white);
+      text-align: center;
+      padding: 16px;
+      font-size: 13px;
+      opacity: 0.85;
+    }
+
+    /* ═══════════════════════════════════════════════ */
+    /* ═══ RESPONSIVE MÓVIL ═══ */
+    /* ═══════════════════════════════════════════════ */
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 24px;
+      }
+
+      h2 {
+        font-size: 18px;
+      }
+
+      .card {
+        padding: 16px;
+      }
+
+      .app-main {
+        padding: 16px 12px;
+      }
+
+      .select-card {
+        min-width: 100px;
+        padding: 12px;
+      }
+
+      .result-hero .total {
+        font-size: 26px;
+      }
+
+      .action-buttons {
+        flex-direction: column;
+      }
+
+      .btn-action {
+        min-width: unset;
+      }
+
+      .table-wrapper {
+        margin: 0 -16px;
+        padding: 0 16px;
+      }
+
+      .app-header {
+        padding: 0 16px;
+      }
+
+      .app-header .subtitle {
+        display: none;
+      }
+
+      .finance-row.grand-total {
+        font-size: 18px;
+      }
+    }
+
+    /* ═══════════════════════════════════════════════ */
+    /* ═══ ESTILOS DE IMPRESIÓN ═══ */
+    /* ═══════════════════════════════════════════════ */
+    @media print {
+
+      .app-header,
+      .app-footer,
+      #screen1,
+      #screen2,
+      .action-buttons,
+      .btn-submit {
+        display: none !important;
+      }
+
+      body {
+        background: white;
+        color: black;
+        font-size: 12px;
+      }
+
+      .card {
+        box-shadow: none;
+        border: 1px solid #ccc;
+        break-inside: avoid;
+      }
+
+      .result-hero {
+        background: white !important;
+      }
+
+      .result-hero .total {
+        color: black;
+      }
+
+      .data-table thead th {
+        background: #333;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      .screen {
+        display: block !important;
+        opacity: 1 !important;
+        transform: none !important;
+      }
+
+      .print-header {
+        display: block !important;
+        text-align: center;
+        font-size: 18px;
+        font-weight: 700;
+        padding: 16px 0;
+        border-bottom: 2px solid #333;
+        margin-bottom: 16px;
+      }
+
+      .print-footer {
+        display: block !important;
+        text-align: center;
+        font-size: 10px;
+        color: #666;
+        border-top: 1px solid #ccc;
+        padding-top: 12px;
+        margin-top: 24px;
+      }
+
+      .disclaimer {
+        font-size: 10px;
+      }
+    }
+
+    .print-header,
+    .print-footer {
+      display: none;
+    }
+
+    /* ═══ Badge fuente de precios CMIC ═══ */
+    .source-badge {
+      display: inline-block;
+      margin-top: 10px;
+      padding: 4px 12px;
+      background: #F0F4F8;
+      border-radius: 20px;
+      font-size: 11px;
+      color: var(--text-secondary);
+      letter-spacing: 0.2px;
+    }
+
+    /* ═══ Overlay de carga inicial del JSON ═══ */
+    .init-loader {
+      position: fixed;
+      inset: 0;
+      background: var(--background);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 200;
+      gap: 16px;
+      transition: opacity 0.3s;
+    }
+    .init-loader.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+    .init-loader .init-spinner {
+      width: 36px;
+      height: 36px;
+      border: 4px solid var(--border);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+    }
+    .init-loader .init-text {
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ═══ LOADER INICIAL (mientras carga precios-cmic.json) ═══ -->
+  <div class="init-loader" id="init-loader">
+    <div class="init-spinner"></div>
+    <div class="init-text">Cargando precios actualizados...</div>
+  </div>
+
+  <!-- ═══ HEADER ═══ -->
+  <header class="app-header">
+    <div class="logo">
+      <span class="hex">⬡</span>
+      <span>ObraDigitalMX</span>
+    </div>
+    <span class="subtitle">Cotizador Profesional</span>
+  </header>
+
+  <!-- ═══ CONTENIDO PRINCIPAL ═══ -->
+  <main class="app-main">
+    <div class="container">
+
+      <!-- ═══════════════════════════════════════════════ -->
+      <!-- ═══ PANTALLA 1: FORMULARIO ═══ -->
+      <!-- ═══════════════════════════════════════════════ -->
+      <div id="screen1" class="screen active">
+
+        <div style="text-align:center;margin-bottom:32px;">
+          <h1>Cotiza tu obra en minutos</h1>
+          <p class="text-secondary">Presupuesto detallado con precios reales de Tlaxcala/Puebla 2026</p>
+        </div>
+
+        <form id="budgetForm" novalidate>
+
+          <!-- Superficie -->
+          <div class="card">
+            <div class="form-group">
+              <label for="superficie">📐 Superficie a construir (m²)</label>
+              <input type="number" id="superficie" min="20" max="500" placeholder="Ej. 80" inputmode="numeric">
+              <div class="error-msg" id="err-superficie">Ingresa entre 20 y 500 m²</div>
+            </div>
+          </div>
+
+          <!-- Recámaras -->
+          <div class="card">
+            <div class="form-group">
+              <label>🛏️ Número de recámaras</label>
+              <div class="pill-group" id="recamaras-group">
+                <button type="button" class="pill-btn" data-value="1">1</button>
+                <button type="button" class="pill-btn" data-value="2">2</button>
+                <button type="button" class="pill-btn" data-value="3">3</button>
+                <button type="button" class="pill-btn" data-value="4">4</button>
+                <button type="button" class="pill-btn" data-value="5">5</button>
+              </div>
+              <div class="error-msg" id="err-recamaras">Selecciona el número de recámaras</div>
+            </div>
+          </div>
+
+          <!-- Baños -->
+          <div class="card">
+            <div class="form-group">
+              <label>🚿 Número de baños</label>
+              <div class="pill-group" id="banos-group">
+                <button type="button" class="pill-btn" data-value="1">1</button>
+                <button type="button" class="pill-btn" data-value="2">2</button>
+                <button type="button" class="pill-btn" data-value="3">3</button>
+              </div>
+              <div class="error-msg" id="err-banos">Selecciona el número de baños</div>
+            </div>
+          </div>
+
+          <!-- Tipo de acabado -->
+          <div class="card">
+            <div class="form-group">
+              <label>🎨 Tipo de acabado</label>
+              <div class="card-selector" id="acabado-group">
+                <div class="select-card" data-value="economico">
+                  <div class="card-title">Económico</div>
+                  <div class="card-sub">Materiales básicos</div>
+                  <div class="checkmark">✓</div>
+                </div>
+                <div class="select-card" data-value="estandar">
+                  <span class="badge">MÁS POPULAR</span>
+                  <div class="card-title">Estándar</div>
+                  <div class="card-sub">Calidad media</div>
+                  <div class="checkmark">✓</div>
+                </div>
+                <div class="select-card" data-value="premium">
+                  <div class="card-title">Premium</div>
+                  <div class="card-sub">Alta calidad</div>
+                  <div class="checkmark">✓</div>
+                </div>
+              </div>
+              <div class="error-msg" id="err-acabado">Selecciona el tipo de acabado</div>
+            </div>
+          </div>
+
+          <!-- Tipo de cimentación -->
+          <div class="card">
+            <div class="form-group">
+              <label>🏗️ Tipo de cimentación</label>
+              <div class="card-selector" id="cimentacion-group">
+                <div class="select-card" data-value="zapatas">
+                  <div class="card-title">Zapatas aisladas</div>
+                  <div class="card-sub">Terreno firme</div>
+                  <div class="checkmark">✓</div>
+                </div>
+                <div class="select-card" data-value="losa">
+                  <div class="card-title">Losa de cimentación</div>
+                  <div class="card-sub">Mayor seguridad</div>
+                  <div class="checkmark">✓</div>
+                </div>
+              </div>
+              <div class="error-msg" id="err-cimentacion">Selecciona el tipo de cimentación</div>
+            </div>
+          </div>
+
+          <!-- Bardeo perimetral -->
+          <div class="card">
+            <div class="form-group">
+              <label>🧱 Bardeo perimetral</label>
+              <div class="toggle-row">
+                <span>¿Incluir bardeo perimetral?</span>
+                <div class="toggle-switch" id="bardeo-toggle">
+                  <div class="toggle-knob"></div>
+                </div>
+              </div>
+              <div class="bardeo-sub" id="bardeo-sub">
+                <label for="bardeo-metros" style="font-weight:500;font-size:14px;">Metros lineales de bardeo</label>
+                <input type="number" id="bardeo-metros" min="4" max="200" placeholder="Ej. 40" inputmode="numeric"
+                  style="margin-top:8px;">
+                <div class="error-msg" id="err-bardeo">Ingresa entre 4 y 200 metros lineales</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Botón submit -->
+          <button type="submit" class="btn-submit" id="btn-calcular">
+            <span class="spinner"></span>
+            <span class="btn-text">CALCULAR PRESUPUESTO →</span>
+          </button>
+
+        </form>
+      </div>
+
+      <!-- ═══════════════════════════════════════════════ -->
+      <!-- ═══ PANTALLA 2: PROCESANDO ═══ -->
+      <!-- ═══════════════════════════════════════════════ -->
+      <div id="screen2" class="screen">
+        <div class="loading-screen">
+          <div class="loading-bars">
+            <span></span><span></span><span></span><span></span><span></span>
+          </div>
+          <div class="loading-text">Calculando presupuesto...</div>
+          <div class="loading-sub">Analizando materiales, mano de obra y costos regionales</div>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════════════════════ -->
+      <!-- ═══ PANTALLA 3: RESULTADOS ═══ -->
+      <!-- ═══════════════════════════════════════════════ -->
+      <div id="screen3" class="screen">
+
+        <!-- Encabezado solo para impresión -->
+        <div class="print-header">ObraDigitalMX — Cotización de Obra</div>
+
+        <!-- Sección A: Resumen Ejecutivo -->
+        <div class="card result-hero" id="result-hero">
+          <!-- Se llena dinámicamente -->
+        </div>
+
+        <!-- Sección B: Desglose de Materiales -->
+        <div class="card">
+          <h2>📦 Desglose de Materiales</h2>
+          <div class="table-wrapper">
+            <table class="data-table" id="table-materiales">
+              <!-- Se llena dinámicamente -->
+            </table>
+          </div>
+        </div>
+
+        <!-- Sección C: Mano de Obra -->
+        <div class="card">
+          <h2>👷 Mano de Obra</h2>
+          <div class="table-wrapper">
+            <table class="data-table" id="table-labor">
+              <!-- Se llena dinámicamente -->
+            </table>
+          </div>
+        </div>
+
+        <!-- Sección D: Resumen Financiero -->
+        <div class="card">
+          <h2>💰 Resumen Financiero</h2>
+          <div id="finance-summary">
+            <!-- Se llena dinámicamente -->
+          </div>
+        </div>
+
+        <!-- Sección E: Botones de Acción -->
+        <div class="action-buttons" style="margin-bottom:24px;">
+          <button class="btn-action btn-print" onclick="window.print()">🖨️ Imprimir / Guardar PDF</button>
+          <button class="btn-action btn-new" id="btn-nueva">↩ Nueva Cotización</button>
+        </div>
+
+        <!-- Sección F: Disclaimer -->
+        <div class="disclaimer">
+          Este presupuesto es una estimación referencial basada en precios de materiales y mano de obra vigentes en
+          Tlaxcala/Puebla en 2026. Los precios reales pueden variar según proveedor y condiciones del terreno.
+          ObraDigitalMX no se hace responsable de variaciones en el costo final de obra.
+        </div>
+
+        <!-- Pie solo para impresión -->
+        <div class="print-footer">
+          Generado por ObraDigitalMX · <span id="print-date"></span><br>
+          Este presupuesto es una estimación referencial. Los precios reales pueden variar.
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ═══ FOOTER ═══ -->
+  <footer class="app-footer">
+    Precios basados en Catálogo CMIC Puebla 2024 con ajuste inflación 2025 · Salarios IMSS 2026
+  </footer>
+
+  <script>
+    /* ═══════════════════════════════════════════════ */
+    /* ═══ NOTA SOBRE CARGA DE PRECIOS ═══ */
+    /* ═══════════════════════════════════════════════ */
+    /*
+     * IMPORTANTE: La carga dinámica de precios desde precios-cmic.json
+     * usa fetch(), que SOLO funciona cuando la app se sirve desde un
+     * servidor web (GitHub Pages, http-server, etc.).
+     *
+     * Si abres index.html directamente con file:// en el navegador,
+     * fetch() fallará silenciosamente y la app usará los precios
+     * hardcoded como respaldo. La app NUNCA se rompe.
+     */
+
+    /* ═══════════════════════════════════════════════ */
+    /* ═══ PRECIOS HARDCODED (RESPALDO) ═══ */
+    /* ═══════════════════════════════════════════════ */
+    /* Estos valores se usan si precios-cmic.json no se puede cargar */
+    let MATERIALES = [
+      { nombre: 'Block 15×20×40cm', unidad: 'pzas', precio: 8.50, cantidadPorM2: 12.5, marca: '' },
+      { nombre: 'Cemento 50kg', unidad: 'bolsas', precio: 210.00, cantidadPorM2: 0.35, marca: '' },
+      { nombre: 'Arena', unidad: 'm³', precio: 280.00, cantidadPorM2: 0.04, marca: '' },
+      { nombre: 'Grava', unidad: 'm³', precio: 320.00, cantidadPorM2: 0.02, marca: '' },
+      { nombre: 'Varilla 3/8" × 12m', unidad: 'pzas', precio: 185.00, cantidadPorM2: 0.8, marca: '' },
+      { nombre: 'Varilla 1/2" × 12m', unidad: 'pzas', precio: 320.00, cantidadPorM2: 0.3, marca: '' },
+      { nombre: 'Alambre recocido', unidad: 'kg', precio: 32.00, cantidadPorM2: 0.5, marca: '' }
+    ];
+
+    let BASE_MATERIAL_PER_M2 = 457.35;
+    let BASE_LABOR_PER_M2 = 293.33;
+
+    const ACABADO_MULT = { economico: 1.0, estandar: 1.35, premium: 1.80 };
+    const ACABADO_LABEL = { economico: 'Económico', estandar: 'Estándar', premium: 'Premium' };
+
+    const CIMENTACION = {
+      zapatas: { material: 85, labor: 55 },
+      losa: { material: 140, labor: 90 }
+    };
+    const CIMENTACION_LABEL = { zapatas: 'Zapatas aisladas', losa: 'Losa de cimentación' };
+
+    const BARDEO_POR_ML = 500;
+    const COSTO_EXTRA_RECAMARA = 4500;
+    const COSTO_EXTRA_BANO = 6800;
+    const PORCENTAJE_IMPREVISTOS = 0.10;
+    const M2_POR_SEMANA = 12;
+
+    let LABOR_DETAIL = [
+      { concepto: 'Oficial albañil', salarioDia: 450, m2PorDia: 2.5, costoPorM2: 180 },
+      { concepto: 'Peón', salarioDia: 280, m2PorDia: 4, costoPorM2: 70 },
+      { concepto: 'Maestro de obra', salarioDia: 650, m2PorDia: 15, costoPorM2: 43.33 }
+    ];
+
+    /* Bandera: ¿se cargaron precios del JSON? */
+    let preciosCMICCargados = false;
+    let metadataCMIC = null;
+
+    /* ═══════════════════════════════════════════════ */
+    /* ═══ CARGA DINÁMICA DE PRECIOS CMIC ═══ */
+    /* ═══════════════════════════════════════════════ */
+    /* Mapeo de IDs del JSON a los 7 materiales del cotizador */
+    const JSON_TO_MAT_MAP = [
+      { jsonId: 'block_15_20_40',     idx: 0 },
+      { jsonId: 'cemento_cpc30r_50kg', idx: 1 },
+      { jsonId: 'arena_fina',          idx: 2 },
+      { jsonId: 'grava_3_4',           idx: 3 },
+      { jsonId: 'varilla_3_8',         idx: 4 },
+      { jsonId: 'varilla_1_2',         idx: 5 },
+      { jsonId: 'alambre_recocido',    idx: 6 }
+    ];
+
+    /* Mapeo de IDs del JSON a los 3 trabajadores del cotizador */
+    const JSON_TO_LABOR_MAP = [
+      { jsonId: 'oficial_albanileria', idx: 0, m2PorDia: 2.5 },
+      { jsonId: 'peon_construccion',   idx: 1, m2PorDia: 4 },
+      { jsonId: 'maestro_obra',        idx: 2, m2PorDia: 15 }
+    ];
+
+    /* Buscar un material por ID en todas las categorías del JSON */
+    const findMaterialById = (materialesJSON, id) => {
+      const categorias = Object.values(materialesJSON);
+      for (const cat of categorias) {
+        const found = cat.find(m => m.id === id);
+        if (found) return found;
+      }
+      return null;
+    };
+
+    /* Buscar un trabajador por ID en el array del JSON */
+    const findWorkerById = (trabajadores, id) => {
+      return trabajadores.find(w => w.id === id) || null;
+    };
+
+    /* Aplicar precios del JSON a las variables del cotizador */
+    const applyJSONPrices = (data) => {
+      try {
+        /* Actualizar materiales */
+        JSON_TO_MAT_MAP.forEach(mapping => {
+          const jsonMat = findMaterialById(data.materiales, mapping.jsonId);
+          if (jsonMat && jsonMat.precio_actualizado) {
+            MATERIALES[mapping.idx].precio = jsonMat.precio_actualizado;
+            MATERIALES[mapping.idx].marca = (jsonMat.marcas && jsonMat.marcas.length > 0)
+              ? jsonMat.marcas[0] : '';
+          }
+        });
+
+        /* Recalcular BASE_MATERIAL_PER_M2 con precios actualizados */
+        BASE_MATERIAL_PER_M2 = MATERIALES.reduce(
+          (sum, mat) => sum + (mat.precio * mat.cantidadPorM2), 0
+        );
+
+        /* Actualizar mano de obra */
+        JSON_TO_LABOR_MAP.forEach(mapping => {
+          const jsonWorker = findWorkerById(data.mano_de_obra.trabajadores, mapping.jsonId);
+          if (jsonWorker && jsonWorker.costo_real_dia) {
+            const costoPorM2 = jsonWorker.costo_real_dia / mapping.m2PorDia;
+            LABOR_DETAIL[mapping.idx].salarioDia = jsonWorker.costo_real_dia;
+            LABOR_DETAIL[mapping.idx].costoPorM2 = Math.round(costoPorM2 * 100) / 100;
+          }
+        });
+
+        /* Recalcular BASE_LABOR_PER_M2 con costos actualizados */
+        BASE_LABOR_PER_M2 = LABOR_DETAIL.reduce(
+          (sum, l) => sum + l.costoPorM2, 0
+        );
+
+        /* Guardar metadata para mostrar en resultados */
+        metadataCMIC = data.metadata;
+        preciosCMICCargados = true;
+
+        console.log('✅ Precios CMIC cargados correctamente');
+        console.log('   BASE_MATERIAL_PER_M2:', BASE_MATERIAL_PER_M2.toFixed(2));
+        console.log('   BASE_LABOR_PER_M2:', BASE_LABOR_PER_M2.toFixed(2));
+      } catch (err) {
+        console.warn('⚠️ Error al aplicar precios CMIC, usando respaldo:', err);
+      }
+    };
+
+    /* Cargar el JSON al iniciar la app */
+    const loadPrices = async () => {
+      const loader = document.getElementById('init-loader');
+      try {
+        const response = await fetch('precios-cmic.json');
+        if (!response.ok) throw new Error('HTTP ' + response.status);
+        const data = await response.json();
+        applyJSONPrices(data);
+      } catch (err) {
+        /* Fallo silencioso: la app funciona con precios hardcoded */
+        console.warn('⚠️ No se pudo cargar precios-cmic.json:', err.message);
+        console.warn('   Usando precios de respaldo hardcoded.');
+      } finally {
+        /* Ocultar loader inicial */
+        loader.classList.add('hidden');
+        setTimeout(() => loader.remove(), 300);
+      }
+    };
+
+    /* Ejecutar carga al iniciar */
+    loadPrices();
+
+    /* ═══════════════════════════════════════════════ */
+    /* ═══ FORMATO DE MONEDA ═══ */
+    /* ═══════════════════════════════════════════════ */
+    const formatMoney = (val) => {
+      return val.toLocaleString('es-MX', { style: 'currency', currency: 'MXN' });
+    };
+    const formatNum = (val, decimals = 1) => {
+      return val.toLocaleString('es-MX', { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
+    };
+
+    /* ═══════════════════════════════════════════════ */
+    /* ═══ MOTOR DE CÁLCULO ═══ */
+    /* ═══════════════════════════════════════════════ */
+    const calculateBudget = (inputs) => {
+      const { m2, recamaras, banos, acabado, cimentacion, bardeoEnabled, bardeoMetros } = inputs;
+      const mult = ACABADO_MULT[acabado];
+      const cim = CIMENTACION[cimentacion];
+
+      /* Materiales por item */
+      const materialesDetalle = MATERIALES.map(mat => {
+        const cantidadTotal = mat.cantidadPorM2 * m2;
+        const subtotalBase = mat.precio * mat.cantidadPorM2 * m2;
+        const subtotalConAcabado = subtotalBase * mult;
+        return {
+          nombre: mat.nombre,
+          unidad: mat.unidad,
+          cantidad: cantidadTotal,
+          precioUnitario: mat.precio,
+          subtotal: subtotalConAcabado,
+          marca: mat.marca || ''
+        };
+      });
+
+      /* Subtotales materiales */
+      const materialBase = m2 * BASE_MATERIAL_PER_M2 * mult;
+      const materialCimentacion = m2 * cim.material;
+      const materialSubtotal = materialBase + materialCimentacion;
+
+      /* Mano de obra */
+      const laborBase = m2 * BASE_LABOR_PER_M2 * mult;
+      const laborCimentacion = m2 * cim.labor;
+      const laborSubtotal = laborBase + laborCimentacion;
+
+      /* Labor detalle */
+      const laborDetalle = LABOR_DETAIL.map(l => {
+        const dias = m2 / l.m2PorDia;
+        const costo = l.costoPorM2 * m2 * mult;
+        return {
+          concepto: l.concepto,
+          dias: dias,
+          costo: costo
+        };
+      });
+
+      /* Habitaciones extra */
+      const extraRecamaras = Math.max(0, recamaras - 2);
+      const extraBanos = Math.max(0, banos - 1);
+      const roomsExtra = extraRecamaras * COSTO_EXTRA_RECAMARA + extraBanos * COSTO_EXTRA_BANO;
+
+      /* Bardeo */
+      const bardeoTotal = bardeoEnabled ? bardeoMetros * BARDEO_POR_ML : 0;
+
+      /* Totales */
+      const subtotal = materialSubtotal + laborSubtotal + roomsExtra + bardeoTotal;
+      const imprevistos = subtotal * PORCENTAJE_IMPREVISTOS;
+      const total = subtotal + imprevistos;
+
+      /* Tiempo */
+      const semanas = Math.ceil(m2 / M2_POR_SEMANA);
+
+      return {
+        materialesDetalle,
+        materialSubtotal,
+        materialCimentacion,
+        laborDetalle,
+        laborSubtotal,
+        laborCimentacion,
+        roomsExtra,
+        extraRecamaras,
+        extraBanos,
+        bardeoTotal,
+        bardeoEnabled,
+        bardeoMetros: bardeoEnabled ? bardeoMetros : 0,
+        subtotal,
+        imprevistos,
+        total,
+        semanas,
+        /* Inputs para mostrar en resumen */
+        m2,
+        acabado: ACABADO_LABEL[acabado],
+        cimentacion: CIMENTACION_LABEL[cimentacion],
+        recamaras,
+        banos
+      };
+    };
+
+    /* ═══════════════════════════════════════════════ */
+    /* ═══ MANEJO DE PANTALLAS ═══ */
+    /* ═══════════════════════════════════════════════ */
+    const showScreen = (id) => {
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      const target = document.getElementById(id);
+      target.classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    /* ═══════════════════════════════════════════════ */
+    /* ═══ MANEJO DE SELECTORES (PILLS Y CARDS) ═══ */
+    /* ═══════════════════════════════════════════════ */
+    const selectedValues = {
+      recamaras: null,
+      banos: null,
+      acabado: null,
+      cimentacion: null,
+      bardeo: false
+    };
+
+    const setupPillGroup = (groupId, key) => {
+      const group = document.getElementById(groupId);
+      group.querySelectorAll('.pill-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          group.querySelectorAll('.pill-btn').forEach(b => b.classList.remove('selected'));
+          btn.classList.add('selected');
+          selectedValues[key] = parseInt(btn.dataset.value);
+          const errEl = document.getElementById('err-' + key);
+          if (errEl) errEl.classList.remove('visible');
+        });
+      });
+    };
+
+    const setupCardGroup = (groupId, key) => {
+      const group = document.getElementById(groupId);
+      group.querySelectorAll('.select-card').forEach(card => {
+        card.addEventListener('click', () => {
+          group.querySelectorAll('.select-card').forEach(c => c.classList.remove('selected'));
+          card.classList.add('selected');
+          selectedValues[key] = card.dataset.value;
+          const errEl = document.getElementById('err-' + key);
+          if (errEl) errEl.classList.remove('visible');
+        });
+      });
+    };
+
+    /* Toggle bardeo */
+    const bardeoToggle = document.getElementById('bardeo-toggle');
+    const bardeoSub = document.getElementById('bardeo-sub');
+    bardeoToggle.addEventListener('click', () => {
+      selectedValues.bardeo = !selectedValues.bardeo;
+      bardeoToggle.classList.toggle('on', selectedValues.bardeo);
+      bardeoSub.classList.toggle('visible', selectedValues.bardeo);
+      if (!selectedValues.bardeo) {
+        document.getElementById('bardeo-metros').value = '';
+        document.getElementById('err-bardeo').classList.remove('visible');
+      }
+    });
+
+    /* Inicializar grupos */
+    setupPillGroup('recamaras-group', 'recamaras');
+    setupPillGroup('banos-group', 'banos');
+    setupCardGroup('acabado-group', 'acabado');
+    setupCardGroup('cimentacion-group', 'cimentacion');
+
+    /* ═══════════════════════════════════════════════ */
+    /* ═══ VALIDACIÓN DE FORMULARIO ═══ */
+    /* ═══════════════════════════════════════════════ */
+    const showError = (id) => {
+      const el = document.getElementById(id);
+      if (el) el.classList.add('visible');
+    };
+    const hideError = (id) => {
+      const el = document.getElementById(id);
+      if (el) el.classList.remove('visible');
+    };
+
+    document.getElementById('superficie').addEventListener('input', () => hideError('err-superficie'));
+    document.getElementById('bardeo-metros').addEventListener('input', () => hideError('err-bardeo'));
+
+    const validateForm = () => {
+      let valid = true;
+      const superficie = parseFloat(document.getElementById('superficie').value);
+
+      if (isNaN(superficie) || superficie < 20 || superficie > 500) {
+        showError('err-superficie');
+        document.getElementById('superficie').classList.add('input-error');
+        valid = false;
+      } else {
+        hideError('err-superficie');
+        document.getElementById('superficie').classList.remove('input-error');
+      }
+
+      if (selectedValues.recamaras === null) { showError('err-recamaras'); valid = false; }
+      if (selectedValues.banos === null) { showError('err-banos'); valid = false; }
+      if (selectedValues.acabado === null) { showError('err-acabado'); valid = false; }
+      if (selectedValues.cimentacion === null) { showError('err-cimentacion'); valid = false; }
+
+      if (selectedValues.bardeo) {
+        const metros = parseFloat(document.getElementById('bardeo-metros').value);
+        if (isNaN(metros) || metros < 4 || metros > 200) {
+          showError('err-bardeo');
+          document.getElementById('bardeo-metros').classList.add('input-error');
+          valid = false;
+        } else {
+          hideError('err-bardeo');
+          document.getElementById('bardeo-metros').classList.remove('input-error');
+        }
+      }
+
+      return valid;
+    };
+
+    /* ═══════════════════════════════════════════════ */
+    /* ═══ RENDERIZAR RESULTADOS ═══ */
+    /* ═══════════════════════════════════════════════ */
+    const renderResults = (r) => {
+      /* Sección A: Hero con badge de fuente CMIC */
+      const badgeHTML = preciosCMICCargados
+        ? `<div class="source-badge">📋 Precios: CMIC Puebla 2024 | Actualizado ${metadataCMIC ? metadataCMIC.ultima_actualizacion : 'Marzo 2026'}</div>`
+        : `<div class="source-badge">📋 Precios de referencia | Tlaxcala/Puebla 2026</div>`;
+
+      document.getElementById('result-hero').innerHTML = `
+    <div class="label">Presupuesto estimado total:</div>
+    <div class="total" id="total-animated">${formatMoney(r.total)}</div>
+    <div class="meta">
+      ⏱️ Tiempo estimado: <strong>${r.semanas} semanas</strong><br>
+      📐 Superficie: <strong>${r.m2}m²</strong> · 🎨 Acabado: <strong>${r.acabado}</strong> · 🏗️ ${r.cimentacion}
+    </div>
+    ${badgeHTML}
+  `;
+
+      /* Sección B: Tabla de materiales con columna Marca */
+      const hasMarcas = r.materialesDetalle.some(m => m.marca);
+      const marcaHeader = hasMarcas ? '<th>Marca</th>' : '';
+      const colspanMat = hasMarcas ? 4 : 3;
+
+      let matHTML = `<thead><tr><th>Material</th>${marcaHeader}<th>Cantidad</th><th>P. Unitario</th><th class="text-right">Subtotal</th></tr></thead><tbody>`;
+      r.materialesDetalle.forEach(m => {
+        const marcaTd = hasMarcas ? `<td style="font-size:12px;color:var(--text-secondary)">${m.marca}</td>` : '';
+        matHTML += `<tr>
+      <td>${m.nombre}</td>
+      ${marcaTd}
+      <td>${formatNum(m.cantidad)} ${m.unidad}</td>
+      <td>${formatMoney(m.precioUnitario)}</td>
+      <td class="text-right">${formatMoney(m.subtotal)}</td>
+    </tr>`;
+      });
+      if (r.materialCimentacion > 0) {
+        const marcaCimTd = hasMarcas ? '<td>—</td>' : '';
+        matHTML += `<tr>
+      <td>Cimentación (${r.cimentacion})</td>
+      ${marcaCimTd}
+      <td>—</td><td>—</td>
+      <td class="text-right">${formatMoney(r.materialCimentacion)}</td>
+    </tr>`;
+      }
+      matHTML += `<tr class="row-total"><td colspan="${colspanMat}">Subtotal Materiales</td><td class="text-right">${formatMoney(r.materialSubtotal)}</td></tr>`;
+      matHTML += `</tbody>`;
+      document.getElementById('table-materiales').innerHTML = matHTML;
+
+      /* Sección C: Tabla mano de obra */
+      let labHTML = `<thead><tr><th>Concepto</th><th>Días estimados</th><th class="text-right">Costo</th></tr></thead><tbody>`;
+      r.laborDetalle.forEach(l => {
+        labHTML += `<tr>
+      <td>${l.concepto}</td>
+      <td>${formatNum(l.dias)}</td>
+      <td class="text-right">${formatMoney(l.costo)}</td>
+    </tr>`;
+      });
+      if (r.laborCimentacion > 0) {
+        labHTML += `<tr>
+      <td>Cimentación (mano de obra)</td>
+      <td>—</td>
+      <td class="text-right">${formatMoney(r.laborCimentacion)}</td>
+    </tr>`;
+      }
+      labHTML += `<tr class="row-total"><td colspan="2">Subtotal Mano de Obra</td><td class="text-right">${formatMoney(r.laborSubtotal)}</td></tr>`;
+      labHTML += `</tbody>`;
+      document.getElementById('table-labor').innerHTML = labHTML;
+
+      /* Sección D: Resumen Financiero */
+      let finHTML = `
+    <div class="finance-row"><span>Subtotal materiales</span><span>${formatMoney(r.materialSubtotal)}</span></div>
+    <div class="finance-row"><span>Subtotal mano de obra</span><span>${formatMoney(r.laborSubtotal)}</span></div>
+  `;
+      if (r.bardeoEnabled && r.bardeoTotal > 0) {
+        finHTML += `<div class="finance-row"><span>Bardeo perimetral (${r.bardeoMetros} ml)</span><span>${formatMoney(r.bardeoTotal)}</span></div>`;
+      }
+      if (r.roomsExtra > 0) {
+        let roomDesc = '';
+        if (r.extraRecamaras > 0) roomDesc += `${r.extraRecamaras} recámara${r.extraRecamaras > 1 ? 's' : ''} extra`;
+        if (r.extraBanos > 0) {
+          if (roomDesc) roomDesc += ' + ';
+          roomDesc += `${r.extraBanos} baño${r.extraBanos > 1 ? 's' : ''} extra`;
+        }
+        finHTML += `<div class="finance-row"><span>Habitaciones adicionales (${roomDesc})</span><span>${formatMoney(r.roomsExtra)}</span></div>`;
+      }
+      finHTML += `
+    <div class="finance-row divider"><span><strong>Subtotal</strong></span><span><strong>${formatMoney(r.subtotal)}</strong></span></div>
+    <div class="finance-row"><span>Imprevistos (10%)</span><span>${formatMoney(r.imprevistos)}</span></div>
+    <div class="finance-row grand-total"><span>TOTAL ESTIMADO</span><span>${formatMoney(r.total)}</span></div>
+  `;
+      document.getElementById('finance-summary').innerHTML = finHTML;
+
+      /* Fecha para impresión */
+      const now = new Date();
+      document.getElementById('print-date').textContent = now.toLocaleDateString('es-MX', { year: 'numeric', month: 'long', day: 'numeric' });
+
+      /* Animación de conteo del total */
+      animateTotal(r.total);
+    };
+
+    /* ═══════════════════════════════════════════════ */
+    /* ═══ ANIMACIÓN DE CONTEO ═══ */
+    /* ═══════════════════════════════════════════════ */
+    const animateTotal = (finalValue) => {
+      const el = document.getElementById('total-animated');
+      if (!el) return;
+      const duration = 1000;
+      const startTime = performance.now();
+      const step = (currentTime) => {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        const currentVal = finalValue * eased;
+        el.textContent = formatMoney(currentVal);
+        if (progress < 1) requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);
+    };
+
+    /* ═══════════════════════════════════════════════ */
+    /* ═══ ENVÍO DEL FORMULARIO ═══ */
+    /* ═══════════════════════════════════════════════ */
+    document.getElementById('budgetForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      if (!validateForm()) return;
+
+      const inputs = {
+        m2: parseFloat(document.getElementById('superficie').value),
+        recamaras: selectedValues.recamaras,
+        banos: selectedValues.banos,
+        acabado: selectedValues.acabado,
+        cimentacion: selectedValues.cimentacion,
+        bardeoEnabled: selectedValues.bardeo,
+        bardeoMetros: selectedValues.bardeo ? parseFloat(document.getElementById('bardeo-metros').value) : 0
+      };
+
+      const btn = document.getElementById('btn-calcular');
+      btn.classList.add('loading');
+      btn.querySelector('.btn-text').textContent = 'Calculando...';
+
+      const results = calculateBudget(inputs);
+
+      showScreen('screen2');
+
+      setTimeout(() => {
+        renderResults(results);
+        showScreen('screen3');
+
+        btn.classList.remove('loading');
+        btn.querySelector('.btn-text').textContent = 'CALCULAR PRESUPUESTO →';
+      }, 2000);
+    });
+
+    /* ═══════════════════════════════════════════════ */
+    /* ═══ NUEVA COTIZACIÓN ═══ */
+    /* ═══════════════════════════════════════════════ */
+    document.getElementById('btn-nueva').addEventListener('click', () => {
+      selectedValues.recamaras = null;
+      selectedValues.banos = null;
+      selectedValues.acabado = null;
+      selectedValues.cimentacion = null;
+      selectedValues.bardeo = false;
+
+      document.getElementById('superficie').value = '';
+      document.getElementById('bardeo-metros').value = '';
+
+      document.querySelectorAll('.pill-btn').forEach(b => b.classList.remove('selected'));
+      document.querySelectorAll('.select-card').forEach(c => c.classList.remove('selected'));
+
+      bardeoToggle.classList.remove('on');
+      bardeoSub.classList.remove('visible');
+
+      document.querySelectorAll('.error-msg').forEach(e => e.classList.remove('visible'));
+      document.querySelectorAll('.input-error').forEach(e => e.classList.remove('input-error'));
+
+      showScreen('screen1');
+    });
+  </script>
+</body>
+
+</html>
