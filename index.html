@@ -18,265 +18,336 @@
       --success: #10B981;
       --background: #F8FAFC;
       --white: #FFFFFF;
-      --text-primary: #1B2B4B;
+      --text-main: #1F2937;
       --text-secondary: #6B7280;
-      --border: #E5E7EB;
-      --error: #EF4444;
-      --shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-      --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
+      --border-color: #E5E7EB;
+      --input-bg: #F3F4F6;
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
     }
 
-    /* ═══════════════════════════════════════════════ */
-    /* ═══ RESET Y BASE ═══ */
-    /* ═══════════════════════════════════════════════ */
-    *,
-    *::before,
-    *::after {
+    * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-    }
-
-    html {
-      scroll-behavior: smooth;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     }
 
     body {
-      font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
-      font-size: 16px;
-      color: var(--text-primary);
-      background: var(--background);
+      background-color: var(--background);
+      color: var(--text-main);
       line-height: 1.5;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
+      -webkit-font-smoothing: antialiased;
+      padding-bottom: 60px;
     }
 
     /* ═══════════════════════════════════════════════ */
-    /* ═══ HEADER ═══ */
+    /* ═══ LOADER INICIAL ═══ */
+    /* ═══════════════════════════════════════════════ */
+    .init-loader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.95);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    }
+
+    .init-spinner {
+      width: 50px;
+      height: 50px;
+      border: 4px solid var(--border-color);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-bottom: 16px;
+    }
+
+    .init-text {
+      font-size: 14px;
+      color: var(--primary);
+      font-weight: 500;
+      animation: pulse 1.5s infinite;
+    }
+
+    /* ═══════════════════════════════════════════════ */
+    /* ═══ HEADER Y LAYOUT BASE ═══ */
     /* ═══════════════════════════════════════════════ */
     .app-header {
-      background: var(--primary);
+      background-color: var(--primary);
       color: var(--white);
-      height: 64px;
+      padding: 16px 20px;
       display: flex;
-      align-items: center;
       justify-content: space-between;
-      padding: 0 24px;
+      align-items: center;
+      box-shadow: var(--shadow-md);
       position: sticky;
       top: 0;
       z-index: 100;
-      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
     }
 
-    .app-header .logo {
+    .logo {
+      font-size: 18px;
+      font-weight: 700;
       display: flex;
       align-items: center;
-      gap: 10px;
-      font-size: 20px;
-      font-weight: 700;
-      letter-spacing: -0.3px;
+      gap: 8px;
     }
 
-    .app-header .logo .hex {
+    .logo .hex {
       color: var(--accent);
-      font-size: 26px;
-      line-height: 1;
+      font-size: 20px;
     }
 
-    .app-header .subtitle {
-      font-size: 13px;
-      opacity: 0.7;
-      font-weight: 400;
+    .subtitle {
+      font-size: 12px;
+      color: #94A3B8;
+      font-weight: 500;
     }
 
-    /* ═══════════════════════════════════════════════ */
-    /* ═══ CONTENIDO PRINCIPAL ═══ */
-    /* ═══════════════════════════════════════════════ */
     .app-main {
-      flex: 1;
-      display: flex;
-      justify-content: center;
-      padding: 32px 16px;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 24px 20px;
     }
 
-    .container {
+    .app-footer {
+      background: var(--white);
+      color: var(--text-secondary);
+      text-align: center;
+      padding: 16px;
+      font-size: 11px;
+      border-top: 1px solid var(--border-color);
+      position: relative;
+      bottom: 0;
       width: 100%;
-      max-width: 680px;
     }
 
     /* ═══════════════════════════════════════════════ */
-    /* ═══ PANTALLAS ═══ */
+    /* ═══ BARRA DE PROGRESO ═══ */
+    /* ═══════════════════════════════════════════════ */
+    .progress-bar-container {
+      background: var(--white);
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .progress-bar {
+      max-width: 800px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      position: relative;
+    }
+
+    .progress-bar::before {
+      content: '';
+      position: absolute;
+      top: 14px;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: var(--input-bg);
+      z-index: 0;
+    }
+
+    .progress-bar-fill {
+      position: absolute;
+      top: 14px;
+      left: 0;
+      height: 2px;
+      background: var(--accent);
+      z-index: 0;
+      width: 0%;
+      transition: width 0.4s ease;
+    }
+
+    .step-indicator {
+      width: 30px;
+      height: 30px;
+      background: var(--white);
+      border: 2px solid var(--border-color);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      z-index: 1;
+      position: relative;
+      transition: all 0.3s;
+    }
+
+    .step-indicator.active {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: var(--white);
+    }
+
+    .step-indicator.completed {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: var(--white);
+    }
+
+    .step-label {
+      position: absolute;
+      top: 36px;
+      font-size: 10px;
+      white-space: nowrap;
+      color: var(--text-secondary);
+    }
+
+    .step-indicator.active .step-label {
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    /* ═══════════════════════════════════════════════ */
+    /* ═══ PANTALLAS (PAGINATION) ═══ */
     /* ═══════════════════════════════════════════════ */
     .screen {
       display: none;
-      opacity: 0;
-      transform: translateY(20px);
+      animation: fadeIn 0.4s ease forwards;
     }
 
     .screen.active {
       display: block;
-      animation: fadeInUp 0.3s ease forwards;
     }
 
-    @keyframes fadeInUp {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+    h1 {
+      font-size: 22px;
+      color: var(--primary);
+      margin-bottom: 20px;
+      font-weight: 700;
     }
 
-    /* ═══════════════════════════════════════════════ */
-    /* ═══ TARJETAS ═══ */
-    /* ═══════════════════════════════════════════════ */
     .card {
       background: var(--white);
-      border-radius: 12px;
-      border: 1px solid var(--border);
-      box-shadow: var(--shadow);
+      border-radius: 16px;
       padding: 24px;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border-color);
       margin-bottom: 24px;
     }
 
     /* ═══════════════════════════════════════════════ */
-    /* ═══ TIPOGRAFÍA ═══ */
-    /* ═══════════════════════════════════════════════ */
-    h1 {
-      font-size: 28px;
-      font-weight: 700;
-      color: var(--primary);
-      margin-bottom: 8px;
-    }
-
-    h2 {
-      font-size: 20px;
-      font-weight: 600;
-      color: var(--primary);
-      margin-bottom: 16px;
-    }
-
-    h3 {
-      font-size: 17px;
-      font-weight: 600;
-      color: var(--primary);
-      margin-bottom: 12px;
-    }
-
-    .text-secondary {
-      color: var(--text-secondary);
-      font-size: 14px;
-    }
-
-    .text-small {
-      font-size: 13px;
-      color: var(--text-secondary);
-    }
-
-    /* ═══════════════════════════════════════════════ */
-    /* ═══ FORMULARIO ═══ */
+    /* ═══ CONTROLES DE FORMULARIO ═══ */
     /* ═══════════════════════════════════════════════ */
     .form-group {
       margin-bottom: 24px;
-    }
-
-    .form-group label {
-      display: block;
-      font-weight: 600;
-      margin-bottom: 8px;
-      font-size: 15px;
-    }
-
-    .form-group input[type="number"] {
-      width: 100%;
-      height: 48px;
-      border-radius: 8px;
-      border: 1.5px solid var(--border);
-      padding: 0 16px;
-      font-size: 16px;
-      font-family: inherit;
-      color: var(--text-primary);
-      background: var(--white);
-      transition: border-color 0.2s;
-      outline: none;
-    }
-
-    .form-group input[type="number"]:focus {
-      border-color: var(--accent);
-    }
-
-    .form-group input[type="number"].input-error {
-      border-color: var(--error);
-    }
-
-    .error-msg {
-      color: var(--error);
-      font-size: 13px;
-      margin-top: 6px;
-      display: none;
-    }
-
-    .error-msg.visible {
-      display: block;
-    }
-
-    /* ═══ Pill Buttons (Recámaras / Baños) ═══ */
-    .pill-group {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-
-    .pill-btn {
-      width: 56px;
-      height: 56px;
-      border-radius: 50%;
-      border: 2px solid var(--border);
-      background: var(--white);
-      font-size: 18px;
-      font-weight: 600;
-      color: var(--text-primary);
-      cursor: pointer;
-      transition: all 0.2s;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .pill-btn:hover {
-      border-color: var(--accent);
-      background: #FFF7ED;
-    }
-
-    .pill-btn.selected {
-      background: var(--accent);
-      color: var(--white);
-      border-color: var(--accent);
-      box-shadow: 0 2px 8px rgba(249, 115, 22, 0.3);
-    }
-
-    /* ═══ Card Selector (Acabado / Cimentación) ═══ */
-    .card-selector {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-
-    .select-card {
-      flex: 1;
-      min-width: 140px;
-      border: 2px solid var(--border);
-      border-radius: 12px;
-      padding: 16px;
-      cursor: pointer;
-      text-align: center;
-      background: var(--white);
-      transition: all 0.2s;
       position: relative;
     }
 
-    .select-card:hover {
+    .form-group:last-child {
+      margin-bottom: 0;
+    }
+
+    label {
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--primary);
+      margin-bottom: 8px;
+    }
+
+    .text-small {
+      font-size: 12px;
+      color: var(--text-secondary);
+      font-weight: normal;
+    }
+
+    input[type="number"],
+    .dropdown {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      font-size: 16px;
+      color: var(--text-main);
+      background: var(--white);
+      transition: border-color 0.2s, box-shadow 0.2s;
+      appearance: none;
+    }
+
+    input[type="number"]:focus,
+    .dropdown:focus {
+      outline: none;
       border-color: var(--accent);
-      background: #FFF7ED;
+      box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1);
+    }
+
+    .error-msg {
+      color: #EF4444;
+      font-size: 12px;
+      margin-top: 4px;
+      display: none;
+    }
+
+    /* ====== SELECTORES PILL ====== */
+    .pill-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .pill-btn {
+      flex: 1;
+      min-width: 48px;
+      padding: 10px 0;
+      background: var(--white);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text-main);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .pill-btn:hover {
+      background: var(--input-bg);
+    }
+
+    .pill-btn.selected {
+      background: var(--primary);
+      color: var(--white);
+      border-color: var(--primary);
+    }
+
+    /* ====== SELECTORES CARD ====== */
+    .card-selector {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 12px;
+    }
+
+    .select-card {
+      border: 1.5px solid var(--border-color);
+      border-radius: 12px;
+      padding: 16px 12px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      background: var(--white);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 80px;
+    }
+
+    .select-card:hover {
+      border-color: #CBD5E1;
+      background: var(--background);
     }
 
     .select-card.selected {
@@ -285,134 +356,135 @@
       box-shadow: 0 0 0 1px var(--accent);
     }
 
-    .select-card .card-title {
-      font-weight: 600;
-      font-size: 15px;
-      margin-bottom: 4px;
-    }
-
-    .select-card .card-sub {
-      font-size: 13px;
-      color: var(--text-secondary);
-    }
-
     .select-card .badge {
       position: absolute;
       top: -10px;
-      right: -6px;
       background: var(--accent);
-      color: white;
-      font-size: 10px;
+      color: var(--white);
+      font-size: 9px;
       font-weight: 700;
-      padding: 3px 8px;
-      border-radius: 20px;
+      padding: 2px 8px;
+      border-radius: 10px;
       letter-spacing: 0.5px;
     }
 
-    .select-card .checkmark {
-      display: none;
-      color: var(--accent);
-      font-size: 20px;
-      margin-top: 8px;
+    .card-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-main);
     }
 
-    .select-card.selected .checkmark {
-      display: block;
+    .select-card.selected .card-title {
+      color: var(--accent-hover);
     }
 
-    /* ═══ Toggle Switch ═══ */
+    /* ====== TOGGLE SWITCH ====== */
     .toggle-row {
       display: flex;
-      align-items: center;
       justify-content: space-between;
-      padding: 12px 0;
+      align-items: center;
+      padding: 16px;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 500;
+      background: #FAFAFA;
     }
 
     .toggle-switch {
-      width: 52px;
-      height: 28px;
-      background: var(--border);
-      border-radius: 14px;
-      cursor: pointer;
+      width: 44px;
+      height: 24px;
+      background: #CBD5E1;
+      border-radius: 12px;
       position: relative;
-      transition: background 0.2s;
-      flex-shrink: 0;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .toggle-knob {
+      width: 20px;
+      height: 20px;
+      background: var(--white);
+      border-radius: 50%;
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      transition: transform 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+      box-shadow: var(--shadow-sm);
     }
 
     .toggle-switch.on {
-      background: var(--accent);
-    }
-
-    .toggle-switch .toggle-knob {
-      width: 22px;
-      height: 22px;
-      background: white;
-      border-radius: 50%;
-      position: absolute;
-      top: 3px;
-      left: 3px;
-      transition: transform 0.2s;
-      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+      background: var(--success);
     }
 
     .toggle-switch.on .toggle-knob {
-      transform: translateX(24px);
+      transform: translateX(20px);
     }
 
-    .bardeo-sub {
-      display: none;
+    /* ═══════════════════════════════════════════════ */
+    /* ═══ BOTONES Y NAVEGACIÓN ═══ */
+    /* ═══════════════════════════════════════════════ */
+    .nav-buttons {
+      display: flex;
+      justify-content: space-between;
       margin-top: 16px;
+      gap: 16px;
     }
 
-    .bardeo-sub.visible {
-      display: block;
+    button {
+      outline: none;
     }
 
-    /* ═══ Submit Button ═══ */
-    .btn-submit {
-      width: 100%;
-      height: 56px;
-      background: var(--accent);
-      color: var(--white);
-      border: none;
+    .btn-next,
+    .btn-back {
+      padding: 16px 24px;
       border-radius: 12px;
-      font-size: 17px;
+      font-size: 14px;
       font-weight: 700;
       cursor: pointer;
-      transition: background 0.2s, transform 0.1s;
+      transition: all 0.2s;
+      flex: 1;
       display: flex;
-      align-items: center;
       justify-content: center;
-      gap: 8px;
-      letter-spacing: 0.3px;
+      align-items: center;
+      letter-spacing: 0.5px;
+    }
+
+    .btn-next {
+      background: var(--primary);
+      color: var(--white);
+      border: none;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .btn-next:hover {
+      background: #15223c;
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .btn-next:active {
+      transform: translateY(0);
+    }
+
+    .btn-back {
+      background: var(--input-bg);
+      color: var(--text-secondary);
+      border: 1px solid var(--border-color);
+      flex: 0.5;
+    }
+
+    .btn-back:hover {
+      background: #E5E7EB;
+      color: var(--primary);
+    }
+
+    .btn-submit {
+      background: var(--accent);
     }
 
     .btn-submit:hover {
       background: var(--accent-hover);
-    }
-
-    .btn-submit:active {
-      transform: scale(0.98);
-    }
-
-    .btn-submit .spinner {
-      width: 20px;
-      height: 20px;
-      border: 3px solid rgba(255, 255, 255, 0.3);
-      border-top-color: white;
-      border-radius: 50%;
-      animation: spin 0.7s linear infinite;
-      display: none;
-    }
-
-    .btn-submit.loading .spinner {
-      display: inline-block;
-    }
-
-    @keyframes spin {
-      to {
-        transform: rotate(360deg);
-      }
     }
 
     /* ═══════════════════════════════════════════════ */
@@ -423,364 +495,390 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      min-height: 400px;
-      gap: 24px;
-      text-align: center;
+      height: 50vh;
     }
 
     .loading-bars {
       display: flex;
       gap: 6px;
-      align-items: flex-end;
-      height: 48px;
+      margin-bottom: 24px;
     }
 
     .loading-bars span {
       width: 8px;
+      height: 40px;
       background: var(--accent);
       border-radius: 4px;
-      animation: barPulse 1s ease-in-out infinite;
-    }
-
-    .loading-bars span:nth-child(1) {
-      height: 20px;
-      animation-delay: 0s;
+      animation: bounce 1s ease-in-out infinite;
     }
 
     .loading-bars span:nth-child(2) {
-      height: 32px;
-      animation-delay: 0.15s;
+      animation-delay: 0.1s;
     }
 
     .loading-bars span:nth-child(3) {
-      height: 44px;
-      animation-delay: 0.3s;
+      animation-delay: 0.2s;
     }
 
     .loading-bars span:nth-child(4) {
-      height: 32px;
-      animation-delay: 0.45s;
+      animation-delay: 0.3s;
     }
 
     .loading-bars span:nth-child(5) {
-      height: 20px;
-      animation-delay: 0.6s;
-    }
-
-    @keyframes barPulse {
-
-      0%,
-      100% {
-        opacity: 0.3;
-        transform: scaleY(0.6);
-      }
-
-      50% {
-        opacity: 1;
-        transform: scaleY(1);
-      }
+      animation-delay: 0.4s;
     }
 
     .loading-text {
-      font-size: 18px;
+      font-size: 16px;
       font-weight: 600;
       color: var(--primary);
-    }
-
-    .loading-sub {
-      font-size: 14px;
-      color: var(--text-secondary);
+      animation: pulse 1.5s infinite;
     }
 
     /* ═══════════════════════════════════════════════ */
-    /* ═══ RESULTADOS ═══ */
+    /* ═══ PANTALLA DE RESULTADOS (V2) ═══ */
     /* ═══════════════════════════════════════════════ */
     .result-hero {
-      border-left: 5px solid var(--accent);
-      padding: 24px;
-      background: linear-gradient(135deg, #FFF7ED 0%, var(--white) 100%);
+      background: linear-gradient(135deg, var(--background) 0%, #FFF7ED 100%);
+      border: 2px solid var(--accent);
+      border-left: 6px solid var(--accent);
+      text-align: center;
+      padding: 32px 20px;
     }
 
     .result-hero .label {
       font-size: 14px;
       color: var(--text-secondary);
-      margin-bottom: 4px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
     }
 
     .result-hero .total {
-      font-size: 32px;
-      font-weight: 700;
+      font-size: 38px;
+      font-weight: 800;
       color: var(--primary);
-      line-height: 1.2;
+      letter-spacing: -1px;
+      margin-bottom: 16px;
     }
 
     .result-hero .meta {
-      margin-top: 12px;
-      font-size: 14px;
-      color: var(--text-secondary);
-      line-height: 1.8;
+      font-size: 13px;
+      color: var(--text-main);
+      display: inline-block;
+      text-align: left;
+      background: var(--white);
+      padding: 10px 16px;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+      line-height: 1.6;
     }
 
-    /* ═══ Tablas ═══ */
+    .source-badge {
+      display: inline-block;
+      margin-top: 16px;
+      font-size: 11px;
+      color: #64748B;
+      font-weight: 500;
+    }
+
+    /* ═══════════════════════════════════════════════ */
+    /* ═══ TABS Y TABLAS DE DESGLOSE ═══ */
+    /* ═══════════════════════════════════════════════ */
+    .tabs {
+      display: flex;
+      border-bottom: 1px solid var(--border-color);
+      margin-bottom: 20px;
+      background: #E2E8F0;
+      border-radius: 8px;
+      padding: 4px;
+      overflow-x: auto;
+    }
+
+    .tab-btn {
+      flex: 1;
+      background: transparent;
+      border: none;
+      padding: 10px 16px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+
+    .tab-btn.active {
+      background: var(--white);
+      color: var(--primary);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .tab-content {
+      display: none;
+      animation: fadeIn 0.4s ease forwards;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .tab-content h2 {
+      font-size: 18px;
+      color: var(--primary);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .finance-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 12px 0;
+      border-bottom: 1px dashed var(--border-color);
+      font-size: 14px;
+    }
+
+    .finance-row.divider {
+      border-bottom: 1px solid #CBD5E1;
+      margin-top: 4px;
+    }
+
+    .finance-row.grand-total {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--accent);
+      border-bottom: none;
+      padding-top: 16px;
+    }
+
     .table-wrapper {
       overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-      margin: 0 -24px;
-      padding: 0 24px;
     }
 
     .data-table {
       width: 100%;
       border-collapse: collapse;
-      font-size: 14px;
+      font-size: 13px;
+      min-width: 500px;
     }
 
-    .data-table thead th {
-      background: var(--primary);
-      color: var(--white);
-      padding: 12px 10px;
+    .data-table th,
+    .data-table td {
+      padding: 12px;
       text-align: left;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .data-table th {
+      background: var(--background);
       font-weight: 600;
-      font-size: 13px;
+      color: var(--primary);
       white-space: nowrap;
     }
 
-    .data-table thead th:first-child {
-      border-radius: 8px 0 0 0;
-    }
-
-    .data-table thead th:last-child {
-      border-radius: 0 8px 0 0;
-    }
-
-    .data-table tbody td {
-      padding: 10px;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .data-table tbody tr:nth-child(even) {
-      background: #F8FAFC;
-    }
-
-    .data-table tbody tr.row-total {
-      font-weight: 700;
-      background: #F0F4F8;
-    }
-
-    .data-table tbody tr.row-total td {
-      border-top: 2px solid var(--primary);
-    }
-
-    .text-right {
+    .data-table .text-right {
       text-align: right;
     }
 
-    /* ═══ Resumen Financiero ═══ */
-    .finance-row {
-      display: flex;
-      justify-content: space-between;
-      padding: 10px 0;
-      font-size: 15px;
+    .data-table tr:hover {
+      background: #F8FAFC;
     }
 
-    .finance-row.divider {
-      border-top: 1px dashed var(--border);
-      margin-top: 4px;
-      padding-top: 14px;
-    }
-
-    .finance-row.grand-total {
-      border-top: 3px solid var(--primary);
-      margin-top: 8px;
-      padding-top: 16px;
-      font-size: 20px;
+    .row-total {
       font-weight: 700;
-      color: var(--accent);
+      background: #F1F5F9 !important;
+      color: var(--primary);
     }
 
-    /* ═══ Action Buttons ═══ */
     .action-buttons {
       display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
+      gap: 16px;
+      margin-top: 32px;
     }
 
     .btn-action {
       flex: 1;
-      min-width: 200px;
-      height: 48px;
-      border-radius: 10px;
-      font-size: 15px;
+      padding: 16px;
+      border-radius: 12px;
       font-weight: 600;
       cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
+      font-size: 14px;
       transition: all 0.2s;
-      border: 2px solid transparent;
+      text-align: center;
     }
 
     .btn-print {
       background: var(--white);
-      border-color: var(--accent);
-      color: var(--accent);
-    }
-
-    .btn-print:hover {
-      background: #FFF7ED;
+      border: 1.5px solid var(--primary);
+      color: var(--primary);
     }
 
     .btn-new {
-      background: #F0F4F8;
-      color: var(--text-secondary);
-      border-color: var(--border);
-    }
-
-    .btn-new:hover {
-      background: var(--border);
-    }
-
-    /* ═══ Disclaimer ═══ */
-    .disclaimer {
-      font-size: 12px;
-      color: var(--text-secondary);
-      line-height: 1.6;
-      padding: 16px 0;
-      text-align: center;
-    }
-
-    /* ═══════════════════════════════════════════════ */
-    /* ═══ FOOTER ═══ */
-    /* ═══════════════════════════════════════════════ */
-    .app-footer {
       background: var(--primary);
       color: var(--white);
-      text-align: center;
-      padding: 16px;
-      font-size: 13px;
-      opacity: 0.85;
+      border: 1.5px solid var(--primary);
     }
 
     /* ═══════════════════════════════════════════════ */
-    /* ═══ RESPONSIVE MÓVIL ═══ */
+    /* ═══ UTILIDADES Y ANIMACIONES ═══ */
     /* ═══════════════════════════════════════════════ */
-    @media (max-width: 600px) {
-      h1 {
-        font-size: 24px;
+    .bardeo-sub {
+      margin-top: 12px;
+      padding: 16px;
+      background: var(--white);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      display: none;
+      animation: fadeInDown 0.3s ease;
+    }
+
+    .mb-2 {
+      margin-bottom: 8px;
+    }
+
+    .mt-2 {
+      margin-top: 8px;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(5px);
       }
 
-      h2 {
-        font-size: 18px;
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeInDown {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
       }
 
-      .card {
-        padding: 16px;
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
       }
 
-      .app-main {
-        padding: 16px 12px;
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        opacity: 1;
       }
 
-      .select-card {
-        min-width: 100px;
-        padding: 12px;
+      50% {
+        opacity: 0.6;
+      }
+    }
+
+    @keyframes bounce {
+
+      0%,
+      100% {
+        transform: scaleY(1);
       }
 
-      .result-hero .total {
-        font-size: 26px;
+      50% {
+        transform: scaleY(1.5);
       }
+    }
 
-      .action-buttons {
-        flex-direction: column;
-      }
-
-      .btn-action {
-        min-width: unset;
-      }
-
-      .table-wrapper {
-        margin: 0 -16px;
-        padding: 0 16px;
-      }
-
-      .app-header {
-        padding: 0 16px;
-      }
-
-      .app-header .subtitle {
-        display: none;
-      }
-
-      .finance-row.grand-total {
-        font-size: 18px;
-      }
+    .spinner {
+      display: none;
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
     }
 
     /* ═══════════════════════════════════════════════ */
     /* ═══ ESTILOS DE IMPRESIÓN ═══ */
     /* ═══════════════════════════════════════════════ */
+    .print-header {
+      display: none;
+      font-size: 18px;
+      font-weight: 800;
+      color: #1B2B4B;
+      margin-bottom: 20px;
+      border-bottom: 2px solid #F97316;
+      padding-bottom: 10px;
+    }
+
+    .print-footer {
+      display: none;
+      font-size: 10px;
+      color: #666;
+      border-top: 1px solid #ccc;
+      padding-top: 12px;
+      margin-top: 24px;
+    }
+
     @media print {
+      body {
+        background: white;
+        padding: 0;
+      }
 
       .app-header,
-      .app-footer,
-      #screen1,
-      #screen2,
+      .progress-bar-container,
+      .nav-buttons,
       .action-buttons,
-      .btn-submit {
+      .tabs,
+      .app-footer,
+      .init-loader {
         display: none !important;
       }
 
-      body {
-        background: white;
-        color: black;
-        font-size: 12px;
+      .app-main {
+        padding: 0;
+        max-width: 100%;
       }
 
       .card {
+        border: none;
         box-shadow: none;
-        border: 1px solid #ccc;
-        break-inside: avoid;
+        padding: 0;
+        margin-bottom: 20px;
       }
 
       .result-hero {
-        background: white !important;
+        border: 1px solid #000;
+        border-left: 1px solid #000;
+        background: white;
+        padding: 16px;
+        margin-bottom: 20px;
       }
 
-      .result-hero .total {
-        color: black;
-      }
-
-      .data-table thead th {
-        background: #333;
-        -webkit-print-color-adjust: exact;
-        print-color-adjust: exact;
-      }
-
-      .screen {
+      .tab-content {
         display: block !important;
         opacity: 1 !important;
-        transform: none !important;
+        page-break-inside: avoid;
+        margin-bottom: 20px;
       }
 
-      .print-header {
-        display: block !important;
-        text-align: center;
-        font-size: 18px;
-        font-weight: 700;
-        padding: 16px 0;
-        border-bottom: 2px solid #333;
-        margin-bottom: 16px;
-      }
-
+      .print-header,
       .print-footer {
-        display: block !important;
-        text-align: center;
-        font-size: 10px;
-        color: #666;
-        border-top: 1px solid #ccc;
-        padding-top: 12px;
-        margin-top: 24px;
+        display: block;
       }
 
       .disclaimer {
@@ -788,829 +886,1684 @@
       }
     }
 
-    .print-header,
-    .print-footer {
+    .helper-text {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-top: 4px;
+    }
+
+    /* ═══════════════════════════════════════════════ */
+    /* ═══ MODO TOGGLE & TOOLTIPS ═══ */
+    /* ═══════════════════════════════════════════════ */
+    .mode-toggle-container {
+      background: #F8FAFC;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 24px;
+    }
+
+    .mode-toggle {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .mode-btn {
+      background: white;
+      border: 1.5px solid #E5E7EB;
+      border-radius: 10px;
+      padding: 14px 16px;
+      cursor: pointer;
+      text-align: center;
+      font-size: 14px;
+      font-weight: 500;
+      color: #1B2B4B;
+      transition: all 0.2s;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .mode-btn span {
+      font-size: 11px;
+      font-weight: 400;
+      color: #6B7280;
+    }
+
+    .mode-btn.active {
+      background: #1B2B4B;
+      color: white;
+      border-color: #1B2B4B;
+    }
+
+    .mode-btn.active span {
+      color: #9CA3AF;
+    }
+
+    .tooltip-wrap {
+      position: relative;
+      display: inline-block;
+      cursor: pointer;
+    }
+
+    .tooltip-icon {
+      font-size: 12px;
+      color: #9CA3AF;
+      margin-left: 4px;
+    }
+
+    .tooltip-box {
+      display: none;
+      position: absolute;
+      bottom: 125%;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #1B2B4B;
+      color: white;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 12px;
+      line-height: 1.5;
+      width: 220px;
+      z-index: 100;
+      text-align: left;
+    }
+
+    .tooltip-wrap:hover .tooltip-box,
+    .tooltip-wrap:focus .tooltip-box {
+      display: block;
+    }
+
+    .tooltip-box::after {
+      content: '';
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      margin-left: -5px;
+      border: 5px solid transparent;
+      border-top-color: #1B2B4B;
+    }
+
+    /* ═══════════════════════════════════════════════ */
+    /* ═══ LÍNEA DE TIEMPO & SEMÁFORO ═══ */
+    /* ═══════════════════════════════════════════════ */
+    .obra-timeline {
+      background: white;
+      border-radius: 12px;
+      border: 1px solid #E5E7EB;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    .timeline-steps {
+      display: flex;
+      gap: 0;
+      overflow-x: auto;
+      padding-bottom: 8px;
+    }
+
+    .timeline-step {
+      flex: 1;
+      min-width: 100px;
+      text-align: center;
+      position: relative;
+    }
+
+    .timeline-step::after {
+      content: '→';
+      position: absolute;
+      right: -8px;
+      top: 20px;
+      color: #D1D5DB;
+      font-size: 16px;
+    }
+
+    .timeline-step:last-child::after {
       display: none;
     }
 
-    /* ═══ Badge fuente de precios CMIC ═══ */
-    .source-badge {
-      display: inline-block;
-      margin-top: 10px;
-      padding: 4px 12px;
-      background: #F0F4F8;
-      border-radius: 20px;
-      font-size: 11px;
-      color: var(--text-secondary);
-      letter-spacing: 0.2px;
-    }
-
-    /* ═══ Overlay de carga inicial del JSON ═══ */
-    .init-loader {
-      position: fixed;
-      inset: 0;
-      background: var(--background);
+    .step-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      margin: 0 auto 8px;
       display: flex;
-      flex-direction: column;
       align-items: center;
       justify-content: center;
-      z-index: 200;
+      font-size: 20px;
+    }
+
+    .step-icon.active {
+      background: #FFF7ED;
+      border: 2px solid #F97316;
+    }
+
+    .step-icon.pending {
+      background: #F9FAFB;
+      border: 2px solid #E5E7EB;
+    }
+
+    .step-name {
+      font-size: 11px;
+      font-weight: 500;
+      color: #1B2B4B;
+      margin-bottom: 3px;
+    }
+
+    .step-weeks {
+      font-size: 10px;
+      color: #6B7280;
+    }
+
+    .step-pct {
+      font-size: 10px;
+      font-weight: 600;
+      color: #F97316;
+    }
+
+    .semaforo-badge {
+      display: inline-block;
+      padding: 2px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      margin-left: 8px;
+      font-weight: 500;
+      vertical-align: middle;
+    }
+
+    /* ═══════════════════════════════════════════════ */
+    /* ═══ QUÉ INCLUYE Y METODOLOGÍA ═══ */
+    /* ═══════════════════════════════════════════════ */
+    .que-incluye {
+      margin-top: 20px;
+    }
+
+    .qi-toggle {
+      width: 100%;
+      padding: 12px 16px;
+      background: #F8FAFC;
+      border: 1px solid #E5E7EB;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      color: #1B2B4B;
+      cursor: pointer;
+      text-align: left;
+      transition: background 0.2s;
+    }
+
+    .qi-toggle:hover {
+      background: #E2E8F0;
+    }
+
+    .qi-content {
+      padding: 16px 0;
+    }
+
+    .qi-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
       gap: 16px;
-      transition: opacity 0.3s;
+      margin-bottom: 14px;
     }
-    .init-loader.hidden {
-      opacity: 0;
-      pointer-events: none;
+
+    .qi-col {
+      font-size: 12px;
+      line-height: 1.8;
     }
-    .init-loader .init-spinner {
-      width: 36px;
-      height: 36px;
-      border: 4px solid var(--border);
-      border-top-color: var(--accent);
-      border-radius: 50%;
-      animation: spin 0.7s linear infinite;
+
+    .qi-col h4 {
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 8px;
     }
-    .init-loader .init-text {
-      font-size: 14px;
-      color: var(--text-secondary);
+
+    .qi-yes h4 {
+      color: #10B981;
+    }
+
+    .qi-no h4 {
+      color: #EF4444;
+    }
+
+    .qi-note {
+      background: #FFF7ED;
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 12px;
+      color: #92400E;
+    }
+
+    #qi-yes-list {
+      padding-left: 16px;
+      margin: 0;
+    }
+
+    .qi-col.qi-no ul {
+      padding-left: 16px;
+      margin: 0;
+    }
+
+    .metodologia {
+      background: #EFF6FF;
+      border-left: 3px solid #1B2B4B;
+      border-radius: 8px;
+      padding: 16px 20px;
+      margin-top: 24px;
+    }
+
+    .inline-error {
+      color: #EF4444;
+      font-size: 13px;
+      margin-top: 6px;
+      display: none;
+    }
+
+    .comp-col-selected {
+      border-top: 3px solid #F97316;
     }
   </style>
 </head>
 
 <body>
-
-  <!-- ═══ LOADER INICIAL (mientras carga precios-cmic.json) ═══ -->
-  <div class="init-loader" id="init-loader">
+  <div class="init-loader" id="init-loader" style="display:none!important">
     <div class="init-spinner"></div>
     <div class="init-text">Cargando precios actualizados...</div>
   </div>
 
-  <!-- ═══ HEADER ═══ -->
   <header class="app-header">
-    <div class="logo">
-      <span class="hex">⬡</span>
-      <span>ObraDigitalMX</span>
-    </div>
-    <span class="subtitle">Cotizador Profesional</span>
+    <div class="logo"><span class="hex">⬡</span><span>ObraDigitalMX</span></div>
+    <span class="subtitle">Cotizador v2.0</span>
   </header>
 
-  <!-- ═══ CONTENIDO PRINCIPAL ═══ -->
-  <main class="app-main">
+  <div class="progress-bar-container" id="progress-container">
+    <div class="progress-bar">
+      <div class="progress-bar-fill" id="progress-fill"></div>
+      <div class="step-indicator active" id="step-1">1<span class="step-label">General</span></div>
+      <div class="step-indicator" id="step-2">2<span class="step-label">Estructura</span></div>
+      <div class="step-indicator" id="step-3">3<span class="step-label">Acabados</span></div>
+      <div class="step-indicator" id="step-4">4<span class="step-label">Instalaciones</span></div>
+      <div class="step-indicator" id="step-5">5<span class="step-label">Extras</span></div>
+    </div>
+  </div>
+
+  <main class="app-main" id="app-main">
     <div class="container">
+      <form id="budgetForm" novalidate>
 
-      <!-- ═══════════════════════════════════════════════ -->
-      <!-- ═══ PANTALLA 1: FORMULARIO ═══ -->
-      <!-- ═══════════════════════════════════════════════ -->
-      <div id="screen1" class="screen active">
-
-        <div style="text-align:center;margin-bottom:32px;">
-          <h1>Cotiza tu obra en minutos</h1>
-          <p class="text-secondary">Presupuesto detallado con precios reales de Tlaxcala/Puebla 2026</p>
+        <div class="mode-toggle-container">
+          <p style="font-size:13px;color:#666;margin-bottom:10px;text-align:center">¿Cómo quieres usar la calculadora?
+          </p>
+          <div class="mode-toggle">
+            <button type="button" id="btn-simple" class="mode-btn active" onclick="setMode('simple')">
+              🏠 Modo Simple<span>Para dueños y familias</span>
+            </button>
+            <button type="button" id="btn-pro" class="mode-btn" onclick="setMode('pro')">
+              📐 Modo Arquitecto<span>Desglose técnico completo</span>
+            </button>
+          </div>
         </div>
 
-        <form id="budgetForm" novalidate>
-
-          <!-- Superficie -->
+        <!-- SECTION 1 -->
+        <div id="screen1" class="screen active">
+          <h1>Datos Generales</h1>
           <div class="card">
-            <div class="form-group">
-              <label for="superficie">📐 Superficie a construir (m²)</label>
-              <input type="number" id="superficie" min="20" max="500" placeholder="Ej. 80" inputmode="numeric">
-              <div class="error-msg" id="err-superficie">Ingresa entre 20 y 500 m²</div>
+            <div class="form-group"><label>📐 Superficie a construir (m²)</label><input type="number" id="superficie"
+                min="20" max="500" placeholder="Ej. 80">
+              <div class="inline-error" id="err-superficie">El valor debe estar entre 20 y 500 m²</div>
+            </div>
+            <div class="form-group"><label>🏢 Número de niveles</label>
+              <div class="pill-group" id="niveles-group"><button type="button" class="pill-btn"
+                  data-value="1">1</button><button type="button" class="pill-btn" data-value="2">2</button><button
+                  type="button" class="pill-btn" data-value="3">3</button></div>
+              <div class="error-msg" id="err-niveles">Requerido</div>
+            </div>
+            <div class="form-group"><label>🛏️ Número de recámaras</label>
+              <div class="pill-group" id="recamaras-group"><button type="button" class="pill-btn"
+                  data-value="1">1</button><button type="button" class="pill-btn" data-value="2">2</button><button
+                  type="button" class="pill-btn" data-value="3">3</button><button type="button" class="pill-btn"
+                  data-value="4">4</button><button type="button" class="pill-btn" data-value="5">5</button></div>
+              <div class="error-msg" id="err-recamaras">Requerido</div>
+            </div>
+            <div class="form-group"><label>🚿 Baños completos</label>
+              <div class="helper-text">WC + lavabo + regadera</div>
+              <div class="pill-group mt-2" id="banos-group"><button type="button" class="pill-btn"
+                  data-value="1">1</button><button type="button" class="pill-btn" data-value="2">2</button><button
+                  type="button" class="pill-btn" data-value="3">3</button></div>
+              <div class="error-msg" id="err-banos">Requerido</div>
+            </div>
+            <div class="form-group"><label>🚽 Medios baños</label>
+              <div class="helper-text">WC + lavabo únicamente</div>
+              <div class="pill-group mt-2" id="mediosbanos-group"><button type="button" class="pill-btn"
+                  data-value="0">0</button><button type="button" class="pill-btn" data-value="1">1</button><button
+                  type="button" class="pill-btn" data-value="2">2</button></div>
+              <div class="error-msg" id="err-mediosbanos">Requerido</div>
             </div>
           </div>
+          <div class="nav-buttons"><button type="button" class="btn-next btn-forward" data-next="screen2">SIGUIENTE PASO
+              →</button></div>
+        </div>
 
-          <!-- Recámaras -->
+        <!-- SECTION 2 -->
+        <div id="screen2" class="screen section-pro-only" style="display:none">
+          <h1>Sistema Estructural</h1>
           <div class="card">
-            <div class="form-group">
-              <label>🛏️ Número de recámaras</label>
-              <div class="pill-group" id="recamaras-group">
-                <button type="button" class="pill-btn" data-value="1">1</button>
-                <button type="button" class="pill-btn" data-value="2">2</button>
-                <button type="button" class="pill-btn" data-value="3">3</button>
-                <button type="button" class="pill-btn" data-value="4">4</button>
-                <button type="button" class="pill-btn" data-value="5">5</button>
-              </div>
-              <div class="error-msg" id="err-recamaras">Selecciona el número de recámaras</div>
-            </div>
-          </div>
-
-          <!-- Baños -->
-          <div class="card">
-            <div class="form-group">
-              <label>🚿 Número de baños</label>
-              <div class="pill-group" id="banos-group">
-                <button type="button" class="pill-btn" data-value="1">1</button>
-                <button type="button" class="pill-btn" data-value="2">2</button>
-                <button type="button" class="pill-btn" data-value="3">3</button>
-              </div>
-              <div class="error-msg" id="err-banos">Selecciona el número de baños</div>
-            </div>
-          </div>
-
-          <!-- Tipo de acabado -->
-          <div class="card">
-            <div class="form-group">
-              <label>🎨 Tipo de acabado</label>
-              <div class="card-selector" id="acabado-group">
-                <div class="select-card" data-value="economico">
-                  <div class="card-title">Económico</div>
-                  <div class="card-sub">Materiales básicos</div>
-                  <div class="checkmark">✓</div>
-                </div>
-                <div class="select-card" data-value="estandar">
-                  <span class="badge">MÁS POPULAR</span>
-                  <div class="card-title">Estándar</div>
-                  <div class="card-sub">Calidad media</div>
-                  <div class="checkmark">✓</div>
-                </div>
-                <div class="select-card" data-value="premium">
-                  <div class="card-title">Premium</div>
-                  <div class="card-sub">Alta calidad</div>
-                  <div class="checkmark">✓</div>
-                </div>
-              </div>
-              <div class="error-msg" id="err-acabado">Selecciona el tipo de acabado</div>
-            </div>
-          </div>
-
-          <!-- Tipo de cimentación -->
-          <div class="card">
-            <div class="form-group">
-              <label>🏗️ Tipo de cimentación</label>
+            <div class="form-group"><label>🏗️ Tipo de cimentación</label>
               <div class="card-selector" id="cimentacion-group">
                 <div class="select-card" data-value="zapatas">
-                  <div class="card-title">Zapatas aisladas</div>
-                  <div class="card-sub">Terreno firme</div>
-                  <div class="checkmark">✓</div>
+                  <div class="card-title"><span class="tooltip-wrap">Zapatas aisladas<span class="tooltip-icon">❓</span>
+                      <div class="tooltip-box">Bases de concreto armado bajo cada columna. Ideal para terrenos firmes.
+                        Es el sistema más económico y el más común en Tlaxcala.</div>
+                    </span></div>
                 </div>
-                <div class="select-card" data-value="losa">
-                  <div class="card-title">Losa de cimentación</div>
-                  <div class="card-sub">Mayor seguridad</div>
-                  <div class="checkmark">✓</div>
+                <div class="select-card" data-value="losa_cim">
+                  <div class="card-title"><span class="tooltip-wrap">Losa de cimentación<span
+                        class="tooltip-icon">❓</span>
+                      <div class="tooltip-box">Plataforma de concreto que cubre todo el terreno. Mayor protección
+                        sísmica. Recomendado para terrenos con relleno o arcilla.</div>
+                    </span></div>
+                </div>
+                <div class="select-card" data-value="pilotes">
+                  <div class="card-title">Pilotes + losa</div>
                 </div>
               </div>
-              <div class="error-msg" id="err-cimentacion">Selecciona el tipo de cimentación</div>
+              <div class="error-msg" id="err-cimentacion">Requerido</div>
+            </div>
+            <div class="form-group"><label>🧱 Sistema de muros</label>
+              <div class="card-selector" id="muros-group">
+                <div class="select-card" data-value="block">
+                  <div class="card-title"><span class="tooltip-wrap">Block concreto 15cm<span
+                        class="tooltip-icon">❓</span>
+                      <div class="tooltip-box">Material más usado en la región. Buen aislamiento térmico, resistente a
+                        sismo. 12.5 piezas por m².</div>
+                    </span></div>
+                </div>
+                <div class="select-card" data-value="tabique">
+                  <div class="card-title">Tabique rojo recocido</div>
+                </div>
+                <div class="select-card" data-value="mixto">
+                  <div class="card-title">Block + aplanado mixto</div>
+                </div>
+              </div>
+              <div class="error-msg" id="err-muros">Requerido</div>
+            </div>
+            <div class="form-group"><label>🏢 Sistema de losa</label>
+              <div class="card-selector" id="losa-group">
+                <div class="select-card" data-value="maciza">
+                  <div class="card-title"><span class="tooltip-wrap">Losa maciza<span class="tooltip-icon">❓</span>
+                      <div class="tooltip-box">Concreto armado sólido. Mayor resistencia pero más pesada y cara.
+                        Recomendada para 2+ niveles.</div>
+                    </span></div>
+                </div>
+                <div class="select-card" data-value="nervada"><span class="badge">POPULAR</span>
+                  <div class="card-title"><span class="tooltip-wrap">Vigueta y bovedilla<span
+                        class="tooltip-icon">❓</span>
+                      <div class="tooltip-box">Viguetas de concreto + bovedillas de poliestireno. Más ligera que losa
+                        maciza, misma resistencia. La más usada en casas de Tlaxcala/Puebla.</div>
+                    </span></div>
+                </div>
+                <div class="select-card" data-value="steeldeck">
+                  <div class="card-title">Steel deck</div>
+                </div>
+              </div>
+              <div class="error-msg" id="err-losa">Requerido</div>
+            </div>
+            <div class="form-group"><label>👷 Castillos y trabes</label>
+              <div class="toggle-row"><span><span class="tooltip-wrap">Incluir castillos/trabes<span
+                      class="tooltip-icon">❓</span>
+                    <div class="tooltip-box">Columnas y vigas de concreto armado que amarran los muros. Obligatorios en
+                      zona sísmica. Nunca construyas sin ellos.</div>
+                  </span></span>
+                <div class="toggle-switch on" id="castillos-toggle">
+                  <div class="toggle-knob"></div>
+                </div>
+              </div>
             </div>
           </div>
+          <div class="nav-buttons"><button type="button" class="btn-back btn-backward" data-back="screen1">←
+              ATRÁS</button><button type="button" class="btn-next btn-forward" data-next="screen3">SIGUIENTE PASO
+              →</button></div>
+        </div>
 
-          <!-- Bardeo perimetral -->
+        <!-- SECTION 3 -->
+        <div id="screen3" class="screen section-pro-only" style="display:none">
+          <h1>Acabados</h1>
           <div class="card">
-            <div class="form-group">
-              <label>🧱 Bardeo perimetral</label>
-              <div class="toggle-row">
-                <span>¿Incluir bardeo perimetral?</span>
+            <div class="form-group"><label>🎨 Nivel de acabados</label>
+              <div class="card-selector" id="acabado-group">
+                <div class="select-card" data-value="economico">
+                  <div class="card-title"><span class="tooltip-wrap">Económico<span class="tooltip-icon">❓</span>
+                      <div class="tooltip-box">Materiales funcionales de bajo costo. Piso de cemento o cerámica básica,
+                        pintura vinílica, ventanas de aluminio sencillas.</div>
+                    </span></div>
+                </div>
+                <div class="select-card" data-value="estandar"><span class="badge">MÁS POPULAR</span>
+                  <div class="card-title">Estándar</div>
+                </div>
+                <div class="select-card" data-value="premium">
+                  <div class="card-title"><span class="tooltip-wrap">Premium<span class="tooltip-icon">❓</span>
+                      <div class="tooltip-box">Porcelanato, pintura elastomérica, cancelería de aluminio anodizado,
+                        sanitarios de marca.</div>
+                    </span></div>
+                </div>
+              </div>
+              <div class="error-msg" id="err-acabado">Requerido</div>
+            </div>
+            <div class="form-group"><label>🔲 Tipo de piso</label><select id="piso-select" class="dropdown">
+                <option value="">Selecciona un piso...</option>
+                <option value="cemento">Cemento pulido</option>
+                <option value="ceramica_33">Cerámica 33x33</option>
+                <option value="ceramica_45">Cerámica 45x45</option>
+                <option value="porcelanato">Porcelanato 60x60</option>
+              </select>
+              <div class="error-msg" id="err-piso">Requerido</div>
+            </div>
+            <div class="form-group"><label>🧱 Tipo de aplanado</label>
+              <div class="card-selector" id="aplanado-group">
+                <div class="select-card" data-value="cemento_arena">
+                  <div class="card-title">Cemento-arena</div>
+                </div>
+                <div class="select-card" data-value="yeso">
+                  <div class="card-title">Yeso fino</div>
+                </div>
+              </div>
+              <div class="error-msg" id="err-aplanado">Requerido</div>
+            </div>
+            <div class="form-group"><label>🖌️ Pintura</label>
+              <div class="card-selector" id="pintura-group">
+                <div class="select-card" data-value="vinilica">
+                  <div class="card-title">Vinílica interior</div>
+                </div>
+                <div class="select-card" data-value="elastomerica">
+                  <div class="card-title">Elastomérica fachadas</div>
+                </div>
+              </div>
+              <div class="error-msg" id="err-pintura">Requerido</div>
+            </div>
+            <div class="form-group"><label>💧 Impermeabilizar losa</label>
+              <div class="toggle-row"><span>Incluir impermeabilización</span>
+                <div class="toggle-switch on" id="impermeabilizar-toggle">
+                  <div class="toggle-knob"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="nav-buttons"><button type="button" class="btn-back btn-backward" data-back="screen2">←
+              ATRÁS</button><button type="button" class="btn-next btn-forward" data-next="screen4">SIGUIENTE PASO
+              →</button></div>
+        </div>
+
+        <!-- SECTION 4 -->
+        <div id="screen4" class="screen section-pro-only" style="display:none">
+          <h1>Instalaciones</h1>
+          <div class="card">
+            <div class="form-group"><label>🚰 Hidráulica y Sanitaria</label>
+              <div class="card-selector" id="hidraulica-group">
+                <div class="select-card" data-value="pvc_12">
+                  <div class="card-title">PVC básico 1/2"</div>
+                </div>
+                <div class="select-card" data-value="pvc_34">
+                  <div class="card-title">PVC reforzado 3/4"</div>
+                </div>
+              </div>
+              <div class="error-msg" id="err-hidraulica">Requerido</div>
+            </div>
+            <div class="form-group"><label>⚡ Instalación Eléctrica</label>
+              <div class="card-selector" id="electrica-group">
+                <div class="select-card" data-value="basica">
+                  <div class="card-title">Básica cal.12</div>
+                </div>
+                <div class="select-card" data-value="completa"><span class="badge">RECOMENDADO</span>
+                  <div class="card-title">Completa cal.10+12</div>
+                </div>
+              </div>
+              <div class="error-msg" id="err-electrica">Requerido</div>
+            </div>
+            <div class="form-group"><label>🔥 Calentador de agua</label>
+              <div class="card-selector" id="calentador-group">
+                <div class="select-card" data-value="ninguno">
+                  <div class="card-title">Sin calentador</div>
+                </div>
+                <div class="select-card" data-value="gas">
+                  <div class="card-title">Gas 40L</div>
+                </div>
+                <div class="select-card" data-value="solar">
+                  <div class="card-title">Solar 200L</div>
+                </div>
+              </div>
+              <div class="error-msg" id="err-calentador">Requerido</div>
+            </div>
+          </div>
+          <div class="nav-buttons"><button type="button" class="btn-back btn-backward" data-back="screen3">←
+              ATRÁS</button><button type="button" class="btn-next btn-forward" data-next="screen5">SIGUIENTE PASO
+              →</button></div>
+        </div>
+
+        <!-- SECTION 5 -->
+        <div id="screen5" class="screen section-pro-only" style="display:none">
+          <h1>Elementos Extras</h1>
+          <div class="card">
+            <div class="form-group"><label>🧱 Bardeo perimetral</label>
+              <div class="toggle-row"><span>¿Incluir bardeo?</span>
                 <div class="toggle-switch" id="bardeo-toggle">
                   <div class="toggle-knob"></div>
                 </div>
               </div>
-              <div class="bardeo-sub" id="bardeo-sub">
-                <label for="bardeo-metros" style="font-weight:500;font-size:14px;">Metros lineales de bardeo</label>
-                <input type="number" id="bardeo-metros" min="4" max="200" placeholder="Ej. 40" inputmode="numeric"
-                  style="margin-top:8px;">
-                <div class="error-msg" id="err-bardeo">Ingresa entre 4 y 200 metros lineales</div>
+              <div class="bardeo-sub" id="bardeo-sub"><label>Metros lineales</label><input type="number"
+                  id="bardeo-metros">
+                <div class="error-msg" id="err-bardeo">Requerido</div>
+              </div>
+            </div>
+            <div class="form-group"><label>🚗 Cochera techada</label>
+              <div class="toggle-row"><span>¿Incluir cochera?</span>
+                <div class="toggle-switch" id="cochera-toggle">
+                  <div class="toggle-knob"></div>
+                </div>
+              </div>
+              <div class="bardeo-sub" id="cochera-sub"><select id="cochera-select" class="dropdown">
+                  <option value="1_auto">1 auto 15m²</option>
+                  <option value="2_autos">2 autos 25m²</option>
+                  <option value="porton">Con portón eléctrico</option>
+                </select></div>
+            </div>
+            <div class="form-group"><label>🛢️ Cisterna</label>
+              <div class="toggle-row"><span>¿Incluir cisterna?</span>
+                <div class="toggle-switch" id="cisterna-toggle">
+                  <div class="toggle-knob"></div>
+                </div>
+              </div>
+              <div class="bardeo-sub" id="cisterna-sub"><select id="cisterna-select" class="dropdown">
+                  <option value="5000">5,000L</option>
+                  <option value="10000">10,000L</option>
+                  <option value="20000">20,000L</option>
+                </select></div>
+            </div>
+            <div class="form-group" id="escaleras-container" style="display:none;"><label>🪜 Escaleras</label><select
+                id="escalera-select" class="dropdown">
+                <option value="recta">Recta concreto</option>
+                <option value="l_barandal">En L + barandal</option>
+              </select></div>
+            <div class="form-group"><label>🪟 Ventanas y Puertas</label>
+              <div class="mb-2"><label class="text-small">Ventanas (cantidad)</label><input type="number" id="ventanas"
+                  min="0" value="0"></div>
+              <div class="mb-2"><label class="text-small">Puertas interiores</label><input type="number" id="puertas"
+                  min="0" value="0"></div>
+              <p class="helper-text mt-2">La puerta principal siempre se incluye automáticamente.</p>
+            </div>
+          </div>
+          <div class="nav-buttons"><button type="button" class="btn-back btn-backward" data-back="screen4">←
+              ATRÁS</button><button type="submit" class="btn-next btn-submit" id="btn-calcular"><span
+                class="spinner"></span><span class="btn-text">CALCULAR TOTAL</span></button></div>
+        </div>
+
+        <div id="screen-loading" class="screen">
+          <div class="loading-screen">
+            <div class="loading-bars"><span></span><span></span><span></span><span></span><span></span></div>
+            <div class="loading-text">Procesando V2.0...</div>
+          </div>
+        </div>
+
+        <div id="screen-results" class="screen">
+          <div class="print-header">ObraDigitalMX — Cotización de Obra</div>
+          <div class="card result-hero" id="result-hero"></div>
+
+          <div class="obra-timeline">
+            <h3 style="font-size:14px;font-weight:500;color:#1B2B4B;margin-bottom:16px">🏗️ Fases de tu obra</h3>
+            <div class="timeline-steps" id="timeline-steps"></div>
+          </div>
+
+          <div class="tabs">
+            <button class="tab-btn active" data-tab="tab-resumen">Resumen</button>
+            <button class="tab-btn" data-tab="tab-materiales">Materiales</button>
+            <button class="tab-btn" data-tab="tab-mano">Mano de obra</button>
+            <button class="tab-btn" data-tab="tab-comparativa">📊 Comparativa</button>
+          </div>
+
+          <div class="tab-content active" id="tab-resumen">
+            <div class="card">
+              <h2>💰 Resumen Financiero</h2>
+              <div id="finance-summary"></div>
+            </div>
+          </div>
+          <div class="tab-content" id="tab-materiales">
+            <div class="card">
+              <h2>📦 Materiales</h2>
+              <div class="table-wrapper">
+                <table class="data-table" id="table-materiales"></table>
+              </div>
+            </div>
+          </div>
+          <div class="tab-content" id="tab-mano">
+            <div class="card">
+              <h2>👷 Mano de Obra</h2>
+              <p class="text-small mb-2">* Incluye factor prestaciones IMSS 1.35x</p>
+              <div class="table-wrapper">
+                <table class="data-table" id="table-labor"></table>
+              </div>
+            </div>
+          </div>
+          <div class="tab-content" id="tab-comparativa">
+            <div class="card">
+              <h2>📊 Comparativa por Nivel de Acabado</h2>
+              <div class="table-wrapper">
+                <table class="data-table" id="table-comparativa"></table>
               </div>
             </div>
           </div>
 
-          <!-- Botón submit -->
-          <button type="submit" class="btn-submit" id="btn-calcular">
-            <span class="spinner"></span>
-            <span class="btn-text">CALCULAR PRESUPUESTO →</span>
-          </button>
-
-        </form>
-      </div>
-
-      <!-- ═══════════════════════════════════════════════ -->
-      <!-- ═══ PANTALLA 2: PROCESANDO ═══ -->
-      <!-- ═══════════════════════════════════════════════ -->
-      <div id="screen2" class="screen">
-        <div class="loading-screen">
-          <div class="loading-bars">
-            <span></span><span></span><span></span><span></span><span></span>
+          <div class="action-buttons"><button class="btn-action btn-print" onclick="window.print()">🖨️ Imprimir /
+              PDF</button><button class="btn-action btn-new" id="btn-nueva">↩ Nueva Cotización</button></div>
+          <div class="disclaimer">Estimación basada en CMIC Puebla 2024 + inflación INEGI +4.92% + salarios IMSS enero
+            2026. Sin IVA.</div>
+          <div class="metodologia" id="metodologia-c" style="display:none">
+            <h4 style="font-size:13px;font-weight:600;color:#1B2B4B;margin-bottom:10px">📋 Metodología y fuentes
+              oficiales</h4>
+            <ul style="font-size:12px;color:#444;line-height:1.7;padding-left:16px">
+              <li>Precios de materiales: Catálogo CMIC Puebla 2024, ajustado con inflación INEGI +4.92% (mayo 2024–mayo
+                2025)</li>
+              <li>Incremento específico Tlaxcala 2025: +9.2% (Fuente: CEICO/CMIC)</li>
+              <li>Salarios: Tabulador IMSS/CONASAMI enero 2026, Zona Salario Mínimo General. Factor prestaciones: 1.35x
+              </li>
+              <li>Imprevistos: 10% estándar industria construcción MX</li>
+              <li>Estimación referencial — no sustituye presupuesto ejecutivo elaborado por profesional certificado</li>
+            </ul>
+            <p style="font-size:11px;color:#888;margin-top:8px">Fuentes: <a
+                href="https://www.cmicpuebla.org/ingenieria-de-costos" target="_blank" style="color:#1B2B4B">CMIC
+                Puebla</a> · <a href="https://www.inegi.org.mx" target="_blank" style="color:#1B2B4B">INEGI</a> · <a
+                href="https://www.imss.gob.mx" target="_blank" style="color:#1B2B4B">IMSS 2026</a></p>
           </div>
-          <div class="loading-text">Calculando presupuesto...</div>
-          <div class="loading-sub">Analizando materiales, mano de obra y costos regionales</div>
-        </div>
-      </div>
-
-      <!-- ═══════════════════════════════════════════════ -->
-      <!-- ═══ PANTALLA 3: RESULTADOS ═══ -->
-      <!-- ═══════════════════════════════════════════════ -->
-      <div id="screen3" class="screen">
-
-        <!-- Encabezado solo para impresión -->
-        <div class="print-header">ObraDigitalMX — Cotización de Obra</div>
-
-        <!-- Sección A: Resumen Ejecutivo -->
-        <div class="card result-hero" id="result-hero">
-          <!-- Se llena dinámicamente -->
+          <div class="print-footer">Generado por ObraDigitalMX · <span id="print-date"></span><br>Estimación basada en
+            CMIC Puebla 2024.</div>
         </div>
 
-        <!-- Sección B: Desglose de Materiales -->
-        <div class="card">
-          <h2>📦 Desglose de Materiales</h2>
-          <div class="table-wrapper">
-            <table class="data-table" id="table-materiales">
-              <!-- Se llena dinámicamente -->
-            </table>
-          </div>
-        </div>
-
-        <!-- Sección C: Mano de Obra -->
-        <div class="card">
-          <h2>👷 Mano de Obra</h2>
-          <div class="table-wrapper">
-            <table class="data-table" id="table-labor">
-              <!-- Se llena dinámicamente -->
-            </table>
-          </div>
-        </div>
-
-        <!-- Sección D: Resumen Financiero -->
-        <div class="card">
-          <h2>💰 Resumen Financiero</h2>
-          <div id="finance-summary">
-            <!-- Se llena dinámicamente -->
-          </div>
-        </div>
-
-        <!-- Sección E: Botones de Acción -->
-        <div class="action-buttons" style="margin-bottom:24px;">
-          <button class="btn-action btn-print" onclick="window.print()">🖨️ Imprimir / Guardar PDF</button>
-          <button class="btn-action btn-new" id="btn-nueva">↩ Nueva Cotización</button>
-        </div>
-
-        <!-- Sección F: Disclaimer -->
-        <div class="disclaimer">
-          Este presupuesto es una estimación referencial basada en precios de materiales y mano de obra vigentes en
-          Tlaxcala/Puebla en 2026. Los precios reales pueden variar según proveedor y condiciones del terreno.
-          ObraDigitalMX no se hace responsable de variaciones en el costo final de obra.
-        </div>
-
-        <!-- Pie solo para impresión -->
-        <div class="print-footer">
-          Generado por ObraDigitalMX · <span id="print-date"></span><br>
-          Este presupuesto es una estimación referencial. Los precios reales pueden variar.
-        </div>
-
-      </div>
-
+      </form>
     </div>
   </main>
 
-  <!-- ═══ FOOTER ═══ -->
   <footer class="app-footer">
     Precios basados en Catálogo CMIC Puebla 2024 con ajuste inflación 2025 · Salarios IMSS 2026
   </footer>
 
   <script>
-    /* ═══════════════════════════════════════════════ */
-    /* ═══ NOTA SOBRE CARGA DE PRECIOS ═══ */
-    /* ═══════════════════════════════════════════════ */
-    /*
-     * IMPORTANTE: La carga dinámica de precios desde precios-cmic.json
-     * usa fetch(), que SOLO funciona cuando la app se sirve desde un
-     * servidor web (GitHub Pages, http-server, etc.).
-     *
-     * Si abres index.html directamente con file:// en el navegador,
-     * fetch() fallará silenciosamente y la app usará los precios
-     * hardcoded como respaldo. La app NUNCA se rompe.
-     */
+    const PRECIOS_EMBEDDED = {
+      "metadata": {
+        "fuente": "CMIC Puebla - Catálogo Regional 2024",
+        "url": "https://www.cmicpuebla.org/ingenieria-de-costos",
+        "vigencia_base": "Junio 2024",
+        "ajuste_inflacion": "Mayo 2024 a Mayo 2025",
+        "inflacion_residencial": 0.0492,
+        "salarios_vigentes": "Enero 2026",
+        "region": "Puebla/Tlaxcala",
+        "ultima_actualizacion": "Marzo 2026",
+        "proxima_revision": "Junio 2026"
+      },
 
-    /* ═══════════════════════════════════════════════ */
-    /* ═══ PRECIOS HARDCODED (RESPALDO) ═══ */
-    /* ═══════════════════════════════════════════════ */
-    /* Estos valores se usan si precios-cmic.json no se puede cargar */
-    let MATERIALES = [
-      { nombre: 'Block 15×20×40cm', unidad: 'pzas', precio: 8.50, cantidadPorM2: 12.5, marca: '' },
-      { nombre: 'Cemento 50kg', unidad: 'bolsas', precio: 210.00, cantidadPorM2: 0.35, marca: '' },
-      { nombre: 'Arena', unidad: 'm³', precio: 280.00, cantidadPorM2: 0.04, marca: '' },
-      { nombre: 'Grava', unidad: 'm³', precio: 320.00, cantidadPorM2: 0.02, marca: '' },
-      { nombre: 'Varilla 3/8" × 12m', unidad: 'pzas', precio: 185.00, cantidadPorM2: 0.8, marca: '' },
-      { nombre: 'Varilla 1/2" × 12m', unidad: 'pzas', precio: 320.00, cantidadPorM2: 0.3, marca: '' },
-      { nombre: 'Alambre recocido', unidad: 'kg', precio: 32.00, cantidadPorM2: 0.5, marca: '' }
-    ];
-
-    let BASE_MATERIAL_PER_M2 = 457.35;
-    let BASE_LABOR_PER_M2 = 293.33;
-
-    const ACABADO_MULT = { economico: 1.0, estandar: 1.35, premium: 1.80 };
-    const ACABADO_LABEL = { economico: 'Económico', estandar: 'Estándar', premium: 'Premium' };
-
-    const CIMENTACION = {
-      zapatas: { material: 85, labor: 55 },
-      losa: { material: 140, labor: 90 }
-    };
-    const CIMENTACION_LABEL = { zapatas: 'Zapatas aisladas', losa: 'Losa de cimentación' };
-
-    const BARDEO_POR_ML = 500;
-    const COSTO_EXTRA_RECAMARA = 4500;
-    const COSTO_EXTRA_BANO = 6800;
-    const PORCENTAJE_IMPREVISTOS = 0.10;
-    const M2_POR_SEMANA = 12;
-
-    let LABOR_DETAIL = [
-      { concepto: 'Oficial albañil', salarioDia: 450, m2PorDia: 2.5, costoPorM2: 180 },
-      { concepto: 'Peón', salarioDia: 280, m2PorDia: 4, costoPorM2: 70 },
-      { concepto: 'Maestro de obra', salarioDia: 650, m2PorDia: 15, costoPorM2: 43.33 }
-    ];
-
-    /* Bandera: ¿se cargaron precios del JSON? */
-    let preciosCMICCargados = false;
-    let metadataCMIC = null;
-
-    /* ═══════════════════════════════════════════════ */
-    /* ═══ CARGA DINÁMICA DE PRECIOS CMIC ═══ */
-    /* ═══════════════════════════════════════════════ */
-    /* Mapeo de IDs del JSON a los 7 materiales del cotizador */
-    const JSON_TO_MAT_MAP = [
-      { jsonId: 'block_15_20_40',     idx: 0 },
-      { jsonId: 'cemento_cpc30r_50kg', idx: 1 },
-      { jsonId: 'arena_fina',          idx: 2 },
-      { jsonId: 'grava_3_4',           idx: 3 },
-      { jsonId: 'varilla_3_8',         idx: 4 },
-      { jsonId: 'varilla_1_2',         idx: 5 },
-      { jsonId: 'alambre_recocido',    idx: 6 }
-    ];
-
-    /* Mapeo de IDs del JSON a los 3 trabajadores del cotizador */
-    const JSON_TO_LABOR_MAP = [
-      { jsonId: 'oficial_albanileria', idx: 0, m2PorDia: 2.5 },
-      { jsonId: 'peon_construccion',   idx: 1, m2PorDia: 4 },
-      { jsonId: 'maestro_obra',        idx: 2, m2PorDia: 15 }
-    ];
-
-    /* Buscar un material por ID en todas las categorías del JSON */
-    const findMaterialById = (materialesJSON, id) => {
-      const categorias = Object.values(materialesJSON);
-      for (const cat of categorias) {
-        const found = cat.find(m => m.id === id);
-        if (found) return found;
-      }
-      return null;
-    };
-
-    /* Buscar un trabajador por ID en el array del JSON */
-    const findWorkerById = (trabajadores, id) => {
-      return trabajadores.find(w => w.id === id) || null;
-    };
-
-    /* Aplicar precios del JSON a las variables del cotizador */
-    const applyJSONPrices = (data) => {
-      try {
-        /* Actualizar materiales */
-        JSON_TO_MAT_MAP.forEach(mapping => {
-          const jsonMat = findMaterialById(data.materiales, mapping.jsonId);
-          if (jsonMat && jsonMat.precio_actualizado) {
-            MATERIALES[mapping.idx].precio = jsonMat.precio_actualizado;
-            MATERIALES[mapping.idx].marca = (jsonMat.marcas && jsonMat.marcas.length > 0)
-              ? jsonMat.marcas[0] : '';
+      "materiales": {
+        "mamposteria": [
+          {
+            "id": "block_15_20_40",
+            "nombre": "Block hueco de concreto 15×20×40cm",
+            "marcas": ["Cementos Cruz Azul", "Productor local Tlaxcala"],
+            "precio_base_2024": 7.95,
+            "factor_inflacion": 1.065,
+            "precio_actualizado": 8.47,
+            "unidad": "pieza",
+            "rendimiento_m2": 12.5,
+            "costo_por_m2": 105.88,
+            "incluye_desperdicio": true,
+            "porcentaje_desperdicio": 5
+          },
+          {
+            "id": "tabique_rojo",
+            "nombre": "Tabique rojo recocido 7×14×28cm",
+            "marcas": ["Ladrillera San Pablo", "Ladrillera local Tlaxcala"],
+            "precio_base_2024": 4.20,
+            "factor_inflacion": 1.052,
+            "precio_actualizado": 4.42,
+            "unidad": "pieza",
+            "rendimiento_m2": 36,
+            "costo_por_m2": 159.12,
+            "incluye_desperdicio": true,
+            "porcentaje_desperdicio": 5
           }
-        });
-
-        /* Recalcular BASE_MATERIAL_PER_M2 con precios actualizados */
-        BASE_MATERIAL_PER_M2 = MATERIALES.reduce(
-          (sum, mat) => sum + (mat.precio * mat.cantidadPorM2), 0
-        );
-
-        /* Actualizar mano de obra */
-        JSON_TO_LABOR_MAP.forEach(mapping => {
-          const jsonWorker = findWorkerById(data.mano_de_obra.trabajadores, mapping.jsonId);
-          if (jsonWorker && jsonWorker.costo_real_dia) {
-            const costoPorM2 = jsonWorker.costo_real_dia / mapping.m2PorDia;
-            LABOR_DETAIL[mapping.idx].salarioDia = jsonWorker.costo_real_dia;
-            LABOR_DETAIL[mapping.idx].costoPorM2 = Math.round(costoPorM2 * 100) / 100;
+        ],
+        "cementantes": [
+          {
+            "id": "cemento_cpc30r_50kg",
+            "nombre": "Cemento Portland CPC 30R bolsa 50kg",
+            "marcas": ["Tolteca", "Cruz Azul", "Moctezuma"],
+            "precio_base_2024": 198.00,
+            "factor_inflacion": 1.051,
+            "precio_actualizado": 208.10,
+            "unidad": "bolsa 50kg",
+            "rendimiento_m2_muros": 0.35,
+            "costo_por_m2_muros": 72.84,
+            "incluye_desperdicio": true,
+            "porcentaje_desperdicio": 3
+          },
+          {
+            "id": "cemento_cpc40_50kg",
+            "nombre": "Cemento Portland CPC 40 bolsa 50kg",
+            "marcas": ["Tolteca", "Cruz Azul"],
+            "precio_base_2024": 215.00,
+            "factor_inflacion": 1.051,
+            "precio_actualizado": 225.97,
+            "unidad": "bolsa 50kg",
+            "rendimiento_m2_losa": 0.45,
+            "costo_por_m2_losa": 101.69
+          },
+          {
+            "id": "cal_hidratada",
+            "nombre": "Cal hidratada bolsa 20kg",
+            "marcas": ["Calmex", "Cal del Bravo"],
+            "precio_base_2024": 95.00,
+            "factor_inflacion": 1.020,
+            "precio_actualizado": 96.90,
+            "unidad": "bolsa 20kg"
           }
-        });
+        ],
+        "agregados": [
+          {
+            "id": "arena_fina",
+            "nombre": "Arena fina lavada para mortero",
+            "marcas": ["Proveedor local Atoyac", "Banco de material Tlaxcala"],
+            "precio_base_2024": 255.00,
+            "factor_inflacion": 1.094,
+            "precio_actualizado": 278.97,
+            "unidad": "m³",
+            "rendimiento_m2_mortero": 0.04,
+            "costo_por_m2": 11.16
+          },
+          {
+            "id": "grava_3_4",
+            "nombre": "Grava 3/4\" para concreto",
+            "marcas": ["Banco de material Tlaxcala", "Proveedor local"],
+            "precio_base_2024": 295.00,
+            "factor_inflacion": 1.094,
+            "precio_actualizado": 322.73,
+            "unidad": "m³",
+            "rendimiento_m2_losa": 0.12,
+            "costo_por_m2_losa": 38.73
+          },
+          {
+            "id": "arena_gruesa",
+            "nombre": "Arena gruesa para concreto",
+            "marcas": ["Banco de material Tlaxcala"],
+            "precio_base_2024": 240.00,
+            "factor_inflacion": 1.094,
+            "precio_actualizado": 262.56,
+            "unidad": "m³"
+          }
+        ],
+        "acero": [
+          {
+            "id": "varilla_3_8",
+            "nombre": "Varilla corrugada 3/8\" (9.5mm) × 12m",
+            "marcas": ["Deacero", "Ternium", "Simec"],
+            "precio_base_2024": 194.00,
+            "factor_inflacion": 0.950,
+            "precio_actualizado": 184.30,
+            "unidad": "pieza 12m",
+            "peso_kg": 8.06,
+            "rendimiento_m2_losa": 0.85,
+            "costo_por_m2_losa": 156.66,
+            "incluye_desperdicio": true,
+            "porcentaje_desperdicio": 6
+          },
+          {
+            "id": "varilla_1_2",
+            "nombre": "Varilla corrugada 1/2\" (12.7mm) × 12m",
+            "marcas": ["Deacero", "Ternium", "Simec"],
+            "precio_base_2024": 335.00,
+            "factor_inflacion": 0.950,
+            "precio_actualizado": 318.25,
+            "unidad": "pieza 12m",
+            "peso_kg": 14.32,
+            "rendimiento_m2_trabe": 0.30,
+            "costo_por_m2_trabe": 95.48
+          },
+          {
+            "id": "varilla_1_4",
+            "nombre": "Varilla lisa 1/4\" (6.35mm) × 12m",
+            "marcas": ["Deacero", "Ternium"],
+            "precio_base_2024": 98.00,
+            "factor_inflacion": 0.950,
+            "precio_actualizado": 93.10,
+            "unidad": "pieza 12m"
+          },
+          {
+            "id": "alambre_recocido",
+            "nombre": "Alambre recocido cal. 16",
+            "marcas": ["Aceros Trefilados", "Deacero"],
+            "precio_base_2024": 34.00,
+            "factor_inflacion": 0.993,
+            "precio_actualizado": 33.76,
+            "unidad": "kg",
+            "rendimiento_m2": 0.50,
+            "costo_por_m2": 16.88
+          },
+          {
+            "id": "malla_electrosoldada_6_6",
+            "nombre": "Malla electrosoldada 6×6-10/10 (1.5×6m)",
+            "marcas": ["Aceromex", "Deacero"],
+            "precio_base_2024": 850.00,
+            "factor_inflacion": 0.950,
+            "precio_actualizado": 807.50,
+            "unidad": "rollo 9m²"
+          }
+        ],
+        "impermeabilizantes": [
+          {
+            "id": "impermeabilizante_acrilico",
+            "nombre": "Impermeabilizante acrílico 10 años cubo 19L",
+            "marcas": ["Sika", "Comex", "Fester"],
+            "precio_base_2024": 680.00,
+            "factor_inflacion": 1.025,
+            "precio_actualizado": 697.00,
+            "unidad": "cubo 19L",
+            "rendimiento_m2": 3.5,
+            "costo_por_m2": 199.14
+          },
+          {
+            "id": "impermeabilizante_base_cemento",
+            "nombre": "Impermeabilizante base cemento bolsa 20kg",
+            "marcas": ["Sika", "Fester"],
+            "precio_base_2024": 280.00,
+            "factor_inflacion": 1.025,
+            "precio_actualizado": 287.00,
+            "unidad": "bolsa 20kg"
+          }
+        ],
+        "acabados": [
+          {
+            "id": "yeso_fino",
+            "nombre": "Yeso fino para interiores bolsa 20kg",
+            "marcas": ["USG", "Gyplac"],
+            "precio_base_2024": 145.00,
+            "factor_inflacion": 1.049,
+            "precio_actualizado": 152.21,
+            "unidad": "bolsa 20kg",
+            "rendimiento_m2": 2.5,
+            "costo_por_m2": 60.88
+          },
+          {
+            "id": "pintura_vinilica_cubeta",
+            "nombre": "Pintura vinílica interior cubeta 19L",
+            "marcas": ["Comex", "Sherwin Williams", "Pinturas y Pinturas"],
+            "precio_base_2024": 520.00,
+            "factor_inflacion": 1.031,
+            "precio_actualizado": 536.12,
+            "unidad": "cubeta 19L",
+            "rendimiento_m2": 35,
+            "costo_por_m2": 15.32
+          },
+          {
+            "id": "pintura_fachadas",
+            "nombre": "Pintura elastomérica fachadas cubeta 19L",
+            "marcas": ["Comex", "Sherwin Williams"],
+            "precio_base_2024": 780.00,
+            "factor_inflacion": 1.031,
+            "precio_actualizado": 804.18,
+            "unidad": "cubeta 19L",
+            "rendimiento_m2": 30,
+            "costo_por_m2": 26.81
+          },
+          {
+            "id": "azulejo_standard",
+            "nombre": "Azulejo de cerámica 25×33cm",
+            "marcas": ["Interceramic", "Porcelanite", "Vitromex"],
+            "precio_base_2024": 115.00,
+            "factor_inflacion": 1.046,
+            "precio_actualizado": 120.29,
+            "unidad": "m²",
+            "incluye_desperdicio": true,
+            "porcentaje_desperdicio": 10
+          },
+          {
+            "id": "piso_ceramico",
+            "nombre": "Piso cerámico 45×45cm",
+            "marcas": ["Interceramic", "Porcelanite", "Vitromex"],
+            "precio_base_2024": 145.00,
+            "factor_inflacion": 1.046,
+            "precio_actualizado": 151.67,
+            "unidad": "m²",
+            "incluye_desperdicio": true,
+            "porcentaje_desperdicio": 10
+          },
+          {
+            "id": "piso_porcelanato",
+            "nombre": "Piso porcelanato 60×60cm",
+            "marcas": ["Interceramic", "San Lorenzo"],
+            "precio_base_2024": 280.00,
+            "factor_inflacion": 1.046,
+            "precio_actualizado": 292.88,
+            "unidad": "m²"
+          }
+        ],
+        "instalaciones": [
+          {
+            "id": "tubo_pvc_hidraulico_1_2",
+            "nombre": "Tubo PVC hidráulico 1/2\" × 6m",
+            "marcas": ["Amanco", "Mexichem", "Vinilit"],
+            "precio_base_2024": 42.00,
+            "factor_inflacion": 1.110,
+            "precio_actualizado": 46.62,
+            "unidad": "pieza 6m"
+          },
+          {
+            "id": "tubo_pvc_hidraulico_3_4",
+            "nombre": "Tubo PVC hidráulico 3/4\" × 6m",
+            "marcas": ["Amanco", "Mexichem"],
+            "precio_base_2024": 65.00,
+            "factor_inflacion": 1.110,
+            "precio_actualizado": 72.15,
+            "unidad": "pieza 6m"
+          },
+          {
+            "id": "tubo_pvc_sanitario_4",
+            "nombre": "Tubo PVC sanitario 4\" × 6m",
+            "marcas": ["Amanco", "Mexichem"],
+            "precio_base_2024": 185.00,
+            "factor_inflacion": 1.110,
+            "precio_actualizado": 205.35,
+            "unidad": "pieza 6m"
+          },
+          {
+            "id": "cable_thw_12",
+            "nombre": "Cable eléctrico THW cal. 12 rollo 100m",
+            "marcas": ["Condumex", "Viakon", "Phelps Dodge"],
+            "precio_base_2024": 1250.00,
+            "factor_inflacion": 1.144,
+            "precio_actualizado": 1430.00,
+            "unidad": "rollo 100m"
+          },
+          {
+            "id": "cable_thw_10",
+            "nombre": "Cable eléctrico THW cal. 10 rollo 100m",
+            "marcas": ["Condumex", "Viakon"],
+            "precio_base_2024": 1850.00,
+            "factor_inflacion": 1.144,
+            "precio_actualizado": 2115.40,
+            "unidad": "rollo 100m"
+          }
+        ],
+        "carpinteria_aluminio": [
+          {
+            "id": "ventana_aluminio_vidrio",
+            "nombre": "Ventana aluminio natural + vidrio 6mm 1.20×1.20m",
+            "marcas": ["Cuprum", "Tecnología en Aluminio"],
+            "precio_base_2024": 1450.00,
+            "factor_inflacion": 1.156,
+            "precio_actualizado": 1676.20,
+            "unidad": "pieza 1.20×1.20m"
+          },
+          {
+            "id": "puerta_principal_madera",
+            "nombre": "Puerta principal madera sólida + marco 0.90×2.10m",
+            "marcas": ["Puertas Uniarte", "Dica"],
+            "precio_base_2024": 3200.00,
+            "factor_inflacion": 1.032,
+            "precio_actualizado": 3302.40,
+            "unidad": "pieza"
+          },
+          {
+            "id": "puerta_interior_tambor",
+            "nombre": "Puerta interior tambor MDF + marco 0.90×2.10m",
+            "marcas": ["Puertas Uniarte", "Dica"],
+            "precio_base_2024": 1800.00,
+            "factor_inflacion": 1.032,
+            "precio_actualizado": 1857.60,
+            "unidad": "pieza"
+          }
+        ],
+        "sanitarios": [
+          {
+            "id": "wc_sencillo",
+            "nombre": "WC sencillo blanco con tanque",
+            "marcas": ["Lamosa", "Porcelana México", "FV"],
+            "precio_base_2024": 950.00,
+            "factor_inflacion": 1.032,
+            "precio_actualizado": 980.40,
+            "unidad": "pieza"
+          },
+          {
+            "id": "lavabo_empotrado",
+            "nombre": "Lavabo empotrado blanco",
+            "marcas": ["Lamosa", "Porcelana México"],
+            "precio_base_2024": 650.00,
+            "factor_inflacion": 1.032,
+            "precio_actualizado": 670.80,
+            "unidad": "pieza"
+          },
+          {
+            "id": "regadera_sencilla",
+            "nombre": "Regadera cromada básica",
+            "marcas": ["FV", "Foset"],
+            "precio_base_2024": 280.00,
+            "factor_inflacion": 1.032,
+            "precio_actualizado": 288.96,
+            "unidad": "pieza"
+          }
+        ]
+      },
 
-        /* Recalcular BASE_LABOR_PER_M2 con costos actualizados */
-        BASE_LABOR_PER_M2 = LABOR_DETAIL.reduce(
-          (sum, l) => sum + l.costoPorM2, 0
-        );
+      "mano_de_obra": {
+        "fuente": "IMSS/CONASAMI vigente enero 2026",
+        "zona": "Zona del Salario Mínimo General (Tlaxcala/Puebla)",
+        "salario_minimo_diario_2026": 315.04,
+        "trabajadores": [
+          {
+            "id": "oficial_albanileria",
+            "nombre": "Oficial de albañilería",
+            "salario_diario_oficial": 363.44,
+            "factor_prestaciones_imss": 1.35,
+            "costo_real_dia": 490.64,
+            "rendimiento_m2_muro": 2.5,
+            "rendimiento_m2_losa": 2.0,
+            "costo_m2_muro": 196.26,
+            "costo_m2_losa": 245.32
+          },
+          {
+            "id": "peon_construccion",
+            "nombre": "Peón de construcción",
+            "salario_diario_oficial": 315.04,
+            "factor_prestaciones_imss": 1.35,
+            "costo_real_dia": 425.30,
+            "rendimiento_m2": 4.0,
+            "costo_por_m2": 106.33
+          },
+          {
+            "id": "maestro_obra",
+            "nombre": "Maestro de obra",
+            "salario_diario_oficial": 520.00,
+            "factor_prestaciones_imss": 1.35,
+            "costo_real_dia": 702.00,
+            "supervision_m2_dia": 15,
+            "costo_por_m2": 46.80
+          },
+          {
+            "id": "plomero_oficial",
+            "nombre": "Plomero oficial instalaciones sanitarias",
+            "salario_diario_oficial": 349.84,
+            "factor_prestaciones_imss": 1.35,
+            "costo_real_dia": 472.28,
+            "costo_bano_completo": 2800.00
+          },
+          {
+            "id": "electricista_oficial",
+            "nombre": "Electricista oficial instalaciones eléctricas",
+            "salario_diario_oficial": 356.19,
+            "factor_prestaciones_imss": 1.35,
+            "costo_real_dia": 480.86,
+            "costo_punto_electrico": 350.00
+          },
+          {
+            "id": "pintor_oficial",
+            "nombre": "Pintor de casas y edificios oficial",
+            "salario_diario_oficial": 349.22,
+            "factor_prestaciones_imss": 1.35,
+            "costo_real_dia": 471.45,
+            "rendimiento_m2_dia": 25,
+            "costo_por_m2": 18.86
+          },
+          {
+            "id": "herrero_oficial",
+            "nombre": "Herrero oficial",
+            "salario_diario_oficial": 351.59,
+            "factor_prestaciones_imss": 1.35,
+            "costo_real_dia": 474.65
+          },
+          {
+            "id": "carpintero_obra_negra",
+            "nombre": "Carpintero de obra negra",
+            "salario_diario_oficial": 363.44,
+            "factor_prestaciones_imss": 1.35,
+            "costo_real_dia": 490.64
+          }
+        ]
+      },
 
-        /* Guardar metadata para mostrar en resultados */
-        metadataCMIC = data.metadata;
-        preciosCMICCargados = true;
-
-        console.log('✅ Precios CMIC cargados correctamente');
-        console.log('   BASE_MATERIAL_PER_M2:', BASE_MATERIAL_PER_M2.toFixed(2));
-        console.log('   BASE_LABOR_PER_M2:', BASE_LABOR_PER_M2.toFixed(2));
-      } catch (err) {
-        console.warn('⚠️ Error al aplicar precios CMIC, usando respaldo:', err);
+      "costos_por_m2_referencia": {
+        "fuente": "CMIC Puebla + IMSS 2026 - Costo directo sin IVA",
+        "vivienda_economica_40m2": {
+          "descripcion": "Casa mínima tipo INFONAVIT",
+          "costo_m2_materiales": 4200,
+          "costo_m2_mano_obra": 1800,
+          "costo_m2_total_directo": 6000,
+          "variacion_anual_2025": 0.0562
+        },
+        "vivienda_media_90m2": {
+          "descripcion": "Casa dúplex estándar",
+          "costo_m2_materiales": 5800,
+          "costo_m2_mano_obra": 2400,
+          "costo_m2_total_directo": 8200,
+          "variacion_anual_2025": 0.0547
+        }
       }
+    }
+      ;
+    const formState = {
+      mode: 'simple',
+      superficie: 0, niveles: 0, recamaras: 0, banos: 0, mediosBanos: 0,
+      cimentacion: null, muros: null, losa: null, castillos: true,
+      acabado: null, tipoPiso: null, aplanado: null, pintura: null, impermeabilizar: true,
+      hidraulica: null, electrica: null, calentador: null,
+      bardeo: false, bardeoMetros: 0, cochera: false, cocheraTipo: null, cisterna: false, cisternaTipo: null,
+      escaleras: null, ventanas: 0, puertasInt: 0
     };
 
-    /* Cargar el JSON al iniciar la app */
-    const loadPrices = async () => {
-      const loader = document.getElementById('init-loader');
-      try {
-        const response = await fetch('precios-cmic.json');
-        if (!response.ok) throw new Error('HTTP ' + response.status);
-        const data = await response.json();
-        applyJSONPrices(data);
-      } catch (err) {
-        /* Fallo silencioso: la app funciona con precios hardcoded */
-        console.warn('⚠️ No se pudo cargar precios-cmic.json:', err.message);
-        console.warn('   Usando precios de respaldo hardcoded.');
-      } finally {
-        /* Ocultar loader inicial */
-        loader.classList.add('hidden');
-        setTimeout(() => loader.remove(), 300);
-      }
-    };
+    let rawData = null;
+    const formatMoney = v => v.toLocaleString('es-MX', { style: 'currency', currency: 'MXN' });
 
-    /* Ejecutar carga al iniciar */
-    loadPrices();
+    function setMode(mode) {
+      formState.mode = mode;
+      const isSimple = mode === 'simple';
 
-    /* ═══════════════════════════════════════════════ */
-    /* ═══ FORMATO DE MONEDA ═══ */
-    /* ═══════════════════════════════════════════════ */
-    const formatMoney = (val) => {
-      return val.toLocaleString('es-MX', { style: 'currency', currency: 'MXN' });
-    };
-    const formatNum = (val, decimals = 1) => {
-      return val.toLocaleString('es-MX', { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
-    };
+      document.getElementById('btn-simple').classList.toggle('active', isSimple);
+      document.getElementById('btn-pro').classList.toggle('active', !isSimple);
 
-    /* ═══════════════════════════════════════════════ */
-    /* ═══ MOTOR DE CÁLCULO ═══ */
-    /* ═══════════════════════════════════════════════ */
-    const calculateBudget = (inputs) => {
-      const { m2, recamaras, banos, acabado, cimentacion, bardeoEnabled, bardeoMetros } = inputs;
-      const mult = ACABADO_MULT[acabado];
-      const cim = CIMENTACION[cimentacion];
-
-      /* Materiales por item */
-      const materialesDetalle = MATERIALES.map(mat => {
-        const cantidadTotal = mat.cantidadPorM2 * m2;
-        const subtotalBase = mat.precio * mat.cantidadPorM2 * m2;
-        const subtotalConAcabado = subtotalBase * mult;
-        return {
-          nombre: mat.nombre,
-          unidad: mat.unidad,
-          cantidad: cantidadTotal,
-          precioUnitario: mat.precio,
-          subtotal: subtotalConAcabado,
-          marca: mat.marca || ''
-        };
+      document.querySelectorAll('.section-pro-only').forEach(el => {
+        el.style.display = isSimple ? 'none' : 'block';
       });
 
-      /* Subtotales materiales */
-      const materialBase = m2 * BASE_MATERIAL_PER_M2 * mult;
-      const materialCimentacion = m2 * cim.material;
-      const materialSubtotal = materialBase + materialCimentacion;
+      if (isSimple) {
+        formState.cimentacion = 'zapatas';
+        formState.muros = 'block';
+        formState.losa = 'nervada';
+        formState.castillos = true;
+        formState.tipoPiso = 'ceramica_45';
+        formState.acabado = 'estandar';
+        formState.aplanado = 'cemento_arena';
+        formState.pintura = 'vinilica';
+        formState.impermeabilizar = true;
+        formState.electrica = 'basica';
+        formState.hidraulica = 'pvc_34';
+        formState.calentador = 'gas';
+        formState.bardeo = false;
+        formState.cochera = false;
+        formState.cisterna = false;
+      }
+    }
 
-      /* Mano de obra */
-      const laborBase = m2 * BASE_LABOR_PER_M2 * mult;
-      const laborCimentacion = m2 * cim.labor;
-      const laborSubtotal = laborBase + laborCimentacion;
+    function toggleQI(btn) {
+      const content = btn.nextElementSibling;
+      const isHidden = content.style.display === 'none';
+      content.style.display = isHidden ? 'block' : 'none';
+      btn.textContent = btn.textContent.replace(isHidden ? '▼' : '▲', isHidden ? '▲' : '▼');
+    }
 
-      /* Labor detalle */
-      const laborDetalle = LABOR_DETAIL.map(l => {
-        const dias = m2 / l.m2PorDia;
-        const costo = l.costoPorM2 * m2 * mult;
-        return {
-          concepto: l.concepto,
-          dias: dias,
-          costo: costo
-        };
+    const validators = {
+      screen1: () => {
+        let valid = true;
+        formState.superficie = parseFloat(document.getElementById('superficie').value);
+        if (!formState.superficie || formState.superficie < 20 || formState.superficie > 500) { document.getElementById('err-superficie').style.display = 'block'; valid = false; } else document.getElementById('err-superficie').style.display = 'none';
+
+        if (formState.mode === 'simple') {
+          formState.ventanas = Math.round(formState.superficie / 20) || 0;
+          formState.puertasInt = formState.recamaras + 1;
+        }
+
+        if (!formState.niveles) { document.getElementById('err-niveles').style.display = 'block'; valid = false; } else document.getElementById('err-niveles').style.display = 'none';
+        if (!formState.recamaras) { document.getElementById('err-recamaras').style.display = 'block'; valid = false; } else document.getElementById('err-recamaras').style.display = 'none';
+        if (!formState.banos) { document.getElementById('err-banos').style.display = 'block'; valid = false; } else document.getElementById('err-banos').style.display = 'none';
+        if (formState.mediosBanos === null) { document.getElementById('err-mediosbanos').style.display = 'block'; valid = false; } else document.getElementById('err-mediosbanos').style.display = 'none';
+
+        if (formState.mode === 'simple' && !formState.acabado) { document.getElementById('err-acabado').style.display = 'block'; valid = false; } else { document.getElementById('err-acabado').style.display = 'none'; }
+
+        return valid;
+      },
+      screen2: () => {
+        let valid = true;
+        if (!formState.cimentacion) { document.getElementById('err-cimentacion').style.display = 'block'; valid = false; } else document.getElementById('err-cimentacion').style.display = 'none';
+        if (!formState.muros) { document.getElementById('err-muros').style.display = 'block'; valid = false; } else document.getElementById('err-muros').style.display = 'none';
+        if (!formState.losa) { document.getElementById('err-losa').style.display = 'block'; valid = false; } else document.getElementById('err-losa').style.display = 'none';
+        return valid;
+      },
+      screen3: () => {
+        let valid = true;
+        if (!formState.acabado) { document.getElementById('err-acabado').style.display = 'block'; valid = false; } else document.getElementById('err-acabado').style.display = 'none';
+        formState.tipoPiso = document.getElementById('piso-select').value;
+        if (!formState.tipoPiso) { document.getElementById('err-piso').style.display = 'block'; valid = false; } else document.getElementById('err-piso').style.display = 'none';
+        if (!formState.aplanado) { document.getElementById('err-aplanado').style.display = 'block'; valid = false; } else document.getElementById('err-aplanado').style.display = 'none';
+        if (!formState.pintura) { document.getElementById('err-pintura').style.display = 'block'; valid = false; } else document.getElementById('err-pintura').style.display = 'none';
+        return valid;
+      },
+      screen4: () => {
+        let valid = true;
+        if (!formState.hidraulica) { document.getElementById('err-hidraulica').style.display = 'block'; valid = false; } else document.getElementById('err-hidraulica').style.display = 'none';
+        if (!formState.electrica) { document.getElementById('err-electrica').style.display = 'block'; valid = false; } else document.getElementById('err-electrica').style.display = 'none';
+        if (!formState.calentador) { document.getElementById('err-calentador').style.display = 'block'; valid = false; } else document.getElementById('err-calentador').style.display = 'none';
+        return valid;
+      },
+      screen5: () => {
+        let valid = true;
+        if (formState.bardeo && !document.getElementById('bardeo-metros').value) { document.getElementById('err-bardeo').style.display = 'block'; valid = false; } else document.getElementById('err-bardeo').style.display = 'none';
+        if (formState.bardeo) formState.bardeoMetros = parseFloat(document.getElementById('bardeo-metros').value);
+        if (formState.cochera) formState.cocheraTipo = document.getElementById('cochera-select').value;
+        if (formState.cisterna) formState.cisternaTipo = document.getElementById('cisterna-select').value;
+        if (formState.niveles >= 2) formState.escaleras = document.getElementById('escalera-select').value;
+        formState.ventanas = parseInt(document.getElementById('ventanas').value || 0);
+        formState.puertasInt = parseInt(document.getElementById('puertas').value || 0);
+        return valid;
+      }
+    };
+
+    document.querySelectorAll('.btn-forward').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const curScreen = btn.closest('.screen').id;
+
+        // Handling skip logic 
+        if (formState.mode === 'simple' && curScreen === 'screen1') {
+          if (validators.screen1()) {
+            document.getElementById('screen1').classList.remove('active');
+            document.getElementById('screen-loading').classList.add('active');
+            setTimeout(() => { doCalculate(); }, 1500);
+          }
+          return;
+        }
+
+        if (validators[curScreen]()) {
+          document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+          document.getElementById(btn.dataset.next).classList.add('active');
+          updateProgress();
+          window.scrollTo(0, 0);
+        }
       });
+    });
 
-      /* Habitaciones extra */
-      const extraRecamaras = Math.max(0, recamaras - 2);
-      const extraBanos = Math.max(0, banos - 1);
-      const roomsExtra = extraRecamaras * COSTO_EXTRA_RECAMARA + extraBanos * COSTO_EXTRA_BANO;
+    document.querySelectorAll('.btn-backward').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+        document.getElementById(btn.dataset.back).classList.add('active');
+        updateProgress();
+        window.scrollTo(0, 0);
+      });
+    });
 
-      /* Bardeo */
-      const bardeoTotal = bardeoEnabled ? bardeoMetros * BARDEO_POR_ML : 0;
-
-      /* Totales */
-      const subtotal = materialSubtotal + laborSubtotal + roomsExtra + bardeoTotal;
-      const imprevistos = subtotal * PORCENTAJE_IMPREVISTOS;
-      const total = subtotal + imprevistos;
-
-      /* Tiempo */
-      const semanas = Math.ceil(m2 / M2_POR_SEMANA);
-
-      return {
-        materialesDetalle,
-        materialSubtotal,
-        materialCimentacion,
-        laborDetalle,
-        laborSubtotal,
-        laborCimentacion,
-        roomsExtra,
-        extraRecamaras,
-        extraBanos,
-        bardeoTotal,
-        bardeoEnabled,
-        bardeoMetros: bardeoEnabled ? bardeoMetros : 0,
-        subtotal,
-        imprevistos,
-        total,
-        semanas,
-        /* Inputs para mostrar en resumen */
-        m2,
-        acabado: ACABADO_LABEL[acabado],
-        cimentacion: CIMENTACION_LABEL[cimentacion],
-        recamaras,
-        banos
-      };
+    const updateProgress = () => {
+      const activeScreen = document.querySelector('.screen.active').id;
+      if (activeScreen.startsWith('screen') && activeScreen !== 'screen-loading' && activeScreen !== 'screen-results') {
+        const step = parseInt(activeScreen.replace('screen', ''));
+        document.querySelectorAll('.step-indicator').forEach((si, i) => {
+          si.classList.remove('active', 'completed');
+          if (i + 1 < step) si.classList.add('completed');
+          if (i + 1 === step) si.classList.add('active');
+        });
+        document.getElementById('progress-fill').style.width = ((step - 1) / 4) * 100 + '%';
+        if (step >= 2) document.getElementById('escaleras-container').style.display = formState.niveles >= 2 ? 'block' : 'none';
+      }
     };
 
-    /* ═══════════════════════════════════════════════ */
-    /* ═══ MANEJO DE PANTALLAS ═══ */
-    /* ═══════════════════════════════════════════════ */
-    const showScreen = (id) => {
-      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-      const target = document.getElementById(id);
-      target.classList.add('active');
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    };
-
-    /* ═══════════════════════════════════════════════ */
-    /* ═══ MANEJO DE SELECTORES (PILLS Y CARDS) ═══ */
-    /* ═══════════════════════════════════════════════ */
-    const selectedValues = {
-      recamaras: null,
-      banos: null,
-      acabado: null,
-      cimentacion: null,
-      bardeo: false
-    };
-
-    const setupPillGroup = (groupId, key) => {
-      const group = document.getElementById(groupId);
-      group.querySelectorAll('.pill-btn').forEach(btn => {
+    const setupGroup = (groupId, key, isPill) => {
+      const g = document.getElementById(groupId);
+      if (!g) return;
+      g.querySelectorAll(isPill ? '.pill-btn' : '.select-card').forEach(btn => {
         btn.addEventListener('click', () => {
-          group.querySelectorAll('.pill-btn').forEach(b => b.classList.remove('selected'));
+          g.querySelectorAll(isPill ? '.pill-btn' : '.select-card').forEach(b => b.classList.remove('selected'));
           btn.classList.add('selected');
-          selectedValues[key] = parseInt(btn.dataset.value);
-          const errEl = document.getElementById('err-' + key);
-          if (errEl) errEl.classList.remove('visible');
+          formState[key] = isPill ? parseInt(btn.dataset.value) : btn.dataset.value;
         });
       });
     };
+    setupGroup('niveles-group', 'niveles', true);
+    setupGroup('recamaras-group', 'recamaras', true);
+    setupGroup('banos-group', 'banos', true);
+    setupGroup('mediosbanos-group', 'mediosBanos', true);
+    setupGroup('cimentacion-group', 'cimentacion', false);
+    setupGroup('muros-group', 'muros', false);
+    setupGroup('losa-group', 'losa', false);
+    setupGroup('acabado-group', 'acabado', false);
+    setupGroup('aplanado-group', 'aplanado', false);
+    setupGroup('pintura-group', 'pintura', false);
+    setupGroup('hidraulica-group', 'hidraulica', false);
+    setupGroup('electrica-group', 'electrica', false);
+    setupGroup('calentador-group', 'calentador', false);
 
-    const setupCardGroup = (groupId, key) => {
-      const group = document.getElementById(groupId);
-      group.querySelectorAll('.select-card').forEach(card => {
-        card.addEventListener('click', () => {
-          group.querySelectorAll('.select-card').forEach(c => c.classList.remove('selected'));
-          card.classList.add('selected');
-          selectedValues[key] = card.dataset.value;
-          const errEl = document.getElementById('err-' + key);
-          if (errEl) errEl.classList.remove('visible');
-        });
+    const setupToggle = (id, key, subId) => {
+      const t = document.getElementById(id);
+      if (!t) return;
+      t.addEventListener('click', () => {
+        formState[key] = !formState[key];
+        t.classList.toggle('on', formState[key]);
+        if (subId) document.getElementById(subId).style.display = formState[key] ? 'block' : 'none';
       });
     };
+    setupToggle('castillos-toggle', 'castillos');
+    setupToggle('impermeabilizar-toggle', 'impermeabilizar');
+    setupToggle('bardeo-toggle', 'bardeo', 'bardeo-sub');
+    setupToggle('cochera-toggle', 'cochera', 'cochera-sub');
+    setupToggle('cisterna-toggle', 'cisterna', 'cisterna-sub');
 
-    /* Toggle bardeo */
-    const bardeoToggle = document.getElementById('bardeo-toggle');
-    const bardeoSub = document.getElementById('bardeo-sub');
-    bardeoToggle.addEventListener('click', () => {
-      selectedValues.bardeo = !selectedValues.bardeo;
-      bardeoToggle.classList.toggle('on', selectedValues.bardeo);
-      bardeoSub.classList.toggle('visible', selectedValues.bardeo);
-      if (!selectedValues.bardeo) {
-        document.getElementById('bardeo-metros').value = '';
-        document.getElementById('err-bardeo').classList.remove('visible');
-      }
+    document.querySelectorAll('.tab-btn').forEach(tb => {
+      tb.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+        tb.classList.add('active');
+        document.getElementById(tb.dataset.tab).classList.add('active');
+      });
     });
 
-    /* Inicializar grupos */
-    setupPillGroup('recamaras-group', 'recamaras');
-    setupPillGroup('banos-group', 'banos');
-    setupCardGroup('acabado-group', 'acabado');
-    setupCardGroup('cimentacion-group', 'cimentacion');
-
-    /* ═══════════════════════════════════════════════ */
-    /* ═══ VALIDACIÓN DE FORMULARIO ═══ */
-    /* ═══════════════════════════════════════════════ */
-    const showError = (id) => {
-      const el = document.getElementById(id);
-      if (el) el.classList.add('visible');
-    };
-    const hideError = (id) => {
-      const el = document.getElementById(id);
-      if (el) el.classList.remove('visible');
-    };
-
-    document.getElementById('superficie').addEventListener('input', () => hideError('err-superficie'));
-    document.getElementById('bardeo-metros').addEventListener('input', () => hideError('err-bardeo'));
-
-    const validateForm = () => {
-      let valid = true;
-      const superficie = parseFloat(document.getElementById('superficie').value);
-
-      if (isNaN(superficie) || superficie < 20 || superficie > 500) {
-        showError('err-superficie');
-        document.getElementById('superficie').classList.add('input-error');
-        valid = false;
-      } else {
-        hideError('err-superficie');
-        document.getElementById('superficie').classList.remove('input-error');
-      }
-
-      if (selectedValues.recamaras === null) { showError('err-recamaras'); valid = false; }
-      if (selectedValues.banos === null) { showError('err-banos'); valid = false; }
-      if (selectedValues.acabado === null) { showError('err-acabado'); valid = false; }
-      if (selectedValues.cimentacion === null) { showError('err-cimentacion'); valid = false; }
-
-      if (selectedValues.bardeo) {
-        const metros = parseFloat(document.getElementById('bardeo-metros').value);
-        if (isNaN(metros) || metros < 4 || metros > 200) {
-          showError('err-bardeo');
-          document.getElementById('bardeo-metros').classList.add('input-error');
-          valid = false;
-        } else {
-          hideError('err-bardeo');
-          document.getElementById('bardeo-metros').classList.remove('input-error');
-        }
-      }
-
-      return valid;
-    };
-
-    /* ═══════════════════════════════════════════════ */
-    /* ═══ RENDERIZAR RESULTADOS ═══ */
-    /* ═══════════════════════════════════════════════ */
-    const renderResults = (r) => {
-      /* Sección A: Hero con badge de fuente CMIC */
-      const badgeHTML = preciosCMICCargados
-        ? `<div class="source-badge">📋 Precios: CMIC Puebla 2024 | Actualizado ${metadataCMIC ? metadataCMIC.ultima_actualizacion : 'Marzo 2026'}</div>`
-        : `<div class="source-badge">📋 Precios de referencia | Tlaxcala/Puebla 2026</div>`;
-
-      document.getElementById('result-hero').innerHTML = `
-    <div class="label">Presupuesto estimado total:</div>
-    <div class="total" id="total-animated">${formatMoney(r.total)}</div>
-    <div class="meta">
-      ⏱️ Tiempo estimado: <strong>${r.semanas} semanas</strong><br>
-      📐 Superficie: <strong>${r.m2}m²</strong> · 🎨 Acabado: <strong>${r.acabado}</strong> · 🏗️ ${r.cimentacion}
-    </div>
-    ${badgeHTML}
-  `;
-
-      /* Sección B: Tabla de materiales con columna Marca */
-      const hasMarcas = r.materialesDetalle.some(m => m.marca);
-      const marcaHeader = hasMarcas ? '<th>Marca</th>' : '';
-      const colspanMat = hasMarcas ? 4 : 3;
-
-      let matHTML = `<thead><tr><th>Material</th>${marcaHeader}<th>Cantidad</th><th>P. Unitario</th><th class="text-right">Subtotal</th></tr></thead><tbody>`;
-      r.materialesDetalle.forEach(m => {
-        const marcaTd = hasMarcas ? `<td style="font-size:12px;color:var(--text-secondary)">${m.marca}</td>` : '';
-        matHTML += `<tr>
-      <td>${m.nombre}</td>
-      ${marcaTd}
-      <td>${formatNum(m.cantidad)} ${m.unidad}</td>
-      <td>${formatMoney(m.precioUnitario)}</td>
-      <td class="text-right">${formatMoney(m.subtotal)}</td>
-    </tr>`;
-      });
-      if (r.materialCimentacion > 0) {
-        const marcaCimTd = hasMarcas ? '<td>—</td>' : '';
-        matHTML += `<tr>
-      <td>Cimentación (${r.cimentacion})</td>
-      ${marcaCimTd}
-      <td>—</td><td>—</td>
-      <td class="text-right">${formatMoney(r.materialCimentacion)}</td>
-    </tr>`;
-      }
-      matHTML += `<tr class="row-total"><td colspan="${colspanMat}">Subtotal Materiales</td><td class="text-right">${formatMoney(r.materialSubtotal)}</td></tr>`;
-      matHTML += `</tbody>`;
-      document.getElementById('table-materiales').innerHTML = matHTML;
-
-      /* Sección C: Tabla mano de obra */
-      let labHTML = `<thead><tr><th>Concepto</th><th>Días estimados</th><th class="text-right">Costo</th></tr></thead><tbody>`;
-      r.laborDetalle.forEach(l => {
-        labHTML += `<tr>
-      <td>${l.concepto}</td>
-      <td>${formatNum(l.dias)}</td>
-      <td class="text-right">${formatMoney(l.costo)}</td>
-    </tr>`;
-      });
-      if (r.laborCimentacion > 0) {
-        labHTML += `<tr>
-      <td>Cimentación (mano de obra)</td>
-      <td>—</td>
-      <td class="text-right">${formatMoney(r.laborCimentacion)}</td>
-    </tr>`;
-      }
-      labHTML += `<tr class="row-total"><td colspan="2">Subtotal Mano de Obra</td><td class="text-right">${formatMoney(r.laborSubtotal)}</td></tr>`;
-      labHTML += `</tbody>`;
-      document.getElementById('table-labor').innerHTML = labHTML;
-
-      /* Sección D: Resumen Financiero */
-      let finHTML = `
-    <div class="finance-row"><span>Subtotal materiales</span><span>${formatMoney(r.materialSubtotal)}</span></div>
-    <div class="finance-row"><span>Subtotal mano de obra</span><span>${formatMoney(r.laborSubtotal)}</span></div>
-  `;
-      if (r.bardeoEnabled && r.bardeoTotal > 0) {
-        finHTML += `<div class="finance-row"><span>Bardeo perimetral (${r.bardeoMetros} ml)</span><span>${formatMoney(r.bardeoTotal)}</span></div>`;
-      }
-      if (r.roomsExtra > 0) {
-        let roomDesc = '';
-        if (r.extraRecamaras > 0) roomDesc += `${r.extraRecamaras} recámara${r.extraRecamaras > 1 ? 's' : ''} extra`;
-        if (r.extraBanos > 0) {
-          if (roomDesc) roomDesc += ' + ';
-          roomDesc += `${r.extraBanos} baño${r.extraBanos > 1 ? 's' : ''} extra`;
-        }
-        finHTML += `<div class="finance-row"><span>Habitaciones adicionales (${roomDesc})</span><span>${formatMoney(r.roomsExtra)}</span></div>`;
-      }
-      finHTML += `
-    <div class="finance-row divider"><span><strong>Subtotal</strong></span><span><strong>${formatMoney(r.subtotal)}</strong></span></div>
-    <div class="finance-row"><span>Imprevistos (10%)</span><span>${formatMoney(r.imprevistos)}</span></div>
-    <div class="finance-row grand-total"><span>TOTAL ESTIMADO</span><span>${formatMoney(r.total)}</span></div>
-  `;
-      document.getElementById('finance-summary').innerHTML = finHTML;
-
-      /* Fecha para impresión */
-      const now = new Date();
-      document.getElementById('print-date').textContent = now.toLocaleDateString('es-MX', { year: 'numeric', month: 'long', day: 'numeric' });
-
-      /* Animación de conteo del total */
-      animateTotal(r.total);
-    };
-
-    /* ═══════════════════════════════════════════════ */
-    /* ═══ ANIMACIÓN DE CONTEO ═══ */
-    /* ═══════════════════════════════════════════════ */
-    const animateTotal = (finalValue) => {
-      const el = document.getElementById('total-animated');
-      if (!el) return;
-      const duration = 1000;
-      const startTime = performance.now();
-      const step = (currentTime) => {
-        const elapsed = currentTime - startTime;
-        const progress = Math.min(elapsed / duration, 1);
-        const eased = 1 - Math.pow(1 - progress, 3);
-        const currentVal = finalValue * eased;
-        el.textContent = formatMoney(currentVal);
-        if (progress < 1) requestAnimationFrame(step);
-      };
-      requestAnimationFrame(step);
-    };
-
-    /* ═══════════════════════════════════════════════ */
-    /* ═══ ENVÍO DEL FORMULARIO ═══ */
-    /* ═══════════════════════════════════════════════ */
-    document.getElementById('budgetForm').addEventListener('submit', (e) => {
+    document.getElementById('budgetForm').addEventListener('submit', e => {
       e.preventDefault();
+      if ((formState.mode === 'pro' && validators.screen5()) || (formState.mode === 'simple' && validators.screen1())) {
+        if (formState.mode === 'pro') document.getElementById('screen5').classList.remove('active');
+        if (formState.mode === 'simple') document.getElementById('screen1').classList.remove('active');
+        document.getElementById('screen-loading').classList.add('active');
+        setTimeout(() => { doCalculate(); }, 1500);
+      }
+    });
 
-      if (!validateForm()) return;
+    function getSemaforo(value, mt2, type) {
+      const perM2 = value / mt2;
+      const ranges = {
+        materiales: { green: [3500, 6500], yellow: [6500, 9000] },
+        manoObra: { green: [1500, 3500], yellow: [3500, 5000] },
+        total: { green: [6000, 12000], yellow: [12000, 16000] }
+      };
+      const r = ranges[type];
+      if (perM2 >= r.green[0] && perM2 <= r.green[1]) return { color: '#10B981', icon: '🟢', text: 'Dentro del rango normal Tlaxcala/Puebla' };
+      if (perM2 >= r.yellow[0] && perM2 <= r.yellow[1]) return { color: '#F59E0B', icon: '🟡', text: 'Ligeramente elevado — revisar especificaciones' };
+      return { color: '#EF4444', icon: '🔴', text: 'Fuera del rango típico — verificar datos' };
+    }
 
-      const inputs = {
-        m2: parseFloat(document.getElementById('superficie').value),
-        recamaras: selectedValues.recamaras,
-        banos: selectedValues.banos,
-        acabado: selectedValues.acabado,
-        cimentacion: selectedValues.cimentacion,
-        bardeoEnabled: selectedValues.bardeo,
-        bardeoMetros: selectedValues.bardeo ? parseFloat(document.getElementById('bardeo-metros').value) : 0
+    const runScenarioLocal = (finishLevel) => {
+      const pr = rawData;
+      const m2 = formState.superficie;
+      const acaMult = { economico: 1.0, estandar: 1.35, premium: 1.80 }[finishLevel];
+
+      const getMat = id => pr.materiales[Object.keys(pr.materiales).find(k => pr.materiales[k].find(x => x.id === id))].find(x => x.id === id);
+      const mBlock = getMat('block_15_20_40');
+      const mTabique = getMat('tabique_rojo');
+      const mCem = getMat('cemento_cpc30r_50kg');
+      const mAre = getMat('arena_fina');
+      const mGrava = getMat('grava_3_4');
+      const mVar38 = getMat('varilla_3_8');
+      const mVar12 = getMat('varilla_1_2');
+      const mAlam = getMat('alambre_recocido');
+
+      const getB = (mArr, df) => { if (!mArr || mArr.length === 0) return df; return mArr[0]; };
+      const brandMap = {
+        'Block': getB(mBlock.marcas, 'Cruz Azul / Local Tlax.'),
+        'Tabique': getB(mTabique.marcas, 'Ladrillera / Local Tlax.'),
+        'Cemento': getB(mCem.marcas, 'Tolteca / Cruz Azul'),
+        'Arena': getB(mAre.marcas, 'Banco local Tlaxcala'),
+        'Grava': getB(mGrava.marcas, 'Banco local Tlaxcala'),
+        'Varilla38': getB(mVar38.marcas, 'Deacero / Ternium'),
+        'Varilla12': getB(mVar12.marcas, 'Deacero / Ternium'),
+        'Alambre': getB(mAlam.marcas, 'Aceros Trefilados'),
+        'Piso': 'Interceramic / Vitromex',
+        'Pintura': formState.pintura === 'vinilica' ? getB(getMat('pintura_vinilica_cubeta').marcas, 'Comex / Sherwin Williams') : getB(getMat('pintura_fachadas').marcas, 'Comex / Sherwin Williams'),
+        'Imp': getB(getMat('impermeabilizante_acrilico').marcas, 'Sika / Fester'),
+        'WC': getB(getMat('wc_sencillo').marcas, 'Lamosa'),
+        'Lav': getB(getMat('lavabo_empotrado').marcas, 'Lamosa'),
+        'Reg': getB(getMat('regadera_sencilla').marcas, 'Foset'),
+        'Pla': 'Amanco / Mexichem',
+        'Ven': getB(getMat('ventana_aluminio_vidrio').marcas, 'Cuprum'),
+        'Pue': getB(getMat('puerta_interior_tambor').marcas, 'Uniarte / Dica')
       };
 
-      const btn = document.getElementById('btn-calcular');
-      btn.classList.add('loading');
-      btn.querySelector('.btn-text').textContent = 'Calculando...';
+      const pMuroBase = formState.muros === 'tabique' ? mTabique.precio_actualizado : mBlock.precio_actualizado;
+      const rMuroBase = formState.muros === 'tabique' ? mTabique.rendimiento_m2 : mBlock.rendimiento_m2;
+      const pMuroFinal = formState.muros === 'mixto' ? pMuroBase * 1.15 : pMuroBase;
 
-      const results = calculateBudget(inputs);
+      const matList = [];
 
-      showScreen('screen2');
+      let muroMat = m2 * rMuroBase * pMuroFinal * acaMult;
+      matList.push({ name: formState.muros === 'tabique' ? 'Tabique rojo' : formState.muros === 'mixto' ? 'Block mixto' : 'Block ligero', brand: formState.muros === 'tabique' ? brandMap.Tabique : brandMap.Block, qty: m2 * rMuroBase * acaMult, unit: 'pzas', sub: muroMat });
 
-      setTimeout(() => {
-        renderResults(results);
-        showScreen('screen3');
+      let cementoMat = m2 * mCem.rendimiento_m2_muros * mCem.precio_actualizado * acaMult;
+      matList.push({ name: 'Cemento 50kg', brand: brandMap.Cemento, qty: m2 * mCem.rendimiento_m2_muros * acaMult, unit: 'bolsas', sub: cementoMat });
+      let arenaMat = m2 * mAre.rendimiento_m2_mortero * mAre.precio_actualizado * acaMult;
+      matList.push({ name: 'Arena', brand: brandMap.Arena, qty: m2 * mAre.rendimiento_m2_mortero * acaMult, unit: 'm³', sub: arenaMat });
+      let gravaLosa = m2 * mGrava.rendimiento_m2_losa * mGrava.precio_actualizado;
+      matList.push({ name: 'Grava 3/4"', brand: brandMap.Grava, qty: m2 * mGrava.rendimiento_m2_losa, unit: 'm³', sub: gravaLosa });
+      let varilla38 = m2 * mVar38.rendimiento_m2_losa * mVar38.precio_actualizado;
+      matList.push({ name: 'Varilla 3/8"', brand: brandMap.Varilla38, qty: m2 * mVar38.rendimiento_m2_losa, unit: 'pzas', sub: varilla38 });
+      let varilla12 = m2 * mVar12.rendimiento_m2_trabe * mVar12.precio_actualizado;
+      matList.push({ name: 'Varilla 1/2"', brand: brandMap.Varilla12, qty: m2 * mVar12.rendimiento_m2_trabe, unit: 'pzas', sub: varilla12 });
+      let alambre = m2 * mAlam.rendimiento_m2 * mAlam.precio_actualizado;
+      matList.push({ name: 'Alambre recocido', brand: brandMap.Alambre, qty: m2 * mAlam.rendimiento_m2, unit: 'kg', sub: alambre });
 
-        btn.classList.remove('loading');
-        btn.querySelector('.btn-text').textContent = 'CALCULAR PRESUPUESTO →';
-      }, 2000);
-    });
+      let subLosa = { maciza: 680, nervada: 580, steeldeck: 750 }[formState.losa] * m2;
+      matList.push({ name: \`Sistema Losa (\${formState.losa})\`, brand:'Productos locales', qty:m2, unit:'m²', sub: subLosa});
+      let subCimMat = {zapatas:85, losa_cim:140, pilotes:220}[formState.cimentacion] * m2;
+      matList.push({name:\`Cimentación (\${formState.cimentacion}) MAT\`, brand:'Concreto armado local', qty:m2, unit:'m²', sub: subCimMat});
 
-    /* ═══════════════════════════════════════════════ */
-    /* ═══ NUEVA COTIZACIÓN ═══ */
-    /* ═══════════════════════════════════════════════ */
-    document.getElementById('btn-nueva').addEventListener('click', () => {
-      selectedValues.recamaras = null;
-      selectedValues.banos = null;
-      selectedValues.acabado = null;
-      selectedValues.cimentacion = null;
-      selectedValues.bardeo = false;
+      let castillosCost = formState.castillos ? m2 * 95 : 0;
+      if(formState.castillos) matList.push({name:'Castillos y trabes', brand:'Acero + Concreto local', qty:m2, unit:'m²', sub: castillosCost});
 
-      document.getElementById('superficie').value = '';
-      document.getElementById('bardeo-metros').value = '';
+      const pPisoC = getMat('piso_ceramico').precio_actualizado;
+      const pPorce = getMat('piso_porcelanato').precio_actualizado;
+      let pPiso = formState.tipoPiso==='cemento'?85 : formState.tipoPiso==='ceramica_33'?120 : formState.tipoPiso==='ceramica_45'?pPisoC : pPorce;
+      let pisoCost = m2 * pPiso;
+      matList.push({name:'Piso', brand:brandMap.Piso, qty:m2, unit:'m²', sub: pisoCost});
 
-      document.querySelectorAll('.pill-btn').forEach(b => b.classList.remove('selected'));
-      document.querySelectorAll('.select-card').forEach(c => c.classList.remove('selected'));
+      let pYeso = getMat('yeso_fino');
+      let pApla = formState.aplanado==='cemento_arena'? 95 : pYeso.precio_actualizado / pYeso.rendimiento_m2;
+      let aplanadoCost = m2 * pApla;
+      matList.push({name:'Aplanados', brand:'Materiales locales', qty:m2, unit:'m²', sub: aplanadoCost});
 
-      bardeoToggle.classList.remove('on');
-      bardeoSub.classList.remove('visible');
+      let mPin = formState.pintura==='vinilica'?getMat('pintura_vinilica_cubeta'):getMat('pintura_fachadas');
+      let pinturaCost = m2 * (mPin.precio_actualizado/mPin.rendimiento_m2);
+      matList.push({name:'Pintura', brand:brandMap.Pintura, qty:m2, unit:'m²', sub:pinturaCost});
 
-      document.querySelectorAll('.error-msg').forEach(e => e.classList.remove('visible'));
-      document.querySelectorAll('.input-error').forEach(e => e.classList.remove('input-error'));
+      let mImp = getMat('impermeabilizante_acrilico');
+      let impermeaCost = formState.impermeabilizar ? m2 * (mImp.precio_actualizado/mImp.rendimiento_m2) : 0;
+      if(formState.impermeabilizar) matList.push({name:'Impermeabilizante', brand:brandMap.Imp, qty:m2, unit:'m²', sub: impermeaCost});
 
-      showScreen('screen1');
-    });
+      let subInst = {pvc_12: getMat('tubo_pvc_hidraulico_1_2').precio_actualizado, pvc_34: getMat('tubo_pvc_hidraulico_3_4').precio_actualizado};
+      let hidMatPrice = subInst[formState.hidraulica]*10;
+      matList.push({name:'Tubería Hidrosanitaria', brand:brandMap.Pla, qty:1, unit:'lote', sub: hidMatPrice});
+      
+      const mo = pr.mano_de_obra.trabajadores;
+      const mOficial = mo[0], mPeon = mo[1], mMaestro = mo[2];
+      
+      let laborBase = m2 * acaMult * ((mOficial.costo_real_dia/mOficial.rendimiento_m2_muro) + (mPeon.costo_real_dia/mPeon.rendimiento_m2) + (mMaestro.costo_real_dia/mMaestro.supervision_m2_dia));
+      
+      let cimMOcost = {zapatas:55, losa_cim:90, pilotes:140}[formState.cimentacion] * m2;
+      let pintorCost = m2 * mo[5].costo_por_m2;
+      let hidraulicaCost = formState.banos*3500 + formState.mediosBanos*1800;
+      let sanitariaCost = formState.banos * mo[3].costo_bano_completo;
+      let electricaCost = {basica:180, completa:280}[formState.electrica] * m2;
+
+      let moList = [
+        {name: 'Albañilería general (Oficial + Peón)', days: m2*acaMult/mPeon.rendimiento_m2, rate: 'Mixto', sub: laborBase},
+        {name: \`Cimentación (\${formState.cimentacion}) MO\`, days: m2/10, rate: 'Mixto', sub: cimMOcost},
+        {name: 'Pintura', days: m2/mo[5].rendimiento_m2_dia||25, rate: mo[5].costo_real_dia, sub: pintorCost},
+        {name: 'Inst. Hidráulica', days: (formState.banos*2), rate: mo[3].costo_real_dia, sub: hidraulicaCost},
+        {name: 'Inst. Sanitaria', days: formState.banos*3, rate: mo[3].costo_real_dia, sub: sanitariaCost},
+        {name: 'Inst. Eléctrica', days: formState.niveles*5, rate: mo[4].costo_real_dia, sub: electricaCost}
+      ];
+
+      let pWC = getMat('wc_sencillo').precio_actualizado;
+      let pLav = getMat('lavabo_empotrado').precio_actualizado;
+      let pReg = getMat('regadera_sencilla').precio_actualizado;
+      let tBanos = formState.banos + formState.mediosBanos;
+      let wcCost = tBanos * pWC;
+      let lavaboCost = tBanos * pLav;
+      let regaderaCost = formState.banos * pReg;
+      if(wcCost>0) matList.push({name:'WC', brand:brandMap.WC, qty:tBanos, unit:'pzas', sub:wcCost});
+      if(lavaboCost>0) matList.push({name:'Lavabo', brand:brandMap.Lav, qty:tBanos, unit:'pzas', sub:lavaboCost});
+      if(regaderaCost>0) matList.push({name:'Regadera', brand:brandMap.Reg, qty:formState.banos, unit:'pzas', sub:regaderaCost});
+
+      let pVen = getMat('ventana_aluminio_vidrio').precio_actualizado;
+      let pPtPp = getMat('puerta_principal_madera').precio_actualizado;
+      let pPtInt = getMat('puerta_interior_tambor').precio_actualizado;
+      let ventanasCost = formState.ventanas * pVen;
+      let ptPpalCost = pPtPp;
+      let ptIntCost = formState.puertasInt * pPtInt;
+      if(ventanasCost>0) matList.push({name:'Ventanas Alum.', brand:brandMap.Ven, qty:formState.ventanas, unit:'pzas', sub:ventanasCost});
+      matList.push({name:'Puerta Principal', brand:brandMap.Pue, qty:1, unit:'pzas', sub:ptPpalCost});
+      if(ptIntCost>0) matList.push({name:'Puertas Interiores', brand:brandMap.Pue, qty:formState.puertasInt, unit:'pzas', sub:ptIntCost});
+
+      let bardeoCost = formState.bardeo ? formState.bardeoMetros * 500 : 0;
+      let cocheraCost = formState.cochera ? { '1_auto':28500, '2_autos':42000, porton:50500 }[formState.cocheraTipo] : 0;
+      let cisternaCost = formState.cisterna ? { 5000:18000, 10000:28500, 20000:45000 }[formState.cisternaTipo] : 0;
+      let escalerasCost = formState.niveles>=2 ? { recta:18500, l_barandal:24000 }[formState.escaleras] : 0;
+      let calentadorCost = formState.calentador==='ninguno'?0 : formState.calentador==='gas'?2800 : 8500;
+      
+      let recamarasExtra = Math.max(0, formState.recamaras-2) * 4500;
+      let banosExtra = Math.max(0, formState.banos-1) * 6800;
+      let mediosBanosExtra = formState.mediosBanos * 3500;
+
+      let extrasList = [];
+      if(bardeoCost>0) extrasList.push({name:'Bardeo perimetral', sub: bardeoCost});
+      if(cocheraCost>0) extrasList.push({name:'Cochera', sub: cocheraCost});
+      if(cisternaCost>0) extrasList.push({name:'Cisterna', sub: cisternaCost});
+      if(escalerasCost>0) extrasList.push({name:'Escaleras', sub: escalerasCost});
+      if(calentadorCost>0) extrasList.push({name:'Calentador', sub: calentadorCost});
+      if(recamarasExtra>0) extrasList.push({name:'Recámaras adic.', sub: recamarasExtra});
+      if(banosExtra>0) extrasList.push({name:'Baños adic.', sub: banosExtra});
+      if(mediosBanosExtra>0) extrasList.push({name:'M. Baños adic.', sub: mediosBanosExtra});
+
+      let subtotalMat = matList.reduce((acc,i)=>acc+i.sub, 0) + hidMatPrice;
+      let subtotalMO = moList.reduce((acc,i)=>acc+i.sub, 0);
+      let subtotalExtras = bardeoCost+cocheraCost+cisternaCost+escalerasCost+recamarasExtra+banosExtra+mediosBanosExtra+calentadorCost;
+
+      let subtotal = subtotalMat + subtotalMO + subtotalExtras;
+      let imprevistos = subtotal * 0.10;
+      let TOTAL = subtotal + imprevistos;
+      let semanas_raw = Math.ceil(m2/12) * (formState.niveles===1?1:1.4);
+      let semanas = Math.round(semanas_raw * 2) / 2;
+
+      return { mo: subtotalMO, mat: subtotalMat, extras: subtotalExtras, sub: subtotal, imp: imprevistos, tot: TOTAL, sem: semanas, mList: matList, molList: moList };
+    };
+
+    function doCalculate() {
+      const m2 = formState.superficie;
+      const resMain = runScenarioLocal(formState.acabado);
+      
+      const badgeHtml = s => \`<span class="semaforo-badge" style="background:\${s.color}22;color:\${s.color}">\${s.icon} \${s.text}</span>\`;
+      const semMat = getSemaforo(resMain.mat, m2, 'materiales');
+      const semMO = getSemaforo(resMain.mo, m2, 'manoObra');
+      const semTot = getSemaforo(resMain.tot, m2, 'total');
+
+      document.getElementById('result-hero').innerHTML = \`
+        <div class="label">Presupuesto estimado total:</div>
+        <div class="total">\${formatMoney(resMain.tot)}</div>
+        <div class="meta">⏱️ Tiempo estimado: <strong>\${resMain.sem} semanas</strong><br>📐 Superficie: <strong>\${m2}m² en \${formState.niveles} nivel(es)</strong></div>
+        <div class="source-badge">✓ Precios CMIC Puebla 2024 | IMSS 2026</div>
+      \`;
+
+      const phases = [
+        { icon: '🔨', name: 'Cimentación', weeks: Math.round(resMain.sem * 0.15 * 10)/10, pct: Math.round(resMain.mat * 0.18 / resMain.tot * 100) },
+        { icon: '🧱', name: 'Muros y estructura', weeks: Math.round(resMain.sem * 0.30 * 10)/10, pct: Math.round(resMain.mat * 0.35 / resMain.tot * 100) },
+        { icon: '🏠', name: 'Losa y techo', weeks: Math.round(resMain.sem * 0.20 * 10)/10, pct: Math.round(resMain.mat * 0.22 / resMain.tot * 100) },
+        { icon: '🚰', name: 'Instalaciones', weeks: Math.round(resMain.sem * 0.15 * 10)/10, pct: Math.round(resMain.mo * 0.40 / resMain.tot * 100) },
+        { icon: '🎨', name: 'Acabados', weeks: Math.round(resMain.sem * 0.20 * 10)/10, pct: Math.round((resMain.mat * 0.25) / resMain.tot * 100) }
+      ];
+      document.getElementById('timeline-steps').innerHTML = phases.map(p => \`<div class="timeline-step"><div class="step-icon \${p.pct>0?'active':'pending'}">\${p.icon}</div><div class="step-name">\${p.name}</div><div class="step-weeks">~\${p.weeks} sem</div><div class="step-pct">\${p.pct}% del total</div></div>\`).join('');
+
+      let resEco = runScenarioLocal('economico');
+      let resEst = runScenarioLocal('estandar');
+      let resPre = runScenarioLocal('premium');
+
+      document.getElementById('table-comparativa').innerHTML = \`
+        <thead>
+          <tr>
+            <th>Concepto</th>
+            <th class="\${formState.acabado==='economico'?'comp-col-selected':''}">Económico</th>
+            <th class="\${formState.acabado==='estandar'?'comp-col-selected':''}">Estándar</th>
+            <th class="\${formState.acabado==='premium'?'comp-col-selected':''}">Premium</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Materiales</td><td>\${formatMoney(resEco.mat)}</td><td>\${formatMoney(resEst.mat)}</td><td>\${formatMoney(resPre.mat)}</td></tr>
+          <tr><td>Mano de obra</td><td>\${formatMoney(resEco.mo)}</td><td>\${formatMoney(resEst.mo)}</td><td>\${formatMoney(resPre.mo)}</td></tr>
+          <tr class="row-total"><td>TOTAL</td><td>\${formatMoney(resEco.tot)}</td><td>\${formatMoney(resEst.tot)}</td><td>\${formatMoney(resPre.tot)}</td></tr>
+          <tr><td>Por m²</td><td>\${formatMoney(resEco.tot/m2)}</td><td>\${formatMoney(resEst.tot/m2)}</td><td>\${formatMoney(resPre.tot/m2)}</td></tr>
+        </tbody>\`;
+
+      let resHtml = \`
+        <div class="finance-row"><span>Subtotal Materiales \${badgeHtml(semMat)}</span><span>\${formatMoney(resMain.mat)}</span></div>
+        <div class="finance-row"><span>Subtotal Mano de Obra \${badgeHtml(semMO)}</span><span>\${formatMoney(resMain.mo)}</span></div>
+        <div class="finance-row divider"><span>Subtotal Extras</span><span>\${formatMoney(resMain.extras)}</span></div>
+        <div class="finance-row divider"><span><strong>SUBTOTAL</strong></span><span><strong>\${formatMoney(resMain.sub)}</strong></span></div>
+        <div class="finance-row"><span><span class="tooltip-wrap">Imprevistos (10%)<span class="tooltip-icon">❓</span><div class="tooltip-box">Reserva estándar de la industria para cubrir: variaciones en precio de materiales, errores de medición, cambios de diseño o condiciones de terreno.</div></span></span><span>\${formatMoney(resMain.imp)}</span></div>
+        <div class="finance-row grand-total"><span>TOTAL ESTIMADO \${badgeHtml(semTot)}</span><span>\${formatMoney(resMain.tot)}</span></div>
+      \`;
+
+      let qiHtml = '';
+      if(formState.mode==='pro') {
+        const items = ['Cimentación ' + formState.cimentacion, 'Muros de ' + formState.muros, 'Losa: ' + formState.losa, formState.castillos ? 'Castillos y trabes' : null, 'Piso: cerámica/porcelanato', 'Aplanado de muros', 'Pintura interior y exterior', formState.impermeabilizar ? 'Impermeabilización' : null, 'Instalación hidráulica y sanitaria', 'Instalación eléctrica ' + formState.electrica, formState.calentador !== 'ninguno' ? 'Calentador' : null, formState.bardeo ? 'Bardeo' : null, formState.cochera ? 'Cochera' : null, formState.cisterna ? 'Cisterna' : null, formState.niveles >= 2 ? 'Escalera' : null, 'Ventanas (' + formState.ventanas + ' pzas)', 'Puertas (' + (formState.puertasInt+1) + ' pzas)', 'Sanitarios completos', '10% de imprevistos'].filter(Boolean);
+        qiHtml = \`
+          <div class="que-incluye">
+            <button type="button" class="qi-toggle" onclick="toggleQI(this)">📋 ¿Qué incluye y qué NO incluye este presupuesto? ▼</button>
+            <div class="qi-content" style="display:none">
+              <div class="qi-grid">
+                <div class="qi-col qi-yes"><h4>✅ SÍ incluye</h4><ul id="qi-yes-list">\${items.map(i=>\`<li>\${i}</li>\`).join('')}</ul></div>
+                <div class="qi-col qi-no"><h4>❌ NO incluye</h4><ul><li>Terreno</li><li>Proyecto arquitectónico y planos</li><li>Licencia y permisos (3-5% adic.)</li><li>Honorarios (8-12% adic.)</li><li>Muebles y electrodomésticos</li><li>Cocina integral</li><li>Portón vehicular</li><li>Conexión a servicios</li><li>Limpieza final</li></ul></div>
+              </div>
+              <p class="qi-note">💡 Para una obra de \${m2}m², considera agregar aprox. <strong>\${formatMoney(resMain.tot*0.13)} MXN</strong> para permisos y honorarios profesionales (~13%).</p>
+            </div>
+          </div>\`;
+      }
+      
+      document.getElementById('finance-summary').innerHTML = resHtml + qiHtml;
+
+      let mHtml = \`<thead><tr><th>Material</th><th>Marca</th><th>Can.</th><th>P. Unitario</th><th>Subtotal</th></tr></thead><tbody>\`;
+      resMain.mList.forEach(m => {
+        let pu = m.qty>0 ? m.sub/m.qty : 0;
+        mHtml += \`<tr><td>\${m.name}</td><td style="color:var(--text-secondary);font-size:12px;font-style:italic;">\${m.brand}</td><td>\${Math.ceil(m.qty)} \${m.unit}</td><td class="text-right">\${formatMoney(pu)}</td><td class="text-right">\${formatMoney(m.sub)}</td></tr>\`;
+      });
+      mHtml += \`<tr class="row-total"><td colspan="4">Total Materiales</td><td class="text-right">\${formatMoney(resMain.mat)}</td></tr></tbody>\`;
+      document.getElementById('table-materiales').innerHTML = mHtml;
+
+      let lHtml = \`<thead><tr><th>Concepto</th><th>Días</th><th>Subtotal</th></tr></thead><tbody>\`;
+      resMain.molList.forEach(l => {
+        lHtml += \`<tr><td>\${l.name}</td><td>\${Math.ceil(l.days||0)}</td><td class="text-right">\${formatMoney(l.sub)}</td></tr>\`;
+      });
+      lHtml += \`<tr class="row-total"><td colspan="2">Total Mano de Obra</td><td class="text-right">\${formatMoney(resMain.mo)}</td></tr></tbody>\`;
+      document.getElementById('table-labor').innerHTML = lHtml;
+
+      document.getElementById('print-date').textContent = new Date().toLocaleDateString('es-MX', { year:'numeric', month:'long', day:'numeric' });
+      document.getElementById('metodologia-c').style.display = formState.mode==='pro' ? 'block' : 'none';
+
+      document.querySelectorAll('.tab-btn').forEach(tb => {
+        if(formState.mode==='simple') {
+          if(tb.dataset.tab !== 'tab-resumen') tb.style.display='none';
+        } else {
+          tb.style.display='inline-block';
+        }
+      });
+
+      document.getElementById('screen-loading').classList.remove('active');
+      document.getElementById('screen-results').classList.add('active');
+      document.getElementById('progress-container').style.display = 'none';
+      window.scrollTo(0,0);
+    }
+
+    document.getElementById('btn-nueva').addEventListener('click', () => { window.location.reload(); });
+
+    function buildFallbackJSON() {
+      return {
+        materiales: {
+          mamposteria: [{id:"block_15_20_40", precio_actualizado:8.5, rendimiento_m2:12.5, marcas:[]}, {id:"tabique_rojo", precio_actualizado:4.5, rendimiento_m2:36, marcas:[]}],
+          cementantes: [{id:"cemento_cpc30r_50kg", precio_actualizado:210, rendimiento_m2_muros:0.35, marcas:[]}],
+          agregados: [{id:"arena_fina", precio_actualizado:280, rendimiento_m2_mortero:0.04, marcas:[]}, {id:"grava_3_4", precio_actualizado:320, rendimiento_m2_losa:0.12, marcas:[]}],
+          acero: [{id:"varilla_3_8", precio_actualizado:185, rendimiento_m2_losa:0.85, marcas:[]}, {id:"varilla_1_2", precio_actualizado:320, rendimiento_m2_trabe:0.3, marcas:[]}, {id:"alambre_recocido", precio_actualizado:32, rendimiento_m2:0.5, marcas:[]}],
+          impermeabilizantes: [{id:"impermeabilizante_acrilico", precio_actualizado:697, rendimiento_m2:3.5, marcas:[]}],
+          acabados: [{id:"yeso_fino", precio_actualizado:152.21, rendimiento_m2:2.5, marcas:[]}, {id:"pintura_vinilica_cubeta", precio_actualizado:536.12, rendimiento_m2:35, marcas:[]}, {id:"pintura_fachadas", precio_actualizado:804.18, rendimiento_m2:30, marcas:[]}, {id:"piso_ceramico", precio_actualizado:151.67, marcas:[]}, {id:"piso_porcelanato", precio_actualizado:292.88, marcas:[]}],
+          instalaciones: [{id:"tubo_pvc_hidraulico_1_2", precio_actualizado:46.62, marcas:[]}, {id:"tubo_pvc_hidraulico_3_4", precio_actualizado:72.15, marcas:[]}],
+          carpinteria_aluminio: [{id:"ventana_aluminio_vidrio", precio_actualizado:1676.20, marcas:[]}, {id:"puerta_principal_madera", precio_actualizado:3302.40, marcas:[]}, {id:"puerta_interior_tambor", precio_actualizado:1857.60, marcas:[]}],
+          sanitarios: [{id:"wc_sencillo", precio_actualizado:980.40, marcas:[]}, {id:"lavabo_empotrado", precio_actualizado:670.80, marcas:[]}, {id:"regadera_sencilla", precio_actualizado:288.96, marcas:[]}]
+        },
+        mano_de_obra: {
+          trabajadores: [
+            {id:"oficial_albanileria", costo_real_dia:490.64, rendimiento_m2_muro:2.5},
+            {id:"peon_construccion", costo_real_dia:425.30, rendimiento_m2:4},
+            {id:"maestro_obra", costo_real_dia:702.00, supervision_m2_dia:15},
+            {id:"plomero_oficial", costo_bano_completo:2800},
+            {id:"electricista_oficial", costo_punto_electrico:350},
+            {id:"pintor_oficial", costo_por_m2:18.86}
+          ]
+        }
+      };
+    }
+
+rawData = PRECIOS_EMBEDDED;
+
+setMode('simple');
   </script>
 </body>
 
