@@ -125,3 +125,20 @@ Stack: HTML + CSS + JavaScript puro, GitHub Pages, Mercado Libre
 - [ ] awesome-claude-code instalado
 - [ ] Producto 1 construido
 - [ ] Publicado en Mercado Libre
+
+## REGLAS ABSOLUTAS DE JAVASCRIPT - NUNCA ROMPER
+- CERO backticks en cualquier parte del archivo
+- CERO arrow functions => usar siempre function(){}
+- CERO template literals ${} usar concatenacion con +
+- Usar var siempre, nunca const ni let
+- Loops: for(var i=0; i<n; i++) nunca forEach ni .map()
+- Acentos SOLO como entidades HTML: e=&#233; a=&#225; o=&#243; u=&#250; i=&#237; n=&#241;
+- RAZON: el archivo corre en Chrome via file:// sin transpilacion
+
+## ESTRUCTURA TECNICA DEL INDEX.HTML
+- Variables globales: var P (precios), var MO (mano de obra), var ESTADOS (33 estados), var F (formulario), var CT (factores NTC)
+- Pantallas: screen0, screen1, screen2, screen3, screen4, screen5, screen-loading, screen-results
+- Tipos de proyecto: vivienda, comercial, departamentos
+- Motor: funcion calcScenario(nivel)
+- Preview en vivo: funcion updateLivePreview()
+- Layout: workspace grid con ws-left y ws-right panel azul marino
