@@ -117,43 +117,6 @@
             display: none;
         }
 
-        .workspace {
-            display: grid;
-            grid-template-columns: 1fr 360px;
-            min-height: calc(100vh - 56px);
-            max-width: 1300px;
-            margin: 0 auto;
-        }
-
-        .ws-left {
-            padding: 28px 28px 60px;
-            min-width: 0;
-        }
-
-        .ws-right {
-            background: var(--primary);
-            position: sticky;
-            top: 56px;
-            height: calc(100vh - 56px);
-            overflow-y: auto;
-            padding: 20px 18px;
-            display: flex;
-            flex-direction: column;
-            gap: 14px;
-            border-left: 1px solid rgba(255, 255, 255, .06);
-        }
-
-        @media(max-width:860px) {
-            .workspace {
-                grid-template-columns: 1fr;
-            }
-
-            .ws-right {
-                position: static;
-                height: auto;
-            }
-        }
-
         .main-container {
             max-width: 100%;
             margin: 0;
@@ -362,6 +325,13 @@
             height: 8px;
             border-radius: 50%;
             background: var(--accent);
+        }
+
+        /* Atenuar cards no seleccionadas cuando hay una seleccionada en el grupo */
+        .cards-grid:has(.select-card.selected) .select-card:not(.selected),
+        .cards-grid-2:has(.select-card.selected) .select-card:not(.selected),
+        .card-selector:has(.select-card.selected) .select-card:not(.selected) {
+            opacity: 0.5;
         }
 
         .card-title {
@@ -900,12 +870,12 @@
         }
 
         .methodology {
-            background: var(--input-bg);
+            background: var(--bg-subtle);
             border-radius: 10px;
             padding: 16px;
             margin-top: 18px;
             font-size: .78rem;
-            color: var(--text-secondary);
+            color: var(--text-2);
         }
 
         .methodology h4 {
@@ -925,7 +895,7 @@
 
         .includes-section {
             margin-top: 18px;
-            border-top: 1px solid var(--border-color);
+            border-top: 1px solid var(--border);
             padding-top: 14px;
         }
 
@@ -965,13 +935,13 @@
             font-size: .8rem;
             font-weight: 700;
             margin-bottom: 8px;
-            color: var(--text-main);
+            color: var(--text-1);
         }
 
         .includes-col li {
             list-style: none;
             font-size: .78rem;
-            color: var(--text-secondary);
+            color: var(--text-2);
             margin-bottom: 4px;
             line-height: 1.4;
         }
@@ -1080,8 +1050,8 @@
             text-align: center;
             padding: 16px;
             font-size: .74rem;
-            color: var(--text-secondary);
-            border-top: 1px solid var(--border-color);
+            color: var(--text-2);
+            border-top: 1px solid var(--border);
             margin-top: 20px;
         }
 
@@ -2938,13 +2908,18 @@
             else if (F.niveles === 3) { nivelFactor = CT.factor_3_niveles; }
             var sotanoFactor = 1.0;
             var accesoMOFactor = 1.0;
+            var factorMuros = 1.80;
+            if (tipoProy === 'comercial') { factorMuros = 0.90; }
+            if (tipoProy === 'departamentos') { factorMuros = 1.60; }
+            if (F.usoSuelo === 'fit_out') { factorMuros = 0.40; }
+            var m2Muros = m2 * factorMuros * nivelesEfectivos;
             var bloqP, bloqR, bloqM;
             if (F.muros === 'tabique') { bloqP = P.tabique.p * fmat; bloqR = P.tabique.r_m2; bloqM = P.tabique.marca; }
             else if (F.muros === 'mixto') { bloqP = P.block.p * fmat * 1.15; bloqR = P.block.r_m2; bloqM = P.block.marca + ' (mixto)'; }
             else { bloqP = P.block.p * fmat; bloqR = P.block.r_m2; bloqM = P.block.marca; }
 
             if (F.muros !== 'no_incluir') {
-                mats.push({ name: 'Muros (' + F.muros + ')', marca: bloqM, qty: (m2 * bloqR).toFixed(0), unit: 'pza', sub: (F.muros !== 'no_incluir') ? m2 * bloqR * bloqP * mult * tf.albanileria : 0, bkey: 'block' });
+                mats.push({ name: 'Muros (' + F.muros + ')', marca: bloqM, qty: (m2Muros * bloqR).toFixed(0), unit: 'pza', sub: m2Muros * bloqR * bloqP * mult * tf.albanileria, bkey: 'block' });
             }
             mats.push({ name: 'Cemento', marca: P.cemento.marca, qty: (m2 * P.cemento.r_muro).toFixed(1), unit: 'saco', sub: m2 * P.cemento.r_muro * P.cemento.p * fmat * mult * tf.estructura, bkey: 'cemento' });
             mats.push({ name: 'Arena', marca: P.arena.marca, qty: (m2 * P.arena.r_mortero).toFixed(2), unit: 'm3', sub: m2 * P.arena.r_mortero * P.arena.p * fmat * mult * tf.estructura, bkey: 'arena' });
@@ -3094,6 +3069,27 @@
                 if (F.tieneEstacionCom && F.cajonesCom > 0) {
                     mats.push({ name: 'Estacionamiento (' + F.cajonesCom + ' cajones)', marca: 'Losa + se&#241;alamiento', qty: F.cajonesCom + '', unit: 'caj&#243;n', sub: F.cajonesCom * 12000 * fmat, bkey: null });
                 }
+                if (F.tienePlafon && F.plafonTipo) {
+                    var plafonPrecios = { tablaroca: 290, reticular: 220 };
+                    var plafonCosto = (plafonPrecios[F.plafonTipo] || 250) * m2 * fmat;
+                    mats.push({ name: 'Plaf&#243;n ' + F.plafonTipo, marca: 'Instalado', qty: m2.toFixed(0), unit: 'm2', sub: plafonCosto, bkey: null });
+                }
+                if (F.fachadaTipo && F.fachadaTipo !== 'no_incluir') {
+                    var fachadaPrecios = { pintura_com: 95, recubrimiento: 280, cristal: 950, prefabricado: 650 };
+                    var fachadaM2 = m2 * 0.35;
+                    var fachadaCosto = (fachadaPrecios[F.fachadaTipo] || 150) * fachadaM2 * fmat;
+                    mats.push({ name: 'Fachada (' + F.fachadaTipo + ')', marca: 'Instalado', qty: fachadaM2.toFixed(0), unit: 'm2', sub: fachadaCosto, bkey: null });
+                }
+                if (F.tipoProyecto === 'comercial' && F.tipoPiso && F.tipoPiso !== F.tipoPisoVivienda) {
+                    var pisosComerciales = { cemento: 85, ceramica_45: 172, porcelanato: 310, epoxica: 185 };
+                    var pisoComMarca = { cemento: 'Concreto pulido', ceramica_45: 'Cer&#225;mica antiderrapante PEI IV', porcelanato: 'Porcelanato rectificado', epoxica: 'Pintura ep&#243;xica industrial' };
+                    var pisoComPrecio = pisosComerciales[F.tipoPiso] || 172;
+                    var pisoComSub = m2 * pisoComPrecio * fmat * tf.acabados;
+                    var yaHayPiso = false;
+                    for (var pc = 0; pc < mats.length; pc++) {
+                        if (mats[pc].name.indexOf('Piso') === 0) { mats[pc].sub = pisoComSub; mats[pc].marca = pisoComMarca[F.tipoPiso] || ''; yaHayPiso = true; break; }
+                    }
+                }
             }
 
             // Extras departamentos
@@ -3133,9 +3129,16 @@
             moList.push({ name: 'Herramienta menor (3% MO)', days: 0, sub: herramientaMenor });
             moList.push({ name: 'Mandos intermedios (10% MO)', days: 0, sub: mandosIntermedios });
 
-            var maqEquipoFactor = 0.10;
-            if (F.tipoProyecto === 'departamentos' || (F.niveles && F.niveles >= 3)) { maqEquipoFactor = 0.12; }
-            if (F.tipoProyecto === 'comercial' && (F.usoSuelo === 'restaurante' || F.usoSuelo === 'cafeteria')) { maqEquipoFactor = 0.14; }
+            var maqEquipoFactor = 0.08;
+            if (tipoProy === 'vivienda' && nivelesEfectivos === 1) { maqEquipoFactor = 0.08; }
+            if (tipoProy === 'vivienda' && nivelesEfectivos === 2) { maqEquipoFactor = 0.12; }
+            if (tipoProy === 'vivienda' && nivelesEfectivos >= 3) { maqEquipoFactor = 0.15; }
+            if (tipoProy === 'departamentos' && nivelesEfectivos <= 3) { maqEquipoFactor = 0.14; }
+            if (tipoProy === 'departamentos' && nivelesEfectivos >= 4) { maqEquipoFactor = 0.18; }
+            if (tipoProy === 'comercial') { maqEquipoFactor = 0.12; }
+            if (tipoProy === 'comercial' && (F.usoSuelo === 'restaurante' || F.usoSuelo === 'cafeteria')) { maqEquipoFactor = 0.16; }
+            if (tipoProy === 'comercial' && F.usoSuelo === 'fit_out') { maqEquipoFactor = 0.04; }
+            if (F.cimentacion === 'no_incluir') { maqEquipoFactor = maqEquipoFactor * 0.5; }
             var maqEquipoCosto = subMat0 * maqEquipoFactor;
             mats.push({ name: 'Maquinaria y equipo de construcci&#243;n', marca: 'Revolvedora, vibrador, andamios', qty: '1', unit: 'lote', sub: maqEquipoCosto, bkey: null });
 
