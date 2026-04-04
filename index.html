@@ -1300,6 +1300,273 @@
             gap: 18px;
             text-align: center;
         }
+        #screen-home {
+            display: none;
+            min-height: calc(100vh - 58px);
+            padding: 0;
+        }
+
+        #screen-home.active {
+            display: block;
+        }
+
+        .home-hero {
+            padding: 80px 40px 60px;
+            max-width: 820px;
+            margin: 0 auto;
+        }
+
+        .home-eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--accent-soft);
+            border: 1px solid rgba(99,102,241,.25);
+            border-radius: 999px;
+            padding: 5px 14px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: #A5B4FC;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 28px;
+        }
+
+        .home-eyebrow-dot {
+            width: 6px;
+            height: 6px;
+            background: var(--accent);
+            border-radius: 50%;
+        }
+
+        .home-h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--text-1);
+            line-height: 1.15;
+            letter-spacing: -1.5px;
+            margin-bottom: 20px;
+        }
+
+        .home-h1 span {
+            color: #A5B4FC;
+        }
+
+        .home-desc {
+            font-size: 1.05rem;
+            color: var(--text-2);
+            line-height: 1.75;
+            max-width: 580px;
+            margin-bottom: 38px;
+        }
+
+        .home-cta-row {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-bottom: 56px;
+        }
+
+        .home-btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            border-radius: var(--r-lg);
+            padding: 16px 32px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            font-family: inherit;
+            letter-spacing: .3px;
+            transition: all .2s cubic-bezier(.4,0,.2,1);
+            box-shadow: 0 4px 24px rgba(99,102,241,.35);
+        }
+
+        .home-btn-primary:hover {
+            background: var(--accent-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 32px rgba(99,102,241,.45);
+        }
+
+        .home-btn-primary-arrow {
+            font-size: 1.1rem;
+            transition: transform .2s;
+        }
+
+        .home-btn-primary:hover .home-btn-primary-arrow {
+            transform: translateX(4px);
+        }
+
+        .home-trust {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text-3);
+            font-size: 0.78rem;
+        }
+
+        .home-trust-dot {
+            width: 4px;
+            height: 4px;
+            background: var(--text-3);
+            border-radius: 50%;
+        }
+
+        .home-divider {
+            border: none;
+            border-top: 1px solid var(--border);
+            margin: 0 40px;
+        }
+
+        .home-tools {
+            padding: 56px 40px;
+            max-width: 820px;
+            margin: 0 auto;
+        }
+
+        .home-tools-label {
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            color: var(--text-3);
+            text-transform: uppercase;
+            margin-bottom: 24px;
+        }
+
+        .home-tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 12px;
+        }
+
+        .home-tool-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--r-lg);
+            padding: 22px;
+            cursor: pointer;
+            transition: all .2s cubic-bezier(.4,0,.2,1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .home-tool-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0,0,0,.3);
+        }
+
+        .home-tool-card.active-tool {
+            border-color: var(--accent);
+            background: var(--surface-2);
+        }
+
+        .home-tool-card.coming-soon {
+            opacity: 0.45;
+            cursor: default;
+        }
+
+        .home-tool-card.coming-soon:hover {
+            transform: none;
+            border-color: var(--border);
+            box-shadow: none;
+        }
+
+        .home-tool-icon {
+            width: 42px;
+            height: 42px;
+            background: var(--accent-soft);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 14px;
+            font-size: 1.3rem;
+        }
+
+        .home-tool-card.active-tool .home-tool-icon {
+            background: var(--accent);
+        }
+
+        .home-tool-name {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--text-1);
+            margin-bottom: 5px;
+        }
+
+        .home-tool-desc {
+            font-size: 0.75rem;
+            color: var(--text-2);
+            line-height: 1.55;
+        }
+
+        .home-tool-badge {
+            position: absolute;
+            top: 14px;
+            right: 14px;
+            font-size: 0.58rem;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 999px;
+            letter-spacing: .5px;
+            text-transform: uppercase;
+        }
+
+        .home-tool-badge.available {
+            background: rgba(16,185,129,.12);
+            color: var(--success);
+            border: 1px solid rgba(16,185,129,.25);
+        }
+
+        .home-tool-badge.soon {
+            background: var(--surface-3);
+            color: var(--text-3);
+            border: 1px solid var(--border);
+        }
+
+        .home-stats {
+            display: flex;
+            gap: 40px;
+            padding: 32px 40px;
+            border-top: 1px solid var(--border);
+            max-width: 820px;
+            margin: 0 auto;
+            flex-wrap: wrap;
+        }
+
+        .home-stat {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        .home-stat-val {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--text-1);
+            letter-spacing: -0.5px;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .home-stat-label {
+            font-size: 0.72rem;
+            color: var(--text-3);
+            font-weight: 500;
+        }
+
+        @media(max-width:600px) {
+            .home-h1 { font-size: 2rem; letter-spacing: -0.5px; }
+            .home-hero { padding: 48px 20px 40px; }
+            .home-tools { padding: 40px 20px; }
+            .home-divider { margin: 0 20px; }
+            .home-stats { padding: 28px 20px; gap: 28px; }
+        }
+
     </style>
 </head>
 
@@ -1346,9 +1613,92 @@
                         </div>
                     </div>
                 </div>
+                <div id="screen-home" class="screen active">
+                    <div class="home-hero">
+                        <div class="home-eyebrow">
+                            <div class="home-eyebrow-dot"></div>
+                            Presupuestador Pro 2026 &mdash; M&#233;xico
+                        </div>
+                        <h1 class="home-h1">
+                            El presupuesto de<br/>
+                            construcci&#243;n que<br/>
+                            <span>s&#237; puedes confiar.</span>
+                        </h1>
+                        <p class="home-desc">
+                            Calcula el costo real de tu obra en minutos.
+                            Precios actualizados por estado con metodolog&#237;a SICT 2025.
+                            Para arquitectos, ingenieros y personas que quieren construir bien.
+                        </p>
+                        <div class="home-cta-row">
+                            <button type="button" id="btn-ir-calculadora" class="home-btn-primary">
+                                Generar presupuesto ahora
+                                <span class="home-btn-primary-arrow">&#8594;</span>
+                            </button>
+                            <div class="home-trust">
+                                <span>SICT 2025</span>
+                                <div class="home-trust-dot"></div>
+                                <span>33 estados</span>
+                                <div class="home-trust-dot"></div>
+                                <span>PDF descargable</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr class="home-divider"/>
+
+                    <div class="home-tools">
+                        <div class="home-tools-label">Herramientas disponibles</div>
+                        <div class="home-tools-grid">
+                            <div class="home-tool-card active-tool" id="home-card-presupuesto" onclick="document.getElementById('btn-ir-calculadora').click()">
+                                <span class="home-tool-badge available">Disponible</span>
+                                <div class="home-tool-icon">&#127968;</div>
+                                <div class="home-tool-name">Presupuesto de construcci&#243;n</div>
+                                <div class="home-tool-desc">Calcula materiales, mano de obra e indirectos para vivienda, comercial o departamentos.</div>
+                            </div>
+                            <div class="home-tool-card coming-soon">
+                                <span class="home-tool-badge soon">Pr&#243;ximamente</span>
+                                <div class="home-tool-icon">&#128203;</div>
+                                <div class="home-tool-name">Generador de cat&#225;logos</div>
+                                <div class="home-tool-desc">Genera cat&#225;logos de conceptos con precios unitarios listos para exportar.</div>
+                            </div>
+                            <div class="home-tool-card coming-soon">
+                                <span class="home-tool-badge soon">Pr&#243;ximamente</span>
+                                <div class="home-tool-icon">&#128200;</div>
+                                <div class="home-tool-name">Control de obra</div>
+                                <div class="home-tool-desc">Seguimiento de avance, estimaciones y control de costos por etapa.</div>
+                            </div>
+                            <div class="home-tool-card coming-soon">
+                                <span class="home-tool-badge soon">Pr&#243;ximamente</span>
+                                <div class="home-tool-icon">&#128081;</div>
+                                <div class="home-tool-name">Honorarios profesionales</div>
+                                <div class="home-tool-desc">Calcula honorarios de dise&#241;o y supervisi&#243;n con base en normativa CAM-SAM.</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="home-stats">
+                        <div class="home-stat">
+                            <span class="home-stat-val">33</span>
+                            <span class="home-stat-label">Estados con precios regionales</span>
+                        </div>
+                        <div class="home-stat">
+                            <span class="home-stat-val">SICT 2025</span>
+                            <span class="home-stat-label">Metodolog&#237;a oficial aplicada</span>
+                        </div>
+                        <div class="home-stat">
+                            <span class="home-stat-val">3</span>
+                            <span class="home-stat-label">Escenarios comparativos</span>
+                        </div>
+                        <div class="home-stat">
+                            <span class="home-stat-val">PDF</span>
+                            <span class="home-stat-label">Descargable instant&#225;neo</span>
+                        </div>
+                    </div>
+                </div>
+
                 <form id="budgetForm" onsubmit="return false;">
                     <!-- SCREEN 0 -->
-                    <div id="screen0" class="screen active">
+                    <div id="screen0" class="screen">
                         <h1>&#128736;&#65039; Tu proyecto de construcci&#243;n</h1>
                         <div class="card">
                             <div class="form-group">
@@ -4233,8 +4583,15 @@
 
 
 
-            /* hide progress bar on initial load (screen0 is active) */
+            /* hide progress bar on initial load (screen-home is the entry point) */
             document.getElementById('progress-container').style.display = 'none';
+            var btnIrCalc = document.getElementById('btn-ir-calculadora');
+            if (btnIrCalc) {
+                btnIrCalc.addEventListener('click', function () {
+                    showScreen('screen0');
+                    document.getElementById('progress-container').style.display = 'none';
+                });
+            }
             var supEl = document.getElementById('superficie');
             if (supEl) {
                 supEl.addEventListener('input', function () {
