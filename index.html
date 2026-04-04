@@ -235,21 +235,54 @@
         .card {
             background: var(--bg-card);
             border-radius: var(--r-xl);
-            padding: 28px;
+            padding: 0;
             border: 1px solid var(--border);
-            margin-bottom: 16px;
+            margin-bottom: 12px;
+            overflow: hidden;
+        }
+
+        .form-card > *,
+        .card > * {
+            padding-left: 26px;
+            padding-right: 26px;
+        }
+
+        .form-card > .section-title,
+        .card > .section-title {
+            padding: 18px 26px;
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            border-radius: 0;
+            margin-bottom: 0;
+        }
+
+        .form-card > .form-group:first-of-type,
+        .card > .form-group:first-of-type,
+        .form-card > .field-group:first-of-type,
+        .card > .field-group:first-of-type {
+            padding-top: 22px;
+        }
+
+        .form-card > .form-group:last-of-type,
+        .card > .form-group:last-of-type {
+            padding-bottom: 22px;
         }
 
         .section-title {
-            font-size: 0.95rem;
+            font-size: 0.88rem;
             font-weight: 700;
-            color: var(--text-1);
-            margin-bottom: 4px;
+            color: var(--text-2);
+            margin-bottom: 0;
             display: flex;
             align-items: center;
             gap: 8px;
-            padding-bottom: 12px;
-            border-bottom: 1px solid var(--border);
+            letter-spacing: .4px;
+            text-transform: uppercase;
+        }
+
+        .section-title .section-icon {
+            font-size: 0.95rem;
+            opacity: .8;
         }
 
         .section-icon {
@@ -259,8 +292,9 @@
         .section-sub {
             font-size: 0.76rem;
             color: var(--text-3);
-            margin-bottom: 20px;
-            margin-top: 6px;
+            margin-bottom: 16px;
+            margin-top: 2px;
+            padding-top: 4px;
         }
 
         .field-label {
@@ -1705,6 +1739,228 @@
             .home-compare { padding: 40px 20px; }
         }
 
+        .home-hero-inner {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            align-items: center;
+            gap: 48px;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 72px 40px 56px;
+        }
+
+        .home-hero-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .home-hero-visual {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .mockup-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 24px;
+            width: 100%;
+            max-width: 360px;
+            box-shadow: 0 24px 64px rgba(0,0,0,.5);
+        }
+
+        .mockup-header {
+            background: var(--accent);
+            border-radius: 10px;
+            padding: 14px 16px;
+            margin-bottom: 16px;
+        }
+
+        .mockup-header-title {
+            font-size: 0.7rem;
+            font-weight: 800;
+            color: #fff;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin-bottom: 2px;
+        }
+
+        .mockup-header-sub {
+            font-size: 0.62rem;
+            color: rgba(255,255,255,.65);
+            font-weight: 500;
+        }
+
+        .mockup-meta-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 6px;
+            margin-bottom: 16px;
+        }
+
+        .mockup-meta-cell {
+            background: var(--surface-2);
+            border-radius: 7px;
+            padding: 8px 6px;
+            text-align: center;
+        }
+
+        .mockup-meta-val {
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: var(--text-1);
+        }
+
+        .mockup-meta-lbl {
+            font-size: 0.55rem;
+            color: var(--text-3);
+            margin-top: 2px;
+        }
+
+        .mockup-section {
+            margin-bottom: 10px;
+        }
+
+        .mockup-section-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--surface-2);
+            border-radius: 7px;
+            padding: 9px 12px;
+            margin-bottom: 4px;
+        }
+
+        .mockup-section-name {
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: var(--text-2);
+        }
+
+        .mockup-section-val {
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .mockup-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 12px;
+            font-size: 0.62rem;
+        }
+
+        .mockup-row span:first-child { color: var(--text-3); }
+        .mockup-row span:last-child { color: var(--text-2); font-weight: 600; }
+
+        .mockup-total-bar {
+            background: var(--accent);
+            border-radius: 8px;
+            padding: 12px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 12px;
+        }
+
+        .mockup-total-label {
+            font-size: 0.68rem;
+            font-weight: 700;
+            color: rgba(255,255,255,.75);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .mockup-total-val {
+            font-size: 1rem;
+            font-weight: 800;
+            color: #fff;
+        }
+
+        .mockup-footer {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 12px;
+            padding-top: 10px;
+            border-top: 1px solid var(--border);
+        }
+
+        .mockup-footer-logo {
+            width: 28px;
+            height: 28px;
+            background: var(--accent);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.65rem;
+            font-weight: 800;
+            color: #fff;
+        }
+
+        .mockup-footer-text { font-size: 0.6rem; color: var(--text-3); line-height: 1.4; }
+        .mockup-footer-text strong { color: var(--text-2); display: block; }
+
+        @media(max-width: 860px) {
+            .home-hero-inner { grid-template-columns: 1fr; padding: 48px 20px 40px; gap: 36px; }
+            .home-hero-visual { order: -1; }
+            .mockup-card { max-width: 300px; }
+        }
+
+        .field-context {
+            font-size: 0.7rem;
+            color: var(--text-3);
+            margin-top: 3px;
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+
+        label,
+        .field-label {
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--text-1);
+            margin-bottom: 4px;
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--text-1);
+            margin-bottom: 4px;
+            display: block;
+        }
+
+        .helper-text {
+            font-size: 0.7rem;
+            color: var(--text-3);
+            margin-top: 4px;
+            line-height: 1.5;
+        }
+
+        input[type="number"].number-input,
+        select.dropdown,
+        select.field-select {
+            color: var(--text-1);
+        }
+
+        input[type="number"].number-input::placeholder {
+            color: var(--text-3);
+        }
+
+        select.dropdown option,
+        select.field-select option {
+            background: var(--surface-3);
+            color: var(--text-1);
+        }
+
     </style>
 </head>
 
@@ -1758,31 +2014,89 @@
                 </div>
                 <div id="screen-home" class="screen active">
                     <div class="home-hero">
-                        <div class="home-eyebrow">
-                            <div class="home-eyebrow-dot"></div>
-                            Presupuestador Pro 2026 &mdash; M&#233;xico
-                        </div>
-                        <h1 class="home-h1">
-                            El presupuesto de<br/>
-                            construcci&#243;n que<br/>
-                            <span>s&#237; puedes confiar.</span>
-                        </h1>
-                        <p class="home-desc">
-                            Calcula el costo real de tu obra en minutos.
-                            Precios actualizados por estado con metodolog&#237;a SICT 2025.
-                            Para arquitectos, ingenieros y personas que quieren construir bien.
-                        </p>
-                        <div class="home-cta-row">
-                            <button type="button" id="btn-ir-calculadora" class="home-btn-primary">
-                                Generar presupuesto ahora
-                                <span class="home-btn-primary-arrow">&#8594;</span>
-                            </button>
-                            <div class="home-trust">
-                                <span>SICT 2025</span>
-                                <div class="home-trust-dot"></div>
-                                <span>33 estados</span>
-                                <div class="home-trust-dot"></div>
-                                <span>PDF descargable</span>
+                        <div class="home-hero-inner">
+                            <div class="home-hero-text">
+                                <div class="home-eyebrow">
+                                    <div class="home-eyebrow-dot"></div>
+                                    Presupuestador Pro 2026 &mdash; M&#233;xico
+                                </div>
+                                <h1 class="home-h1">
+                                    El presupuesto de<br/>
+                                    construcci&#243;n que<br/>
+                                    <span>s&#237; puedes confiar.</span>
+                                </h1>
+                                <p class="home-desc">
+                                    Calcula el costo real de tu obra en minutos.
+                                    Precios actualizados por estado con metodolog&#237;a SICT 2025.
+                                    Para arquitectos, ingenieros y personas que quieren construir bien.
+                                </p>
+                                <div class="home-cta-row">
+                                    <button type="button" id="btn-ir-calculadora" class="home-btn-primary">
+                                        Generar presupuesto ahora
+                                        <span class="home-btn-primary-arrow">&#8594;</span>
+                                    </button>
+                                    <div class="home-trust">
+                                        <span>SICT 2025</span>
+                                        <div class="home-trust-dot"></div>
+                                        <span>33 estados</span>
+                                        <div class="home-trust-dot"></div>
+                                        <span>PDF descargable</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="home-hero-visual">
+                                <div class="mockup-card">
+                                    <div class="mockup-header">
+                                        <div class="mockup-header-title">Presupuesto de construcci&#243;n</div>
+                                        <div class="mockup-header-sub">Reporte t&#233;cnico &bull; ObraDigitalMX 2026</div>
+                                    </div>
+                                    <div class="mockup-meta-row">
+                                        <div class="mockup-meta-cell">
+                                            <div class="mockup-meta-val">120 m&#178;</div>
+                                            <div class="mockup-meta-lbl">Superficie</div>
+                                        </div>
+                                        <div class="mockup-meta-cell">
+                                            <div class="mockup-meta-val">2</div>
+                                            <div class="mockup-meta-lbl">Niveles</div>
+                                        </div>
+                                        <div class="mockup-meta-cell">
+                                            <div class="mockup-meta-val">Tlax.</div>
+                                            <div class="mockup-meta-lbl">Estado</div>
+                                        </div>
+                                        <div class="mockup-meta-cell">
+                                            <div class="mockup-meta-val">Est.</div>
+                                            <div class="mockup-meta-lbl">Nivel</div>
+                                        </div>
+                                    </div>
+                                    <div class="mockup-section">
+                                        <div class="mockup-section-head">
+                                            <span class="mockup-section-name">Materiales y partidas</span>
+                                            <span class="mockup-section-val">$812,400</span>
+                                        </div>
+                                        <div class="mockup-row"><span>Muros block concreto</span><span>$84,200</span></div>
+                                        <div class="mockup-row"><span>Sistema losa nervada</span><span>$156,800</span></div>
+                                        <div class="mockup-row"><span>Cimentaci&#243;n zapatas</span><span>$98,500</span></div>
+                                        <div class="mockup-row"><span>Piso cer&#225;mica 45x45</span><span>$41,200</span></div>
+                                    </div>
+                                    <div class="mockup-section">
+                                        <div class="mockup-section-head">
+                                            <span class="mockup-section-name">Mano de obra</span>
+                                            <span class="mockup-section-val">$198,600</span>
+                                        </div>
+                                        <div class="mockup-row"><span>Imprevistos (10%)</span><span>$101,100</span></div>
+                                    </div>
+                                    <div class="mockup-total-bar">
+                                        <span class="mockup-total-label">Total estimado</span>
+                                        <span class="mockup-total-val">$1,112,100</span>
+                                    </div>
+                                    <div class="mockup-footer">
+                                        <div class="mockup-footer-logo">OB</div>
+                                        <div class="mockup-footer-text">
+                                            <strong>ObraDigitalMX</strong>
+                                            Metodolog&#237;a SICT 2025 &bull; V&#225;lido 30 d&#237;as
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -1888,28 +2202,28 @@
                         <div class="card">
                             <div class="form-group">
                                 <label>&#127981; Tipo de proyecto</label>
-                                <p style="font-size:12px;color:#6B7280;margin-bottom:12px">Selecciona el tipo de obra
+                                <p style="font-size:12px;color:var(--text-2);margin-bottom:12px">Selecciona el tipo de obra
                                     que deseas
                                     cotizar</p>
                                 <div class="card-selector" id="tipo-proyecto-group">
                                     <div class="select-card" data-value="vivienda">
                                         <div style="font-size:24px;margin-bottom:6px">&#127968;</div>
                                         <div class="card-title">Casa habitaci&#243;n</div>
-                                        <div style="font-size:11px;color:#6B7280;margin-top:4px">Vivienda unifamiliar
+                                        <div style="font-size:11px;color:var(--text-2);margin-top:4px">Vivienda unifamiliar
                                             nueva
                                         </div>
                                     </div>
                                     <div class="select-card" data-value="comercial">
                                         <div style="font-size:24px;margin-bottom:6px">&#127978;</div>
                                         <div class="card-title">Local comercial</div>
-                                        <div style="font-size:11px;color:#6B7280;margin-top:4px">Tienda, oficina,
+                                        <div style="font-size:11px;color:var(--text-2);margin-top:4px">Tienda, oficina,
                                             restaurante
                                         </div>
                                     </div>
                                     <div class="select-card" data-value="departamentos">
                                         <div style="font-size:24px;margin-bottom:6px">&#127963;</div>
                                         <div class="card-title">Departamentos</div>
-                                        <div style="font-size:11px;color:#6B7280;margin-top:4px">Edificio residencial
+                                        <div style="font-size:11px;color:var(--text-2);margin-top:4px">Edificio residencial
                                             3-5
                                             niveles</div>
                                     </div>
@@ -1921,7 +2235,7 @@
 
                             <div class="form-group">
                                 <label>&#128205; Estado o regi&#243;n donde se construir&#225;</label>
-                                <p style="font-size:12px;color:#6B7280;margin-bottom:8px">Afecta los costos de
+                                <p style="font-size:12px;color:var(--text-2);margin-bottom:8px">Afecta los costos de
                                     materiales y mano
                                     de obra seg&#250;n el &#237;ndice FIC SICT 2025</p>
                                 <select id="estado-select" class="dropdown">
@@ -1972,13 +2286,14 @@
                     <!-- SCREEN 1 -->
                     <div id="screen1" class="screen">
                         <h1 id="screen1-title">Datos Generales</h1>
-                        <p id="screen1-subtitle" style="font-size:13px;color:#6B7280;margin-bottom:20px">
+                        <p id="screen1-subtitle" style="font-size:13px;color:var(--text-2);margin-bottom:20px">
                             Caracter&#237;sticas
                             b&#225;sicas de tu proyecto.</p>
                         <div class="card">
 
                             <div class="form-group">
-                                <label>Superficie total (m&#178;)</label>
+                                <label>Superficie total construida (m&#178;)</label>
+                                <div class="field-context">&#193;rea total de construcci&#243;n cubierta en todos los niveles. No incluye terrazas descubiertas ni estacionamiento.</div>
                                 <input type="number" id="superficie" min="20" max="2000" placeholder="Ej. 120"
                                     class="number-input">
                                 <div class="helper-text">M&#237;nimo 20 m&#178;, m&#225;ximo 2,000 m&#178;</div>
@@ -1989,20 +2304,22 @@
                             </div>
 
                             <div class="form-group">
-                                <label>N&#250;mero de niveles</label>
+                                <label>N&#250;mero de niveles (pisos)</label>
+                                <div class="field-context">Cada nivel adicional incrementa el costo estructural. A partir del nivel 3 se aplica factor de altura seg&#250;n NTC 2026.</div>
                                 <div class="pill-group" id="niveles-group">
                                     <button type="button" class="pill-btn" data-value="1">1</button>
                                     <button type="button" class="pill-btn" data-value="2">2</button>
                                     <button type="button" class="pill-btn" data-value="3">3</button>
                                 </div>
                                 <div id="niveles-warning"
-                                    style="display:none;margin-top:8px;padding:10px 14px;background:#FFF7ED;border-left:3px solid #F97316;border-radius:6px;font-size:13px;color:#92400E">
+                                    style="display:none;margin-top:8px;padding:10px 14px;background:var(--amber-soft);border-left:3px solid var(--amber);border-radius:6px;font-size:13px;color:#FCD34D">
                                 </div>
                                 <div class="error-msg" id="err-niveles">Requerido</div>
                             </div>
 
                             <div class="form-group">
-                                <label>Altura libre entre niveles</label>
+                                <label>Altura libre de piso a techo</label>
+                                <div class="field-context">Afecta el costo de muros, castillos y trabes. La NTC establece 2.30 m como m&#237;nimo habitable. El est&#225;ndar residencial es 2.70 m.</div>
                                 <select id="altura-libre" class="dropdown">
                                     <option value="2.30">2.30 m (m&#237;nimo NTC 2026)</option>
                                     <option value="2.50">2.50 m</option>
@@ -2015,6 +2332,7 @@
                             <div id="campos-vivienda">
                                 <div class="form-group">
                                     <label>N&#250;mero de rec&#225;maras</label>
+                                    <div class="field-context">Determina la cantidad de puertas interiores, ventanas y el factor de tabique/block calculado.</div>
                                     <div class="pill-group" id="recamaras-group">
                                         <button type="button" class="pill-btn" data-value="1">1</button>
                                         <button type="button" class="pill-btn" data-value="2">2</button>
@@ -2026,6 +2344,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label>Ba&#241;os completos (WC + lavabo + regadera)</label>
+                                    <div class="field-context">Se calculan WC Lamosa, lavabo empotrado, regadera y tuberia hidrosanitaria por cada ba&#241;o.</div>
                                     <div class="pill-group" id="banos-group">
                                         <button type="button" class="pill-btn" data-value="1">1</button>
                                         <button type="button" class="pill-btn" data-value="2">2</button>
@@ -2035,6 +2354,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label>Medios ba&#241;os (WC + lavabo)</label>
+                                    <div class="field-context">Ba&#241;o social o de visitas. No incluye regadera. Se usa en sala, &#225;rea de trabajo o planta baja.</div>
                                     <div class="pill-group" id="mediosbanos-group">
                                         <button type="button" class="pill-btn" data-value="0">0</button>
                                         <button type="button" class="pill-btn" data-value="1">1</button>
@@ -2060,7 +2380,7 @@
                                     </select>
                                     <div class="error-msg" id="err-uso-suelo">Requerido</div>
                                     <div id="info-fitout"
-                                        style="display:none;margin-top:8px;padding:10px;background:#FFF7ED;border-left:3px solid #F97316;border-radius:4px;font-size:12px;">
+                                        style="display:none;margin-top:8px;padding:10px;background:var(--amber-soft);border-left:3px solid var(--amber);border-radius:6px;font-size:12px;color:#FCD34D;">
                                         &#9432; <strong>Fit-out:</strong> Acondicionamiento de local en obra gris
                                         rentado. No
                                         incluye cimentaci&#243;n ni estructura. Solo instalaciones, acabados, HVAC y
@@ -2182,7 +2502,7 @@
                                             <div class="card-desc">Suelos blandos</div>
                                         </div>
                                         <div class="select-card" data-value="no_incluir">
-                                            <div class="card-title" style="color:#9CA3AF;">No incluir</div>
+                                            <div class="card-title" style="color:var(--text-3);">No incluir</div>
                                             <div class="card-desc" style="color:#D1D5DB;">Omitir esta partida</div>
                                         </div>
                                     </div>
@@ -2204,7 +2524,7 @@
                                             <div class="card-desc">Combinado</div>
                                         </div>
                                         <div class="select-card" data-value="no_incluir">
-                                            <div class="card-title" style="color:#9CA3AF;">No incluir</div>
+                                            <div class="card-title" style="color:var(--text-3);">No incluir</div>
                                             <div class="card-desc" style="color:#D1D5DB;">Omitir esta partida</div>
                                         </div>
                                     </div>
@@ -2226,7 +2546,7 @@
                                             <div class="card-desc">Instalaci&#243;n r&#225;pida</div>
                                         </div>
                                         <div class="select-card" data-value="no_incluir">
-                                            <div class="card-title" style="color:#9CA3AF;">No incluir</div>
+                                            <div class="card-title" style="color:var(--text-3);">No incluir</div>
                                             <div class="card-desc" style="color:#D1D5DB;">Omitir esta partida</div>
                                         </div>
                                     </div>
@@ -2257,7 +2577,7 @@
                                             <div class="card-desc">Ya tiene estructura, se acondiciona</div>
                                         </div>
                                         <div class="select-card" data-value="no_incluir">
-                                            <div class="card-title" style="color:#9CA3AF;">Fit-out / Local rentado</div>
+                                            <div class="card-title" style="color:var(--text-3);">Fit-out / Local rentado</div>
                                             <div class="card-desc" style="color:#D1D5DB;">Sin obra estructural</div>
                                         </div>
                                     </div>
@@ -2278,7 +2598,7 @@
                                             <div class="card-desc">Flexible y r&#225;pido</div>
                                         </div>
                                         <div class="select-card" data-value="no_incluir">
-                                            <div class="card-title" style="color:#9CA3AF;">Sin divisorios</div>
+                                            <div class="card-title" style="color:var(--text-3);">Sin divisorios</div>
                                             <div class="card-desc" style="color:#D1D5DB;">Planta abierta</div>
                                         </div>
                                     </div>
@@ -2313,7 +2633,7 @@
                                             <div class="card-desc">Mayor resistencia</div>
                                         </div>
                                         <div class="select-card" data-value="no_incluir">
-                                            <div class="card-title" style="color:#9CA3AF;">No aplica</div>
+                                            <div class="card-title" style="color:var(--text-3);">No aplica</div>
                                             <div class="card-desc" style="color:#D1D5DB;">Local ya tiene losa</div>
                                         </div>
                                     </div>
@@ -2403,7 +2723,7 @@
                                             <div class="card-desc">Canceler&#237;a + muro</div>
                                         </div>
                                         <div class="select-card" data-value="no_incluir">
-                                            <div class="card-title" style="color:#9CA3AF;">No incluir</div>
+                                            <div class="card-title" style="color:var(--text-3);">No incluir</div>
                                             <div class="card-desc" style="color:#D1D5DB;">Ya tiene fachada</div>
                                         </div>
                                     </div>
@@ -2415,22 +2735,22 @@
                                 <div class="cards-grid" id="piso-group">
                                     <div class="select-card" data-value="cemento">
                                         <div class="card-title">Cemento pulido</div>
-                                        <div style="font-size:11px;color:#6B7280;margin-top:4px">~$85/m&#178; mat.</div>
+                                        <div style="font-size:11px;color:var(--text-2);margin-top:4px">~$85/m&#178; mat.</div>
                                     </div>
                                     <div class="select-card" data-value="ceramica_33">
                                         <div class="card-title">Cer&#225;mica 33x33</div>
-                                        <div style="font-size:11px;color:#6B7280;margin-top:4px">~$120/m&#178; mat.
+                                        <div style="font-size:11px;color:var(--text-2);margin-top:4px">~$120/m&#178; mat.
                                         </div>
                                     </div>
                                     <div class="select-card" data-value="ceramica_45">
                                         <div class="card-badge">POPULAR</div>
                                         <div class="card-title">Cer&#225;mica 45x45</div>
-                                        <div style="font-size:11px;color:#6B7280;margin-top:4px">~$172/m&#178; mat.
+                                        <div style="font-size:11px;color:var(--text-2);margin-top:4px">~$172/m&#178; mat.
                                         </div>
                                     </div>
                                     <div class="select-card" data-value="porcelanato">
                                         <div class="card-title">Porcelanato 60x60</div>
-                                        <div style="font-size:11px;color:#6B7280;margin-top:4px">~$289/m&#178; mat.
+                                        <div style="font-size:11px;color:var(--text-2);margin-top:4px">~$289/m&#178; mat.
                                         </div>
                                     </div>
                                 </div>
@@ -2448,7 +2768,7 @@
                                         <div class="card-desc">Acabado liso interior</div>
                                     </div>
                                     <div class="select-card" data-value="no_incluir">
-                                        <div class="card-title" style="color:#9CA3AF;">No incluir</div>
+                                        <div class="card-title" style="color:var(--text-3);">No incluir</div>
                                         <div class="card-desc" style="color:#D1D5DB;">Omitir esta partida</div>
                                     </div>
                                 </div>
@@ -2457,50 +2777,50 @@
                             </div>
                             <div class="field-group">
                                 <label class="field-label">&#128396; Pintura</label>
-                                <p style="font-size:12px;color:#6B7280;margin-bottom:10px">Selecciona una para
+                                <p style="font-size:12px;color:var(--text-2);margin-bottom:10px">Selecciona una para
                                     interiores y una
                                     para exteriores (o la misma si prefieres)</p>
-                                <p style="font-size:13px;font-weight:600;color:#1B2B4B;margin-bottom:8px">&#127968;
+                                <p style="font-size:13px;font-weight:600;color:var(--text-1);margin-bottom:8px">&#127968;
                                     Interior:
                                 </p>
                                 <div class="cards-grid-2" id="pintura-int-group">
                                     <div class="select-card" data-value="vinilica_std">
                                         <div class="card-title">Vin&#237;lica Est&#225;ndar</div>
-                                        <div style="font-size:11px;color:#6B7280;margin-top:4px">Comex Vinimex &#183;
+                                        <div style="font-size:11px;color:var(--text-2);margin-top:4px">Comex Vinimex &#183;
                                             lavable
                                             &#183; 3 a&#241;os</div>
                                     </div>
                                     <div class="select-card" data-value="vinilica_prem">
                                         <div class="card-title">Vin&#237;lica Premium</div>
-                                        <div style="font-size:11px;color:#6B7280;margin-top:4px">Sherwin-Williams Kem
+                                        <div style="font-size:11px;color:var(--text-2);margin-top:4px">Sherwin-Williams Kem
                                             Tone
                                             &#183; antimoho &#183; 5 a&#241;os</div>
                                     </div>
                                     <div class="select-card" data-value="no_incluir">
-                                        <div class="card-title" style="color:#9CA3AF;">No incluir</div>
+                                        <div class="card-title" style="color:var(--text-3);">No incluir</div>
                                         <div class="card-desc" style="color:#D1D5DB;">Omitir pintura interior</div>
                                     </div>
                                 </div>
                                 <div id="info-pintura-int-group" style="display:none"></div>
                                 <div class="error-msg" id="err-pintura-int">Selecciona pintura interior</div>
                                 <p
-                                    style="font-size:13px;font-weight:600;color:#1B2B4B;margin-top:16px;margin-bottom:8px">
+                                    style="font-size:13px;font-weight:600;color:var(--text-1);margin-top:16px;margin-bottom:8px">
                                     &#127968; Exterior / Fachada:</p>
                                 <div class="cards-grid-2" id="pintura-ext-group">
                                     <div class="select-card" data-value="acrilica_ext">
                                         <div class="card-title">Acr&#237;lica Exterior</div>
-                                        <div style="font-size:11px;color:#6B7280;margin-top:4px">Berel Berelex &#183;
+                                        <div style="font-size:11px;color:var(--text-2);margin-top:4px">Berel Berelex &#183;
                                             resistente
                                             UV &#183; 3 a&#241;os</div>
                                     </div>
                                     <div class="select-card" data-value="elastomerica">
                                         <div class="card-badge">RECOMENDADO</div>
                                         <div class="card-title">Elast&#243;merica</div>
-                                        <div style="font-size:11px;color:#6B7280;margin-top:4px">Comex Vinimex &#183;
+                                        <div style="font-size:11px;color:var(--text-2);margin-top:4px">Comex Vinimex &#183;
                                             impermeable &#183; 10 a&#241;os</div>
                                     </div>
                                     <div class="select-card" data-value="no_incluir">
-                                        <div class="card-title" style="color:#9CA3AF;">No incluir</div>
+                                        <div class="card-title" style="color:var(--text-3);">No incluir</div>
                                         <div class="card-desc" style="color:#D1D5DB;">Omitir pintura exterior</div>
                                     </div>
                                 </div>
@@ -2538,7 +2858,7 @@
                                         <div class="card-desc">Mayor presi&#243;n</div>
                                     </div>
                                     <div class="select-card" data-value="no_incluir">
-                                        <div class="card-title" style="color:#9CA3AF;">No incluir</div>
+                                        <div class="card-title" style="color:var(--text-3);">No incluir</div>
                                         <div class="card-desc" style="color:#D1D5DB;">Omitir esta partida</div>
                                     </div>
                                 </div>
@@ -2556,7 +2876,7 @@
                                         <div class="card-badge">RECOMENDADO</div>
                                     </div>
                                     <div class="select-card" data-value="no_incluir">
-                                        <div class="card-title" style="color:#9CA3AF;">No incluir</div>
+                                        <div class="card-title" style="color:var(--text-3);">No incluir</div>
                                         <div class="card-desc" style="color:#D1D5DB;">Omitir esta partida</div>
                                     </div>
                                 </div>
@@ -2680,7 +3000,7 @@
                                             <div class="card-desc">Panel solar en azotea</div>
                                         </div>
                                         <div class="select-card" data-value="ninguno">
-                                            <div class="card-title" style="color:#9CA3AF;">Sin calentador</div>
+                                            <div class="card-title" style="color:var(--text-3);">Sin calentador</div>
                                             <div class="card-desc" style="color:#D1D5DB;">El comprador lo instala</div>
                                         </div>
                                     </div>
@@ -2744,25 +3064,25 @@
                                     </div>
                                     <div class="toggle-sub" id="cochera-sub">
                                         <div style="margin-top:12px">
-                                            <p style="font-size:13px;font-weight:600;color:#1B2B4B;margin-bottom:8px">
+                                            <p style="font-size:13px;font-weight:600;color:var(--text-1);margin-bottom:8px">
                                                 &#128663;
                                                 Espacios de estacionamiento:</p>
                                             <div class="cards-grid" id="cochera-espacios-group">
                                                 <div class="select-card" data-value="1_auto">
                                                     <div class="card-title">1 auto</div>
-                                                    <div style="font-size:11px;color:#6B7280;margin-top:4px">~15 m&#178;
+                                                    <div style="font-size:11px;color:var(--text-2);margin-top:4px">~15 m&#178;
                                                         techado
                                                     </div>
                                                 </div>
                                                 <div class="select-card" data-value="2_autos">
                                                     <div class="card-title">2 autos</div>
-                                                    <div style="font-size:11px;color:#6B7280;margin-top:4px">~25 m&#178;
+                                                    <div style="font-size:11px;color:var(--text-2);margin-top:4px">~25 m&#178;
                                                         techado
                                                     </div>
                                                 </div>
                                                 <div class="select-card" data-value="3_autos">
                                                     <div class="card-title">3 autos</div>
-                                                    <div style="font-size:11px;color:#6B7280;margin-top:4px">~35 m&#178;
+                                                    <div style="font-size:11px;color:var(--text-2);margin-top:4px">~35 m&#178;
                                                         techado
                                                     </div>
                                                 </div>
@@ -2772,38 +3092,38 @@
                                             </div>
                                         </div>
                                         <div style="margin-top:16px">
-                                            <p style="font-size:13px;font-weight:600;color:#1B2B4B;margin-bottom:8px">
+                                            <p style="font-size:13px;font-weight:600;color:var(--text-1);margin-bottom:8px">
                                                 &#128682;
                                                 Port&#243;n de acceso:</p>
                                             <div class="cards-grid" id="cochera-porton-group">
                                                 <div class="select-card" data-value="sin_porton">
                                                     <div class="card-title">Sin port&#243;n autom&#225;tico</div>
-                                                    <div style="font-size:11px;color:#6B7280;margin-top:4px">Herraje
+                                                    <div style="font-size:11px;color:var(--text-2);margin-top:4px">Herraje
                                                         manual
                                                     </div>
                                                 </div>
                                                 <div class="select-card" data-value="porton_merik">
                                                     <div class="card-badge">POPULAR</div>
                                                     <div class="card-title">Merik 711 + riel</div>
-                                                    <div style="font-size:11px;color:#6B7280;margin-top:4px">~$18,500
+                                                    <div style="font-size:11px;color:var(--text-2);margin-top:4px">~$18,500
                                                         instalado
                                                     </div>
                                                 </div>
                                                 <div class="select-card" data-value="porton_chamberlain">
                                                     <div class="card-title">Chamberlain C2405 WiFi</div>
-                                                    <div style="font-size:11px;color:#6B7280;margin-top:4px">~$22,000
+                                                    <div style="font-size:11px;color:var(--text-2);margin-top:4px">~$22,000
                                                         instalado
                                                     </div>
                                                 </div>
                                                 <div class="select-card" data-value="porton_industrial">
                                                     <div class="card-title">Industrial FAAC/SEG</div>
-                                                    <div style="font-size:11px;color:#6B7280;margin-top:4px">~$35,000
+                                                    <div style="font-size:11px;color:var(--text-2);margin-top:4px">~$35,000
                                                         instalado
                                                     </div>
                                                 </div>
                                             </div>
                                             <p id="porton-nota"
-                                                style="font-size:11px;color:#6B7280;margin-top:8px;display:none;line-height:1.5">
+                                                style="font-size:11px;color:var(--text-2);margin-top:8px;display:none;line-height:1.5">
                                                 &#9432; Port&#243;n autom&#225;tico incluye: motor, 2 controles,
                                                 gu&#237;a,
                                                 fotoceldas y mano de obra. Chamberlain C200LA disponible en Home Depot
@@ -2825,12 +3145,12 @@
                                             <option value="10000">10,000 L</option>
                                             <option value="20000">20,000 L</option>
                                         </select>
-                                        <div id="cisterna-aviso" style="display:none;margin-top:6px;padding:8px 10px;background:#FFF7ED;border-left:3px solid #F59E0B;border-radius:4px;font-size:0.75rem;color:#92400E;"></div>
+                                        <div id="cisterna-aviso" style="display:none;margin-top:6px;padding:8px 10px;background:var(--amber-soft);border-left:3px solid var(--amber);border-radius:6px;font-size:0.75rem;color:#FCD34D;"></div>
                                     </div>
                                 </div>
                                 <div class="field-group" id="escaleras-container" style="display:none;">
                                     <label class="field-label">&#129308; Tipo de escalera</label>
-                                    <p style="font-size:12px;color:#6B7280;margin-bottom:10px">Fuente: NTE M&#233;xico +
+                                    <p style="font-size:12px;color:var(--text-2);margin-bottom:10px">Fuente: NTE M&#233;xico +
                                         Manual
                                         de
                                         Autoconstrucci&#243;n CENAPRED/SEDATU 2021</p>
@@ -2839,33 +3159,33 @@
                                         id="escalera-group">
                                         <div class="select-card" data-value="recta">
                                             <div class="card-title">Recta de concreto</div>
-                                            <div style="font-size:11px;color:#6B7280;margin-top:4px">1 tramo &#183; sin
+                                            <div style="font-size:11px;color:var(--text-2);margin-top:4px">1 tramo &#183; sin
                                                 descanso
                                                 &#183; ~$18,500</div>
                                         </div>
                                         <div class="select-card" data-value="l_barandal">
                                             <div class="card-badge">RECOMENDADA</div>
                                             <div class="card-title">En &quot;L&quot; + barandal</div>
-                                            <div style="font-size:11px;color:#6B7280;margin-top:4px">2 tramos &#183;
+                                            <div style="font-size:11px;color:var(--text-2);margin-top:4px">2 tramos &#183;
                                                 descanso
                                                 &#183;
                                                 m&#225;s segura &#183; ~$24,000</div>
                                         </div>
                                         <div class="select-card" data-value="u_barandal">
                                             <div class="card-title">En &quot;U&quot; + barandal</div>
-                                            <div style="font-size:11px;color:#6B7280;margin-top:4px">2 tramos paralelos
+                                            <div style="font-size:11px;color:var(--text-2);margin-top:4px">2 tramos paralelos
                                                 &#183;
                                                 ahorra espacio &#183; ~$28,500</div>
                                         </div>
                                         <div class="select-card" data-value="caracol_met">
                                             <div class="card-title">Caracol met&#225;lica</div>
-                                            <div style="font-size:11px;color:#6B7280;margin-top:4px">Diam. 1.20m &#183;
+                                            <div style="font-size:11px;color:var(--text-2);margin-top:4px">Diam. 1.20m &#183;
                                                 espacios
                                                 peque&#241;os &#183; ~$32,000</div>
                                         </div>
                                         <div class="select-card" data-value="flotante">
                                             <div class="card-title">Flotante concreto</div>
-                                            <div style="font-size:11px;color:#6B7280;margin-top:4px">Moderna &#183;
+                                            <div style="font-size:11px;color:var(--text-2);margin-top:4px">Moderna &#183;
                                                 ingenier&#237;a
                                                 especializada &#183; ~$45,000</div>
                                         </div>
@@ -3020,7 +3340,7 @@
                                             <div class="card-desc">M&#225;rmol + iluminaci&#243;n</div>
                                         </div>
                                         <div class="select-card" data-value="no_incluir">
-                                            <div class="card-title" style="color:#9CA3AF;">No incluir</div>
+                                            <div class="card-title" style="color:var(--text-3);">No incluir</div>
                                             <div class="card-desc" style="color:#D1D5DB;">Sin acabados en comunes</div>
                                         </div>
                                     </div>
@@ -3143,7 +3463,7 @@
                                 </div>
                             </div>
                             <div class="methodology" id="metodologia-c">
-                                <h4 style="font-size:13px;font-weight:600;color:#1B2B4B;margin-bottom:10px">&#128203;
+                                <h4 style="font-size:13px;font-weight:600;color:var(--text-1);margin-bottom:10px">&#128203;
                                     Metodolog&#237;a y fuentes</h4>
                                 <ul style="font-size:12px;color:#444;line-height:1.8;padding-left:16px">
                                     <li>Precios de materiales: SOyS CDMX 2026 (357 p&#225;gs.) — Precios unitarios
@@ -3762,7 +4082,7 @@
             var pRecomendado = rec + ban + mban + 1;
             var msg = '';
             msg += '<strong>&#128204; Recomendaci&#243;n arquitect&#243;nica para tu proyecto</strong><br>';
-            msg += '<span style="font-size:12px;color:#6B7280">Fuente: Manual de Autoconstrucci&#243;n CENAPRED/SEDATU 2020 &#8212; Secci&#243;n 1.1 Espacios m&#237;nimos</span><br><br>';
+            msg += '<span style="font-size:12px;color:var(--text-2)">Fuente: Manual de Autoconstrucci&#243;n CENAPRED/SEDATU 2020 &#8212; Secci&#243;n 1.1 Espacios m&#237;nimos</span><br><br>';
             msg += '<strong>&#128693; Ventanas recomendadas: ' + vRecomendado + ' piezas</strong><br>';
             msg += '<span style="font-size:12px">';
             msg += '&#8226; ' + rec + ' rec&#225;mara(s) &#215; 1 ventana c/u = ' + rec + ' ventana(s)<br>';
@@ -3781,7 +4101,7 @@
             if (vActual > 0 && vActual < vRecomendado - 1) { msg += '<br><span style="color:#F59E0B;font-size:12px">&#9888;&#65039; Tienes ' + vActual + ' ventanas, se recomiendan ' + vRecomendado + '. El Manual CENAPRED indica que cada habitaci&#243;n debe tener ventilaci&#243;n e iluminaci&#243;n natural directa al exterior.</span>'; }
             if (vActual >= vRecomendado) { msg += '<br><span style="color:#10B981;font-size:12px">&#9989; Tu cantidad de ventanas es adecuada seg&#250;n est&#225;ndar CENAPRED/SEDATU.</span>'; }
             if (pActual > 0 && pActual < pRecomendado - 1) { msg += '<br><span style="color:#F59E0B;font-size:12px">&#9888;&#65039; Tienes ' + pActual + ' puertas interiores, se recomiendan ' + pRecomendado + ' para privacidad adecuada en cada espacio.</span>'; }
-            msg += '<br><br><span style="font-size:11px;color:#6B7280">Precio referencia Cuprum aLumipro 1.20x1.20m: ~$1,580/pza (Home Depot MX 2025) &#183; Puerta interior Uniarte Tambor MDF: ~$1,858/pza</span>';
+            msg += '<br><br><span style="font-size:11px;color:var(--text-2)">Precio referencia Cuprum aLumipro 1.20x1.20m: ~$1,580/pza (Home Depot MX 2025) &#183; Puerta interior Uniarte Tambor MDF: ~$1,858/pza</span>';
             div.innerHTML = msg; div.style.display = 'block';
         }
 
@@ -4004,8 +4324,8 @@
             if (F.acabado === 'economico' && niv >= 2) { recs.push({ icon: '&#128176;', color: '#F59E0B', title: 'Acabados econ&#243;micos en 2 niveles &#8212; considera est&#225;ndar', text: 'Para un proyecto de 2 niveles, los acabados econ&#243;micos pueden deteriorarse m&#225;s r&#225;pido en las zonas de mayor uso. El Manual de Autoconstrucci&#243;n SEDATU recomienda acabados est&#225;ndar (cer&#225;mica 45x45, pintura lavable) para asegurar durabilidad m&#237;nima de 15-20 a&#241;os sin mantenimiento mayor.' }); }
             if (recs.length === 0 || (F.electrica === 'completa' && F.impermeabilizar && F.castillos && F.calentador !== 'ninguno')) { recs.push({ icon: '&#9989;', color: '#10B981', title: 'Proyecto bien planificado', text: 'Tus selecciones siguen las recomendaciones de la Gu&#237;a B&#225;sica de Autoconstrucci&#243;n CENAPRED/SEDATU 2021: estructura confinada con castillos, impermeabilizaci&#243;n, calentador y buena instalaci&#243;n el&#233;ctrica. El presupuesto refleja un est&#225;ndar s&#243;lido para construcci&#243;n a nivel nacional.' }); }
             var html = '<div class="recs-container">';
-            html += '<h3 style="font-size:15px;font-weight:600;color:#1B2B4B;margin-bottom:4px">&#128204; Recomendaciones para tu proyecto</h3>';
-            html += '<p style="font-size:12px;color:#6B7280;margin-bottom:12px">Basadas en: Gu&#237;a B&#225;sica CENAPRED/SEDATU 2021 &#183; Manual de Autoconstrucci&#243;n SEDATU/CONAVI &#183; NTE M&#233;xico</p>';
+            html += '<h3 style="font-size:15px;font-weight:600;color:var(--text-1);margin-bottom:4px">&#128204; Recomendaciones para tu proyecto</h3>';
+            html += '<p style="font-size:12px;color:var(--text-2);margin-bottom:12px">Basadas en: Gu&#237;a B&#225;sica CENAPRED/SEDATU 2021 &#183; Manual de Autoconstrucci&#243;n SEDATU/CONAVI &#183; NTE M&#233;xico</p>';
             for (var ri = 0; ri < recs.length; ri++) { var r = recs[ri]; html += '<div class="rec-card" style="border-left:4px solid ' + r.color + '"><div class="rec-title">' + r.icon + ' ' + r.title + '</div><div class="rec-text">' + r.text + '</div></div>'; }
             html += '</div>'; var secDiv = document.getElementById('recommendations-section'); if (secDiv) secDiv.innerHTML = html;
         }
@@ -4354,7 +4674,7 @@
             }
 
             var mH = '<thead><tr><th>Material</th><th>Marca</th><th>Cant.</th><th style="text-align:right">P.Unit.</th><th style="text-align:right">Subtotal</th><th></th></tr></thead><tbody>';
-            for (var mi = 0; mi < res.mList.length; mi++) { var mat = res.mList[mi]; var qn = parseFloat(mat.qty) || 1; var pu = mat.sub / qn; var hasBrand = mat.bkey && MARCAS[mat.bkey]; mH += '<tr><td>' + mat.name + '</td><td style="color:#6B7280;font-size:12px">' + mat.marca + '</td><td>' + mat.qty + ' ' + mat.unit + '</td><td style="text-align:right">' + fmt(pu) + '</td><td style="text-align:right">' + fmt(mat.sub) + '</td>'; if (hasBrand) { mH += '<td><button class="toggle-brands" onclick="toggleBrands(this,\'brand-' + mi + '\')">[+] ver marcas</button></td>'; } else { mH += '<td></td>'; } mH += '</tr>'; if (hasBrand) { var br = MARCAS[mat.bkey]; mH += '<tr class="brand-row" id="brand-' + mi + '" style="display:none"><td colspan="6"><table class="brand-table"><tr style="background:#F3F4F6;font-weight:600"><td>Tier</td><td>Marca</td><td>Precio</td><td>Notas</td></tr><tr class="tier-economica"><td>Econ&#243;mica</td><td>' + br.economica.marca + '</td><td>' + fmt(br.economica.precio) + '/' + br.economica.unidad + '</td><td>' + br.economica.nota + '</td></tr><tr class="tier-estandar"><td>Est&#225;ndar &#9733;</td><td>' + br.estandar.marca + '</td><td>' + fmt(br.estandar.precio) + '/' + br.estandar.unidad + '</td><td>' + br.estandar.nota + '</td></tr><tr class="tier-residencial"><td>Residencial</td><td>' + br.residencial.marca + '</td><td>' + fmt(br.residencial.precio) + '/' + br.residencial.unidad + '</td><td>' + br.residencial.nota + '</td></tr></table></td></tr>'; } }
+            for (var mi = 0; mi < res.mList.length; mi++) { var mat = res.mList[mi]; var qn = parseFloat(mat.qty) || 1; var pu = mat.sub / qn; var hasBrand = mat.bkey && MARCAS[mat.bkey]; mH += '<tr><td>' + mat.name + '</td><td style="color:var(--text-2);font-size:12px">' + mat.marca + '</td><td>' + mat.qty + ' ' + mat.unit + '</td><td style="text-align:right">' + fmt(pu) + '</td><td style="text-align:right">' + fmt(mat.sub) + '</td>'; if (hasBrand) { mH += '<td><button class="toggle-brands" onclick="toggleBrands(this,\'brand-' + mi + '\')">[+] ver marcas</button></td>'; } else { mH += '<td></td>'; } mH += '</tr>'; if (hasBrand) { var br = MARCAS[mat.bkey]; mH += '<tr class="brand-row" id="brand-' + mi + '" style="display:none"><td colspan="6"><table class="brand-table"><tr style="background:#F3F4F6;font-weight:600"><td>Tier</td><td>Marca</td><td>Precio</td><td>Notas</td></tr><tr class="tier-economica"><td>Econ&#243;mica</td><td>' + br.economica.marca + '</td><td>' + fmt(br.economica.precio) + '/' + br.economica.unidad + '</td><td>' + br.economica.nota + '</td></tr><tr class="tier-estandar"><td>Est&#225;ndar &#9733;</td><td>' + br.estandar.marca + '</td><td>' + fmt(br.estandar.precio) + '/' + br.estandar.unidad + '</td><td>' + br.estandar.nota + '</td></tr><tr class="tier-residencial"><td>Residencial</td><td>' + br.residencial.marca + '</td><td>' + fmt(br.residencial.precio) + '/' + br.residencial.unidad + '</td><td>' + br.residencial.nota + '</td></tr></table></td></tr>'; } }
             mH += '<tr class="row-total"><td colspan="5">Total Materiales</td><td style="text-align:right">' + fmt(res.mat) + '</td></tr></tbody>';
             document.getElementById('table-materiales').innerHTML = mH;
             var lH = '<thead><tr><th>Concepto</th><th>D&#237;as</th><th style="text-align:right">Precio/jorn.</th><th style="text-align:right">Subtotal</th></tr></thead><tbody>';
