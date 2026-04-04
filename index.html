@@ -2261,7 +2261,9 @@
                                             <option value="5000">5,000 L</option>
                                             <option value="10000">10,000 L</option>
                                             <option value="20000">20,000 L</option>
-                                        </select></div>
+                                        </select>
+                                        <div id="cisterna-aviso" style="display:none;margin-top:6px;padding:8px 10px;background:#FFF7ED;border-left:3px solid #F59E0B;border-radius:4px;font-size:0.75rem;color:#92400E;"></div>
+                                    </div>
                                 </div>
                                 <div class="field-group" id="escaleras-container" style="display:none;">
                                     <label class="field-label">&#129308; Tipo de escalera</label>
@@ -2907,6 +2909,11 @@
             var nivelFactor = 1.0;
             if (F.niveles >= 4) { nivelFactor = CT.factor_4plus_niveles; }
             else if (F.niveles === 3) { nivelFactor = CT.factor_3_niveles; }
+            var alturaFactor = 1.0;
+            var alturaNum = parseFloat(F.alturaLibre || '2.70');
+            if (alturaNum >= 4.0) { alturaFactor = 1.35; }
+            else if (alturaNum >= 3.0) { alturaFactor = 1.18; }
+            else if (alturaNum < 2.50) { alturaFactor = 0.92; }
             var sotanoFactor = 1.0;
             var accesoMOFactor = 1.0;
             var factorMuros = 1.80;
@@ -2916,11 +2923,17 @@
             var m2Muros = m2 * factorMuros * nivelesEfectivos;
             var bloqP, bloqR, bloqM;
             if (F.muros === 'tabique') { bloqP = P.tabique.p * fmat; bloqR = P.tabique.r_m2; bloqM = P.tabique.marca; }
-            else if (F.muros === 'mixto') { bloqP = P.block.p * fmat * 1.15; bloqR = P.block.r_m2; bloqM = P.block.marca + ' (mixto)'; }
+            else if (F.muros === 'mixto') { bloqP = P.block.p * fmat; bloqR = P.block.r_m2; bloqM = P.block.marca; }
             else { bloqP = P.block.p * fmat; bloqR = P.block.r_m2; bloqM = P.block.marca; }
 
             if (F.muros !== 'no_incluir') {
-                mats.push({ name: 'Muros (' + F.muros + ')', marca: bloqM, qty: (m2Muros * bloqR).toFixed(0), unit: 'pza', sub: m2Muros * bloqR * bloqP * mult * tf.albanileria, bkey: 'block' });
+                mats.push({ name: 'Muros perimetrales (' + F.muros + ')', marca: bloqM, qty: (m2Muros * bloqR).toFixed(0), unit: 'pza', sub: m2Muros * bloqR * bloqP * mult * tf.albanileria, bkey: 'block' });
+            }
+            if (F.muros === 'mixto') {
+                var m2Tablaroca = m2Muros * 0.55;
+                var tablarocaUnit = 290;
+                var tablarocaSub = m2Tablaroca * tablarocaUnit * fmat * tf.albanileria;
+                mats.push({ name: 'Tablaroca interior (paneles + postes + masilla)', marca: 'USG/Gyplac + Structowall', qty: m2Tablaroca.toFixed(0), unit: 'm2', sub: tablarocaSub, bkey: null });
             }
             mats.push({ name: 'Cemento', marca: P.cemento.marca, qty: (m2 * P.cemento.r_muro).toFixed(1), unit: 'saco', sub: m2 * P.cemento.r_muro * P.cemento.p * fmat * mult * tf.estructura, bkey: 'cemento' });
             mats.push({ name: 'Arena', marca: P.arena.marca, qty: (m2 * P.arena.r_mortero).toFixed(2), unit: 'm3', sub: m2 * P.arena.r_mortero * P.arena.p * fmat * mult * tf.estructura, bkey: 'arena' });
@@ -2930,15 +2943,15 @@
             mats.push({ name: 'Alambre recocido', marca: P.alambre.marca, qty: (m2 * P.alambre.r_m2).toFixed(1), unit: 'kg', sub: m2 * P.alambre.r_m2 * P.alambre.p * fmat, bkey: null });
             var aceroRatioKg = CT.acero_ratio_kg_m2[F.losa] || 8;
             var losaConcBase = { maciza: 4609.25, nervada: 3829.62, steeldeck: 4500 }[F.losa] || 3829.62;
-            var losaSub = (F.losa !== 'no_incluir') ? (losaConcBase * concRatio * m2 * CT.desperdicio.concreto_premezclado + (m2 * aceroRatioKg / 1000) * 36083.82) * fmat * nivelFactor * tf.estructura : 0;
+            var losaSub = (F.losa !== 'no_incluir') ? (losaConcBase * concRatio * m2 * CT.desperdicio.concreto_premezclado + (m2 * aceroRatioKg / 1000) * 36083.82) * fmat * nivelFactor * alturaFactor * tf.estructura : 0;
             if (F.losa !== 'no_incluir') {
                 mats.push({ name: 'Sistema losa (' + F.losa + ')', marca: 'Varios', qty: m2.toFixed(0), unit: 'm2', sub: losaSub, bkey: null });
             }
             var cimBase = { zapatas: 85, losa_cim: 140, pilotes: 220 }[F.cimentacion] || 85;
             if (F.cimentacion !== 'no_incluir') {
-                mats.push({ name: 'Cimentacion', marca: 'Varios', qty: m2.toFixed(0), unit: 'm2', sub: (F.cimentacion !== 'no_incluir') ? cimBase * concRatio * 4.5 * sotanoFactor * nivelFactor * m2 * fmat * tf.estructura : 0, bkey: null });
+                mats.push({ name: 'Cimentacion', marca: 'Varios', qty: m2.toFixed(0), unit: 'm2', sub: (F.cimentacion !== 'no_incluir') ? cimBase * concRatio * 4.5 * sotanoFactor * nivelFactor * alturaFactor * m2 * fmat * tf.estructura : 0, bkey: null });
             }
-            if (F.castillos) { mats.push({ name: 'Castillos y trabes', marca: 'Deacero/Ternium', qty: m2.toFixed(0), unit: 'm2', sub: m2 * 95 * fmat * nivelFactor * tf.estructura, bkey: null }); }
+            if (F.castillos) { mats.push({ name: 'Castillos y trabes', marca: 'Deacero/Ternium', qty: m2.toFixed(0), unit: 'm2', sub: m2 * 95 * fmat * nivelFactor * alturaFactor * tf.estructura, bkey: null }); }
             var pisoPrices = { cemento: 85, ceramica_33: 120, ceramica_45: P.piso_cer.p, porcelanato: P.piso_porc.p, epoxica: 85 };
             var pisoMarcas = { cemento: 'Local', ceramica_33: 'Interceramic', ceramica_45: P.piso_cer.marca, porcelanato: P.piso_porc.marca, epoxica: 'Pintura ep&#243;xica' };
             var pisoBkey = null;
@@ -3018,6 +3031,15 @@
             var cocheraCost = cocheraEspaciosCost + cocheraPortonCost;
             var cisternaCost = F.cisterna ? ({ '5000': 18000, '10000': 28500, '20000': 45000 }[F.cisternaTipo || '5000']) : 0;
             if (F.cisterna) { mats.push({ name: 'Cisterna ' + (F.cisternaTipo || '5000') + ' L', marca: 'Rotoplas o concreto armado', qty: '1', unit: 'pza', sub: cisternaCost, bkey: null }); }
+            if (F.cisterna && F.cisternaTipo) {
+                var dotMin = (F.banos || 1) * 2 * 150;
+                var volCist = parseInt(F.cisternaTipo || '5000');
+                var diasAuton = Math.floor(volCist / (dotMin > 0 ? dotMin : 150));
+                if (diasAuton < 2) {
+                    var cisAvEl = document.getElementById('cisterna-aviso');
+                    if (cisAvEl) { cisAvEl.innerHTML = '&#9888;&#65039; La cisterna de ' + volCist + 'L da autonomia de ' + diasAuton + ' dia(s) para ' + (F.banos || 1) + ' banos. NTC recomienda minimo 2 dias (150L/hab/dia).'; cisAvEl.style.display = 'block'; }
+                }
+            }
             var escMap = { recta: 18500, l_barandal: 24000, u_barandal: 29500, caracol_met: 32000, flotante: 48000 };
             var escNombres = { recta: 'Escalera recta concreto', l_barandal: 'Escalera en L + barandal', u_barandal: 'Escalera en U + barandal', caracol_met: 'Escalera caracol met&#225;lica', flotante: 'Escalera flotante concreto' };
             var escCost = (F.niveles >= 2 && F.escaleras) ? (escMap[F.escaleras] || 18500) * fmat : 0;
@@ -3269,6 +3291,15 @@
                     if (!F.aforoEstimado) { showErr('err-aforo', true); ok = false; } else { showErr('err-aforo', false); }
                     F.alturaLibre = document.getElementById('altura-libre').value || '2.70';
                     if (!F.banos) { showErr('err-aviso-banos-local', true); } else { showErr('err-aviso-banos-local', false); }
+                    var cajMap = { tienda: 40, restaurante: 15, cafeteria: 30, oficina: 30, bodega_comercial: 200, consultorio: 50, salon: 30, fit_out: 40 };
+                    var cajFactor = cajMap[F.usoSuelo] || 40;
+                    var cajonesReq = Math.ceil(F.superficie / cajFactor);
+                    var avEl = document.getElementById('err-aviso-banos-local');
+                    if (avEl && cajonesReq > 0 && F.usoSuelo) {
+                        avEl.innerHTML = '&#128204; NTC RCDF: Este uso requiere ' + cajonesReq + ' cajones de estacionamiento m&#237;nimo (1 por cada ' + cajFactor + 'm&#178;). Considera incluirlos en el presupuesto en la pantalla de Extras.';
+                        avEl.style.display = 'block';
+                        avEl.style.color = '#0EA5E9';
+                    }
                 } else if (F.tipoProyecto === 'departamentos') {
                     var supDeptoEl = document.getElementById('superficie-depto');
                     F.superficie = supDeptoEl ? (parseFloat(supDeptoEl.value) || 0) : 0;
@@ -3418,7 +3449,11 @@
 
         function generarPDF() {
             if (typeof window.jspdf === 'undefined' && typeof jspdf === 'undefined') {
-                alert('Error: libreria PDF no cargada. Verifica tu conexion a internet.');
+                alert('Libreria PDF no disponible. Verifica tu conexion a internet e intenta de nuevo.');
+                return;
+            }
+            if (!F.tipoProyecto || !F.acabado) {
+                alert('Debes completar el presupuesto antes de descargarlo.');
                 return;
             }
             var jsPDFLib = window.jspdf ? window.jspdf.jsPDF : jspdf.jsPDF;
@@ -3426,169 +3461,254 @@
             var res = calcScenario(F.acabado);
             var m2 = F.superficie || 0;
             var pageW = 210;
-            var margin = 15;
-            var y = 20;
+            var mg = 14;
+            var y = 0;
+            var fechaHoy = new Date();
+            var dd = fechaHoy.getDate();
+            var mm2 = fechaHoy.getMonth() + 1;
+            var yy = fechaHoy.getFullYear();
+            var fechaStr = dd + '/' + mm2 + '/' + yy;
+            var fechaArch = dd + '-' + mm2 + '-' + yy;
 
             doc.setFillColor(15, 31, 61);
-            doc.rect(0, 0, pageW, 30, 'F');
+            doc.rect(0, 0, pageW, 32, 'F');
+            doc.setFillColor(249, 115, 22);
+            doc.rect(0, 32, pageW, 2, 'F');
             doc.setTextColor(255, 255, 255);
-            doc.setFontSize(16);
+            doc.setFontSize(18);
             doc.setFont('helvetica', 'bold');
-            doc.text('ObraDigitalMX', margin, 13);
+            doc.text('ObraDigitalMX', mg, 14);
             doc.setFontSize(8);
             doc.setFont('helvetica', 'normal');
-            doc.text('Presupuestador Profesional 2026', margin, 19);
-            var fechaHoy = new Date();
-            var fechaStr = fechaHoy.getDate() + '/' + (fechaHoy.getMonth() + 1) + '/' + fechaHoy.getFullYear();
-            doc.text('Fecha: ' + fechaStr, pageW - margin - 30, 13);
-            doc.text('Valido 30 dias', pageW - margin - 30, 19);
-
-            y = 38;
-            doc.setTextColor(15, 31, 61);
-            doc.setFontSize(12);
-            doc.setFont('helvetica', 'bold');
-            doc.text('PRESUPUESTO DE CONSTRUCCION', margin, y);
-            y += 8;
-
-            doc.setFillColor(240, 244, 248);
-            doc.rect(margin, y, pageW - margin * 2, 28, 'F');
+            doc.text('Presupuestador Profesional 2026 | SICT 2025 + SOyS CDMX 2026', mg, 21);
+            doc.text('Generado: ' + fechaStr + '  |  Valido 30 dias', mg, 27);
             doc.setFontSize(9);
-            doc.setFont('helvetica', 'normal');
-            doc.setTextColor(71, 85, 105);
+            doc.setFont('helvetica', 'bold');
+            doc.text('PRESUPUESTO ESTIMATIVO DE CONSTRUCCION', pageW - mg, 20, { align: 'right' });
 
-            var tipoTexto = F.tipoProyecto === 'vivienda' ? 'Casa habitacion' : (F.tipoProyecto === 'comercial' ? 'Local comercial' : 'Departamentos');
-            var acabadoTexto = F.acabado === 'economico' ? 'Economico' : (F.acabado === 'estandar' ? 'Estandar' : 'Premium');
-            var estadoData = ESTADOS[F.estado] || ESTADOS['nacional'];
-            var estadoTexto = estadoData.nombre || 'Nacional';
-
-            doc.text('Tipo de proyecto: ' + tipoTexto, margin + 3, y + 7);
-            doc.text('Superficie: ' + m2 + ' m2', margin + 3, y + 13);
-            doc.text('Nivel de acabados: ' + acabadoTexto, margin + 3, y + 19);
-            doc.text('Estado/Region: ' + estadoTexto, pageW / 2, y + 7);
-            doc.text('Niveles: ' + (F.niveles || F.nivelesDepto || 1), pageW / 2, y + 13);
-            doc.text('Factor regional mat: ' + (estadoData.fmat || 1).toFixed(2) + 'x', pageW / 2, y + 19);
-
-            y += 35;
+            y = 42;
             doc.setTextColor(15, 31, 61);
             doc.setFontSize(10);
             doc.setFont('helvetica', 'bold');
-            doc.text('MATERIALES Y PARTIDAS', margin, y);
-            y += 5;
+            doc.text('1. DATOS DEL PROYECTO', mg, y);
+            y += 4;
 
-            doc.setFillColor(15, 31, 61);
-            doc.rect(margin, y, pageW - margin * 2, 7, 'F');
-            doc.setTextColor(255, 255, 255);
-            doc.setFontSize(8);
-            doc.text('Concepto', margin + 2, y + 4.5);
-            doc.text('Cant.', margin + 90, y + 4.5);
-            doc.text('Unidad', margin + 110, y + 4.5);
-            doc.text('Subtotal', pageW - margin - 25, y + 4.5);
-            y += 7;
+            doc.setFillColor(248, 250, 252);
+            doc.rect(mg, y, pageW - mg * 2, 34, 'F');
+            doc.setDrawColor(226, 232, 240);
+            doc.rect(mg, y, pageW - mg * 2, 34);
 
-            doc.setTextColor(15, 31, 61);
+            var estadoData = ESTADOS[F.estado] || ESTADOS['nacional'];
+            var tipoTexto = { vivienda: 'Casa habitacion unifamiliar', comercial: 'Local comercial', departamentos: 'Edificio de departamentos' }[F.tipoProyecto] || F.tipoProyecto;
+            var acabadoTexto = { economico: 'Economico (1.0x)', estandar: 'Estandar (1.35x)', premium: 'Premium (1.80x)' }[F.acabado] || F.acabado;
+            var estadoNombre = estadoData.nombre || 'Nacional';
+
+            doc.setFontSize(8.5);
             doc.setFont('helvetica', 'normal');
+            doc.setTextColor(30, 41, 59);
+
+            var col1x = mg + 3;
+            var col2x = pageW / 2 + 3;
+            var ry = y + 7;
+
+            doc.setFont('helvetica', 'bold');
+            doc.text('Tipo de proyecto:', col1x, ry);
+            doc.setFont('helvetica', 'normal');
+            doc.text(tipoTexto, col1x + 32, ry);
+
+            doc.setFont('helvetica', 'bold');
+            doc.text('Estado/Region:', col2x, ry);
+            doc.setFont('helvetica', 'normal');
+            doc.text(estadoNombre, col2x + 27, ry);
+
+            ry += 7;
+            doc.setFont('helvetica', 'bold');
+            doc.text('Superficie total:', col1x, ry);
+            doc.setFont('helvetica', 'normal');
+            doc.text(m2 + ' m2', col1x + 32, ry);
+
+            doc.setFont('helvetica', 'bold');
+            doc.text('Niveles:', col2x, ry);
+            doc.setFont('helvetica', 'normal');
+            var nivTxt = (F.nivelesDepto || F.niveles || 1) + '';
+            doc.text(nivTxt, col2x + 27, ry);
+
+            ry += 7;
+            doc.setFont('helvetica', 'bold');
+            doc.text('Nivel de acabados:', col1x, ry);
+            doc.setFont('helvetica', 'normal');
+            doc.text(acabadoTexto, col1x + 32, ry);
+
+            doc.setFont('helvetica', 'bold');
+            doc.text('Factor regional:', col2x, ry);
+            doc.setFont('helvetica', 'normal');
+            doc.text('Mat ' + (estadoData.fmat || 1).toFixed(2) + 'x  |  MO ' + (estadoData.fmo || 1).toFixed(2) + 'x', col2x + 27, ry);
+
+            ry += 7;
+            if (F.tipoProyecto === 'vivienda') {
+                doc.setFont('helvetica', 'bold');
+                doc.text('Recamaras:', col1x, ry);
+                doc.setFont('helvetica', 'normal');
+                doc.text((F.recamaras || '-') + '', col1x + 32, ry);
+                doc.setFont('helvetica', 'bold');
+                doc.text('Banos:', col2x, ry);
+                doc.setFont('helvetica', 'normal');
+                doc.text((F.banos || '-') + ' completo(s)' + (F.mediosBanos ? ' + ' + F.mediosBanos + ' medio(s)' : ''), col2x + 27, ry);
+            } else if (F.tipoProyecto === 'comercial') {
+                doc.setFont('helvetica', 'bold');
+                doc.text('Uso de suelo:', col1x, ry);
+                doc.setFont('helvetica', 'normal');
+                doc.text((F.usoSuelo || '-') + '', col1x + 32, ry);
+                doc.setFont('helvetica', 'bold');
+                doc.text('Aforo estimado:', col2x, ry);
+                doc.setFont('helvetica', 'normal');
+                doc.text((F.aforoEstimado || '-') + ' personas', col2x + 27, ry);
+            } else if (F.tipoProyecto === 'departamentos') {
+                doc.setFont('helvetica', 'bold');
+                doc.text('Num. departamentos:', col1x, ry);
+                doc.setFont('helvetica', 'normal');
+                doc.text((F.numDeptos || '-') + '', col1x + 32, ry);
+                doc.setFont('helvetica', 'bold');
+                doc.text('Banos por depto:', col2x, ry);
+                doc.setFont('helvetica', 'normal');
+                doc.text((F.banosDepto || '-') + '', col2x + 27, ry);
+            }
+
+            y += 42;
+
+            var dibujarTabla = function(titulo, encabezados, filas, anchos) {
+                if (y > 255) { doc.addPage(); y = 15; }
+                doc.setTextColor(15, 31, 61);
+                doc.setFontSize(10);
+                doc.setFont('helvetica', 'bold');
+                doc.text(titulo, mg, y);
+                y += 4;
+
+                doc.setFillColor(15, 31, 61);
+                doc.rect(mg, y, pageW - mg * 2, 7, 'F');
+                doc.setTextColor(255, 255, 255);
+                doc.setFontSize(7.5);
+                var xPos = mg + 2;
+                for (var ei = 0; ei < encabezados.length; ei++) {
+                    doc.text(encabezados[ei], xPos, y + 4.5);
+                    xPos += anchos[ei];
+                }
+                y += 7;
+
+                doc.setTextColor(15, 31, 61);
+                doc.setFont('helvetica', 'normal');
+                for (var fi = 0; fi < filas.length; fi++) {
+                    if (y > 270) { doc.addPage(); y = 15; }
+                    var bgC = (fi % 2 === 0) ? [248, 250, 252] : [255, 255, 255];
+                    doc.setFillColor(bgC[0], bgC[1], bgC[2]);
+                    doc.rect(mg, y, pageW - mg * 2, 6, 'F');
+                    doc.setFontSize(7);
+                    xPos = mg + 2;
+                    for (var ci = 0; ci < filas[fi].length; ci++) {
+                        var celda = (filas[fi][ci] || '') + '';
+                        var maxCar = Math.floor(anchos[ci] / 2.2);
+                        if (celda.length > maxCar) { celda = celda.substring(0, maxCar - 2) + '..'; }
+                        doc.text(celda, xPos, y + 4);
+                        xPos += anchos[ci];
+                    }
+                    y += 6;
+                }
+                y += 5;
+            };
+
+            var fmtPeso = function(v) {
+                if (!v || isNaN(v)) { return '$0'; }
+                return '$' + Math.round(v).toLocaleString('es-MX');
+            };
+
+            var filasMat = [];
             var mList = res.mList || [];
             for (var mi = 0; mi < mList.length; mi++) {
-                if (y > 265) {
-                    doc.addPage();
-                    y = 20;
-                }
                 var mat = mList[mi];
-                var bgColor = (mi % 2 === 0) ? [248, 250, 252] : [255, 255, 255];
-                doc.setFillColor(bgColor[0], bgColor[1], bgColor[2]);
-                doc.rect(margin, y, pageW - margin * 2, 6, 'F');
-                doc.setFontSize(7.5);
-                var nombreCorto = mat.name.length > 45 ? mat.name.substring(0, 42) + '...' : mat.name;
-                doc.text(nombreCorto, margin + 2, y + 4);
-                doc.text((mat.qty || '') + '', margin + 90, y + 4);
-                doc.text((mat.unit || '') + '', margin + 110, y + 4);
-                var subStr = mat.sub ? ('$' + Math.round(mat.sub).toLocaleString('es-MX')) : '$0';
-                doc.text(subStr, pageW - margin - 2, y + 4, { align: 'right' });
-                y += 6;
+                filasMat.push([
+                    mat.name || '',
+                    mat.marca || '',
+                    (mat.qty || '') + ' ' + (mat.unit || ''),
+                    fmtPeso(mat.sub)
+                ]);
             }
+            dibujarTabla('2. MATERIALES Y PARTIDAS', ['Concepto', 'Marca/Especificacion', 'Cantidad', 'Subtotal'], filasMat, [68, 52, 28, 34]);
 
-            y += 6;
-            if (y > 250) { doc.addPage(); y = 20; }
+            var filasMO = [];
+            var moList = res.moList || [];
+            for (var moi = 0; moi < moList.length; moi++) {
+                var mo = moList[moi];
+                var pJornal = (mo.days && mo.days > 0 && mo.sub > 0) ? fmtPeso(mo.sub / mo.days) + '/dia' : '---';
+                filasMO.push([
+                    mo.name || '',
+                    (mo.days || 0) + ' dias',
+                    pJornal,
+                    fmtPeso(mo.sub)
+                ]);
+            }
+            dibujarTabla('3. MANO DE OBRA', ['Concepto', 'Duracion', 'Precio/jornal', 'Subtotal'], filasMO, [68, 28, 36, 30]);
+
+            if (y > 220) { doc.addPage(); y = 15; }
+
+            doc.setFillColor(240, 244, 248);
+            doc.rect(mg, y, pageW - mg * 2, 46, 'F');
+            doc.setDrawColor(226, 232, 240);
+            doc.rect(mg, y, pageW - mg * 2, 46);
 
             doc.setFontSize(10);
             doc.setFont('helvetica', 'bold');
             doc.setTextColor(15, 31, 61);
-            doc.text('MANO DE OBRA', margin, y);
-            y += 5;
+            doc.text('4. RESUMEN FINANCIERO', mg + 3, y + 7);
 
-            doc.setFillColor(15, 31, 61);
-            doc.rect(margin, y, pageW - margin * 2, 7, 'F');
-            doc.setTextColor(255, 255, 255);
-            doc.setFontSize(8);
-            doc.text('Concepto', margin + 2, y + 4.5);
-            doc.text('Dias', margin + 100, y + 4.5);
-            doc.text('Subtotal', pageW - margin - 25, y + 4.5);
-            y += 7;
-
-            var moList = res.moList || [];
-            doc.setTextColor(15, 31, 61);
-            doc.setFont('helvetica', 'normal');
-            for (var moi = 0; moi < moList.length; moi++) {
-                if (y > 265) { doc.addPage(); y = 20; }
-                var mo = moList[moi];
-                var bgColor2 = (moi % 2 === 0) ? [248, 250, 252] : [255, 255, 255];
-                doc.setFillColor(bgColor2[0], bgColor2[1], bgColor2[2]);
-                doc.rect(margin, y, pageW - margin * 2, 6, 'F');
-                doc.setFontSize(7.5);
-                doc.text((mo.name || '') + '', margin + 2, y + 4);
-                doc.text((mo.days || 0) + '', margin + 100, y + 4);
-                var moStr = mo.sub ? ('$' + Math.round(mo.sub).toLocaleString('es-MX')) : '$0';
-                doc.text(moStr, pageW - margin - 2, y + 4, { align: 'right' });
-                y += 6;
+            var renglones = [
+                ['Subtotal materiales y partidas:', fmtPeso(res.mat)],
+                ['Subtotal mano de obra:', fmtPeso(res.mo)],
+                ['Costo directo:', fmtPeso(res.mat + res.mo)],
+                ['Imprevistos y contingencias (10%):', fmtPeso(res.imp)]
+            ];
+            var riy = y + 14;
+            doc.setFontSize(8.5);
+            for (var ri2 = 0; ri2 < renglones.length; ri2++) {
+                doc.setFont('helvetica', 'normal');
+                doc.setTextColor(71, 85, 105);
+                doc.text(renglones[ri2][0], mg + 3, riy);
+                doc.setFont('helvetica', 'bold');
+                doc.setTextColor(15, 31, 61);
+                doc.text(renglones[ri2][1], pageW - mg - 3, riy, { align: 'right' });
+                riy += 6;
             }
 
-            y += 8;
-            if (y > 240) { doc.addPage(); y = 20; }
-
-            doc.setFillColor(240, 244, 248);
-            doc.rect(margin, y, pageW - margin * 2, 40, 'F');
-            doc.setFontSize(9);
-            doc.setFont('helvetica', 'normal');
-            doc.setTextColor(71, 85, 105);
-
-            var fmtNum = function(v) { return '$' + Math.round(v).toLocaleString('es-MX'); };
-
-            doc.text('Subtotal materiales:', margin + 3, y + 8);
-            doc.setFont('helvetica', 'bold');
-            doc.text(fmtNum(res.mat), pageW - margin - 3, y + 8, { align: 'right' });
-
-            doc.setFont('helvetica', 'normal');
-            doc.text('Subtotal mano de obra:', margin + 3, y + 15);
-            doc.setFont('helvetica', 'bold');
-            doc.text(fmtNum(res.mo), pageW - margin - 3, y + 15, { align: 'right' });
-
-            doc.setFont('helvetica', 'normal');
-            doc.text('Imprevistos (10%):', margin + 3, y + 22);
-            doc.setFont('helvetica', 'bold');
-            doc.text(fmtNum(res.imp), pageW - margin - 3, y + 22, { align: 'right' });
-
             doc.setDrawColor(249, 115, 22);
-            doc.setLineWidth(0.5);
-            doc.line(margin + 3, y + 26, pageW - margin - 3, y + 26);
+            doc.setLineWidth(0.7);
+            doc.line(mg + 3, riy - 1, pageW - mg - 3, riy - 1);
 
             doc.setFontSize(12);
             doc.setFont('helvetica', 'bold');
             doc.setTextColor(249, 115, 22);
-            doc.text('TOTAL ESTIMADO:', margin + 3, y + 35);
-            doc.text(fmtNum(res.tot), pageW - margin - 3, y + 35, { align: 'right' });
+            doc.text('TOTAL ESTIMADO:', mg + 3, y + 40);
+            doc.text(fmtPeso(res.tot), pageW - mg - 3, y + 40, { align: 'right' });
 
-            y += 48;
-            if (y > 270) { doc.addPage(); y = 20; }
-
+            doc.setTextColor(100, 116, 139);
             doc.setFontSize(7);
             doc.setFont('helvetica', 'normal');
-            doc.setTextColor(148, 163, 184);
-            doc.text('Presupuesto estimativo generado con ObraDigitalMX. Precios basados en SICT 2025 y SOyS CDMX 2026.', margin, y);
-            doc.text('Este documento es orientativo. Los precios reales pueden variar segun condiciones de mercado y region.', margin, y + 4);
-            doc.text('Valido por 30 dias a partir de la fecha de generacion. ObraDigitalMX - Presupuestador Profesional 2026', margin, y + 8);
+            doc.text('Costo/m2: ' + fmtPeso(m2 > 0 ? res.tot / m2 : 0) + '/m2  |  Tiempo estimado: ' + (res.sem || 0) + ' semanas', pageW - mg - 3, y + 46, { align: 'right' });
 
-            var nombreArchivo = 'Presupuesto_ObraDigitalMX_' + m2 + 'm2_' + fechaStr.replace(/\//g, '-') + '.pdf';
-            doc.save(nombreArchivo);
+            y += 54;
+            if (y > 265) { doc.addPage(); y = 15; }
+
+            doc.setFillColor(248, 250, 252);
+            doc.rect(mg, y, pageW - mg * 2, 22, 'F');
+            doc.setFontSize(7);
+            doc.setTextColor(100, 116, 139);
+            doc.setFont('helvetica', 'bold');
+            doc.text('AVISO LEGAL Y LIMITACIONES', mg + 3, y + 6);
+            doc.setFont('helvetica', 'normal');
+            doc.text('Este presupuesto es una estimacion preliminar basada en precios de referencia SICT 2025 y SOyS CDMX 2026.', mg + 3, y + 12);
+            doc.text('Los costos reales pueden variar segun condiciones especificas de terreno, acceso, mercado local y negociacion con contratistas.', mg + 3, y + 17);
+            doc.text('Se recomienda solicitar al menos 3 cotizaciones formales antes de iniciar obra. Valido 30 dias a partir de la fecha de generacion.', mg + 3, y + 22);
+
+            var nombreArch = 'Presupuesto_' + tipoTexto.replace(/ /g, '_') + '_' + m2 + 'm2_' + fechaArch + '.pdf';
+            doc.save(nombreArch);
         }
 
         function doCalculate() {
