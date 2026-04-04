@@ -10,6 +10,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
         :root {
             --primary: #0F1F3D;
@@ -2652,7 +2653,7 @@
                         </div>
                     </div>
                     <div class="action-buttons"><button class="btn-print" onclick="window.print()">&#128424; Imprimir /
-                            PDF</button><button id="btn-nueva">&#8617; Nueva Cotizaci&#243;n</button></div>
+                            PDF</button><button type="button" id="btn-pdf" style="background:#0F1F3D;color:#fff;border:none;border-radius:10px;padding:12px 24px;font-size:0.88rem;font-weight:700;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:8px;">&#128196; Descargar PDF</button><button id="btn-nueva">&#8617; Nueva Cotizaci&#243;n</button></div>
                     <div style="font-size:.72rem;color:#9CA3AF;text-align:center;margin-bottom:12px;" id="print-date">
                     </div>
                 </div>
@@ -3415,6 +3416,181 @@
             html += '</div>'; var secDiv = document.getElementById('recommendations-section'); if (secDiv) secDiv.innerHTML = html;
         }
 
+        function generarPDF() {
+            if (typeof window.jspdf === 'undefined' && typeof jspdf === 'undefined') {
+                alert('Error: libreria PDF no cargada. Verifica tu conexion a internet.');
+                return;
+            }
+            var jsPDFLib = window.jspdf ? window.jspdf.jsPDF : jspdf.jsPDF;
+            var doc = new jsPDFLib({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+            var res = calcScenario(F.acabado);
+            var m2 = F.superficie || 0;
+            var pageW = 210;
+            var margin = 15;
+            var y = 20;
+
+            doc.setFillColor(15, 31, 61);
+            doc.rect(0, 0, pageW, 30, 'F');
+            doc.setTextColor(255, 255, 255);
+            doc.setFontSize(16);
+            doc.setFont('helvetica', 'bold');
+            doc.text('ObraDigitalMX', margin, 13);
+            doc.setFontSize(8);
+            doc.setFont('helvetica', 'normal');
+            doc.text('Presupuestador Profesional 2026', margin, 19);
+            var fechaHoy = new Date();
+            var fechaStr = fechaHoy.getDate() + '/' + (fechaHoy.getMonth() + 1) + '/' + fechaHoy.getFullYear();
+            doc.text('Fecha: ' + fechaStr, pageW - margin - 30, 13);
+            doc.text('Valido 30 dias', pageW - margin - 30, 19);
+
+            y = 38;
+            doc.setTextColor(15, 31, 61);
+            doc.setFontSize(12);
+            doc.setFont('helvetica', 'bold');
+            doc.text('PRESUPUESTO DE CONSTRUCCION', margin, y);
+            y += 8;
+
+            doc.setFillColor(240, 244, 248);
+            doc.rect(margin, y, pageW - margin * 2, 28, 'F');
+            doc.setFontSize(9);
+            doc.setFont('helvetica', 'normal');
+            doc.setTextColor(71, 85, 105);
+
+            var tipoTexto = F.tipoProyecto === 'vivienda' ? 'Casa habitacion' : (F.tipoProyecto === 'comercial' ? 'Local comercial' : 'Departamentos');
+            var acabadoTexto = F.acabado === 'economico' ? 'Economico' : (F.acabado === 'estandar' ? 'Estandar' : 'Premium');
+            var estadoData = ESTADOS[F.estado] || ESTADOS['nacional'];
+            var estadoTexto = estadoData.nombre || 'Nacional';
+
+            doc.text('Tipo de proyecto: ' + tipoTexto, margin + 3, y + 7);
+            doc.text('Superficie: ' + m2 + ' m2', margin + 3, y + 13);
+            doc.text('Nivel de acabados: ' + acabadoTexto, margin + 3, y + 19);
+            doc.text('Estado/Region: ' + estadoTexto, pageW / 2, y + 7);
+            doc.text('Niveles: ' + (F.niveles || F.nivelesDepto || 1), pageW / 2, y + 13);
+            doc.text('Factor regional mat: ' + (estadoData.fmat || 1).toFixed(2) + 'x', pageW / 2, y + 19);
+
+            y += 35;
+            doc.setTextColor(15, 31, 61);
+            doc.setFontSize(10);
+            doc.setFont('helvetica', 'bold');
+            doc.text('MATERIALES Y PARTIDAS', margin, y);
+            y += 5;
+
+            doc.setFillColor(15, 31, 61);
+            doc.rect(margin, y, pageW - margin * 2, 7, 'F');
+            doc.setTextColor(255, 255, 255);
+            doc.setFontSize(8);
+            doc.text('Concepto', margin + 2, y + 4.5);
+            doc.text('Cant.', margin + 90, y + 4.5);
+            doc.text('Unidad', margin + 110, y + 4.5);
+            doc.text('Subtotal', pageW - margin - 25, y + 4.5);
+            y += 7;
+
+            doc.setTextColor(15, 31, 61);
+            doc.setFont('helvetica', 'normal');
+            var mList = res.mList || [];
+            for (var mi = 0; mi < mList.length; mi++) {
+                if (y > 265) {
+                    doc.addPage();
+                    y = 20;
+                }
+                var mat = mList[mi];
+                var bgColor = (mi % 2 === 0) ? [248, 250, 252] : [255, 255, 255];
+                doc.setFillColor(bgColor[0], bgColor[1], bgColor[2]);
+                doc.rect(margin, y, pageW - margin * 2, 6, 'F');
+                doc.setFontSize(7.5);
+                var nombreCorto = mat.name.length > 45 ? mat.name.substring(0, 42) + '...' : mat.name;
+                doc.text(nombreCorto, margin + 2, y + 4);
+                doc.text((mat.qty || '') + '', margin + 90, y + 4);
+                doc.text((mat.unit || '') + '', margin + 110, y + 4);
+                var subStr = mat.sub ? ('$' + Math.round(mat.sub).toLocaleString('es-MX')) : '$0';
+                doc.text(subStr, pageW - margin - 2, y + 4, { align: 'right' });
+                y += 6;
+            }
+
+            y += 6;
+            if (y > 250) { doc.addPage(); y = 20; }
+
+            doc.setFontSize(10);
+            doc.setFont('helvetica', 'bold');
+            doc.setTextColor(15, 31, 61);
+            doc.text('MANO DE OBRA', margin, y);
+            y += 5;
+
+            doc.setFillColor(15, 31, 61);
+            doc.rect(margin, y, pageW - margin * 2, 7, 'F');
+            doc.setTextColor(255, 255, 255);
+            doc.setFontSize(8);
+            doc.text('Concepto', margin + 2, y + 4.5);
+            doc.text('Dias', margin + 100, y + 4.5);
+            doc.text('Subtotal', pageW - margin - 25, y + 4.5);
+            y += 7;
+
+            var moList = res.moList || [];
+            doc.setTextColor(15, 31, 61);
+            doc.setFont('helvetica', 'normal');
+            for (var moi = 0; moi < moList.length; moi++) {
+                if (y > 265) { doc.addPage(); y = 20; }
+                var mo = moList[moi];
+                var bgColor2 = (moi % 2 === 0) ? [248, 250, 252] : [255, 255, 255];
+                doc.setFillColor(bgColor2[0], bgColor2[1], bgColor2[2]);
+                doc.rect(margin, y, pageW - margin * 2, 6, 'F');
+                doc.setFontSize(7.5);
+                doc.text((mo.name || '') + '', margin + 2, y + 4);
+                doc.text((mo.days || 0) + '', margin + 100, y + 4);
+                var moStr = mo.sub ? ('$' + Math.round(mo.sub).toLocaleString('es-MX')) : '$0';
+                doc.text(moStr, pageW - margin - 2, y + 4, { align: 'right' });
+                y += 6;
+            }
+
+            y += 8;
+            if (y > 240) { doc.addPage(); y = 20; }
+
+            doc.setFillColor(240, 244, 248);
+            doc.rect(margin, y, pageW - margin * 2, 40, 'F');
+            doc.setFontSize(9);
+            doc.setFont('helvetica', 'normal');
+            doc.setTextColor(71, 85, 105);
+
+            var fmtNum = function(v) { return '$' + Math.round(v).toLocaleString('es-MX'); };
+
+            doc.text('Subtotal materiales:', margin + 3, y + 8);
+            doc.setFont('helvetica', 'bold');
+            doc.text(fmtNum(res.mat), pageW - margin - 3, y + 8, { align: 'right' });
+
+            doc.setFont('helvetica', 'normal');
+            doc.text('Subtotal mano de obra:', margin + 3, y + 15);
+            doc.setFont('helvetica', 'bold');
+            doc.text(fmtNum(res.mo), pageW - margin - 3, y + 15, { align: 'right' });
+
+            doc.setFont('helvetica', 'normal');
+            doc.text('Imprevistos (10%):', margin + 3, y + 22);
+            doc.setFont('helvetica', 'bold');
+            doc.text(fmtNum(res.imp), pageW - margin - 3, y + 22, { align: 'right' });
+
+            doc.setDrawColor(249, 115, 22);
+            doc.setLineWidth(0.5);
+            doc.line(margin + 3, y + 26, pageW - margin - 3, y + 26);
+
+            doc.setFontSize(12);
+            doc.setFont('helvetica', 'bold');
+            doc.setTextColor(249, 115, 22);
+            doc.text('TOTAL ESTIMADO:', margin + 3, y + 35);
+            doc.text(fmtNum(res.tot), pageW - margin - 3, y + 35, { align: 'right' });
+
+            y += 48;
+            if (y > 270) { doc.addPage(); y = 20; }
+
+            doc.setFontSize(7);
+            doc.setFont('helvetica', 'normal');
+            doc.setTextColor(148, 163, 184);
+            doc.text('Presupuesto estimativo generado con ObraDigitalMX. Precios basados en SICT 2025 y SOyS CDMX 2026.', margin, y);
+            doc.text('Este documento es orientativo. Los precios reales pueden variar segun condiciones de mercado y region.', margin, y + 4);
+            doc.text('Valido por 30 dias a partir de la fecha de generacion. ObraDigitalMX - Presupuestador Profesional 2026', margin, y + 8);
+
+            var nombreArchivo = 'Presupuesto_ObraDigitalMX_' + m2 + 'm2_' + fechaStr.replace(/\//g, '-') + '.pdf';
+            doc.save(nombreArchivo);
+        }
+
         function doCalculate() {
             var m2 = F.superficie; var res = calcScenario(F.acabado);
             var estadoData = ESTADOS[F.estado] || ESTADOS['nacional'];
@@ -3832,6 +4008,12 @@
             for (var i = 0; i < tabBtns.length; i++) { (function (tb) { tb.addEventListener('click', function () { var allTB = document.querySelectorAll('.tab-btn'); var allTC = document.querySelectorAll('.tab-content'); for (var k = 0; k < allTB.length; k++) { allTB[k].classList.remove('active'); } for (var k = 0; k < allTC.length; k++) { allTC[k].classList.remove('active'); } tb.classList.add('active'); document.getElementById(tb.getAttribute('data-tab')).classList.add('active'); }); })(tabBtns[i]); }
             var incBtn = document.getElementById('includes-toggle-btn'); var incBody = document.getElementById('includes-body'); var incArrow = document.getElementById('includes-arrow');
             incBtn.addEventListener('click', function () { if (incBody.classList.contains('open')) { incBody.classList.remove('open'); incArrow.innerHTML = '&#9660;'; } else { incBody.classList.add('open'); incArrow.innerHTML = '&#9650;'; } });
+            var btnPDF = document.getElementById('btn-pdf');
+            if (btnPDF) {
+                btnPDF.addEventListener('click', function () {
+                    generarPDF();
+                });
+            }
             document.getElementById('btn-nueva').addEventListener('click', function () { window.location.reload(); });
             var vInput = document.getElementById('ventanas'); var pInput = document.getElementById('puertas');
             if (vInput) { vInput.addEventListener('input', function () { F.ventanas = parseInt(this.value) || 0; calcVentanasRecomendacion(); }); }
