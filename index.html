@@ -3574,23 +3574,31 @@
                                 <div class="cards-grid" id="piso-group">
                                     <div class="select-card" data-value="cemento">
                                         <div class="card-title">Cemento pulido</div>
-                                        <div style="font-size:11px;color:var(--text-2);margin-top:4px">~$85/m&#178; mat.</div>
+                                        <div style="font-size:11px;color:var(--text-2);margin-top:4px">~$320/m&#178; instalado</div>
                                     </div>
                                     <div class="select-card" data-value="ceramica_33">
                                         <div class="card-title">Cer&#225;mica 33x33</div>
-                                        <div style="font-size:11px;color:var(--text-2);margin-top:4px">~$120/m&#178; mat.
+                                        <div style="font-size:11px;color:var(--text-2);margin-top:4px">~$480/m&#178; instalado
                                         </div>
                                     </div>
                                     <div class="select-card" data-value="ceramica_45">
                                         <div class="card-badge">POPULAR</div>
                                         <div class="card-title">Cer&#225;mica 45x45</div>
-                                        <div style="font-size:11px;color:var(--text-2);margin-top:4px">~$172/m&#178; mat.
+                                        <div style="font-size:11px;color:var(--text-2);margin-top:4px">~$480/m&#178; instalado
                                         </div>
                                     </div>
                                     <div class="select-card" data-value="porcelanato">
                                         <div class="card-title">Porcelanato 60x60</div>
-                                        <div style="font-size:11px;color:var(--text-2);margin-top:4px">~$289/m&#178; mat.
+                                        <div style="font-size:11px;color:var(--text-2);margin-top:4px">~$830/m&#178; instalado
                                         </div>
+                                    </div>
+                                    <div class="select-card" data-value="madera_laminada">
+                                        <div class="card-title">Madera laminada</div>
+                                        <div style="font-size:11px;color:var(--text-2);margin-top:4px">~$420/m&#178; instalado</div>
+                                    </div>
+                                    <div class="select-card" data-value="marmol">
+                                        <div class="card-title">M&#225;rmol / Gran formato</div>
+                                        <div style="font-size:11px;color:var(--text-2);margin-top:4px">~$1,470/m&#178; instalado</div>
                                     </div>
                                 </div>
                                 <div class="error-msg" id="err-piso">Selecciona un tipo de piso</div>
@@ -3600,11 +3608,16 @@
                                 <div class="cards-grid-2" id="aplanado-group">
                                     <div class="select-card" data-value="cemento_arena">
                                         <div class="card-title">Cemento-arena</div>
-                                        <div class="card-desc">Exterior resistente</div>
+                                        <div class="card-desc">Exterior &#183; ~$220/m&#178; mano de obra</div>
                                     </div>
                                     <div class="select-card" data-value="yeso">
                                         <div class="card-title">Yeso fino</div>
-                                        <div class="card-desc">Acabado liso interior</div>
+                                        <div class="card-desc">Interior fino &#183; ~$140/m&#178; mano de obra</div>
+                                    </div>
+                                    <div class="select-card" data-value="mixto">
+                                        <div class="card-badge">RECOMENDADO</div>
+                                        <div class="card-title">Mixto</div>
+                                        <div class="card-desc">Cemento ext + yeso int &#183; recomendado</div>
                                     </div>
                                     <div class="select-card" data-value="no_incluir">
                                         <div class="card-title" style="color:var(--text-3);">No incluir</div>
@@ -3751,6 +3764,59 @@
                                     <div class="error-msg" id="err-calentador">Requerido</div>
                                 </div>
                             </div><!-- /calentador-container -->
+
+                            <!-- Instalaciones vivienda adicionales -->
+                            <div id="instalaciones-vivienda" style="display:none;">
+                                <div class="field-group">
+                                    <label class="field-label">&#128167; Calentador de agua</label>
+                                    <div class="cards-grid-2" id="calentador-viv-group">
+                                        <div class="select-card" data-value="gas_paso">
+                                            <div class="card-title">Gas de paso</div>
+                                            <div class="card-desc">~$3,800 instalado</div>
+                                        </div>
+                                        <div class="select-card" data-value="solar">
+                                            <div class="card-badge">ECO</div>
+                                            <div class="card-title">Solar 200L</div>
+                                            <div class="card-desc">~$18,000 instalado</div>
+                                        </div>
+                                        <div class="select-card" data-value="ninguno">
+                                            <div class="card-title" style="color:var(--text-3);">No incluir</div>
+                                            <div class="card-desc" style="color:#D1D5DB;">El propietario lo instala</div>
+                                        </div>
+                                    </div>
+                                    <div id="nota-calentador-viv" class="nota-tecnica" style="display:none;margin-top:8px;padding:10px;background:rgba(79,70,229,0.08);border-left:3px solid #4F46E5;border-radius:6px;font-size:12px;color:var(--text-2);"></div>
+                                </div>
+                                <div class="field-group">
+                                    <div class="toggle-row">
+                                        <span class="toggle-label">&#128167; &#191;Incluir cisterna?</span>
+                                        <div class="toggle-switch" id="cisterna-viv-toggle">
+                                            <div class="toggle-knob"></div>
+                                        </div>
+                                    </div>
+                                    <p class="field-hint" style="margin-top:6px">Cisterna mamposteria 5,000L ~$18,500 &#183; 10,000L ~$32,000</p>
+                                    <div class="toggle-sub" id="cisterna-viv-sub" style="display:none;">
+                                        <div class="cards-grid-2" id="cisterna-viv-group">
+                                            <div class="select-card" data-value="5000">
+                                                <div class="card-title">5,000 L</div>
+                                                <div class="card-desc">Casa hasta 4 rec&#225;maras</div>
+                                            </div>
+                                            <div class="select-card" data-value="10000">
+                                                <div class="card-title">10,000 L</div>
+                                                <div class="card-desc">Casa grande o multifamiliar</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="field-group">
+                                    <div class="toggle-row">
+                                        <span class="toggle-label">&#128293; &#191;Incluir red de gas interior?</span>
+                                        <div class="toggle-switch" id="gas-viv-toggle">
+                                            <div class="toggle-knob"></div>
+                                        </div>
+                                    </div>
+                                    <p class="field-hint" style="margin-top:6px">Red interior LP o natural &#183; ~$5,500 hasta 3 salidas</p>
+                                </div>
+                            </div><!-- /instalaciones-vivienda -->
 
                             <!-- Instalaciones comerciales -->
                             <div id="instalaciones-comercial" style="display:none;">
@@ -4895,8 +4961,8 @@
                 mats.push({ name: 'Cimentacion', marca: 'Varios', qty: m2.toFixed(0), unit: 'm2', sub: (F.cimentacion !== 'no_incluir') ? cimBase * concRatio * 4.5 * sotanoFactor * nivelFactor * alturaFactor * m2 * fmat * tf.estructura : 0, bkey: null });
             }
             if (F.castillos) { mats.push({ name: 'Castillos y trabes', marca: 'Deacero/Ternium', qty: m2.toFixed(0), unit: 'm2', sub: m2 * 95 * fmat * nivelFactor * alturaFactor * tf.estructura, bkey: null }); }
-            var pisoPrices = { cemento: 85, ceramica_33: 120, ceramica_45: P.piso_cer.p, porcelanato: P.piso_porc.p, epoxica: 85 };
-            var pisoMarcas = { cemento: 'Local', ceramica_33: 'Interceramic', ceramica_45: P.piso_cer.marca, porcelanato: P.piso_porc.marca, epoxica: 'Pintura ep&#243;xica' };
+            var pisoPrices = { cemento: 355, ceramica_33: 480, ceramica_45: 480, porcelanato: 830, epoxica: 85, madera_laminada: 420, marmol: 1470 };
+            var pisoMarcas = { cemento: 'Concreto pulido', ceramica_33: 'Interceramic', ceramica_45: P.piso_cer.marca, porcelanato: P.piso_porc.marca, epoxica: 'Pintura ep&#243;xica', madera_laminada: 'Laminado AC3', marmol: 'M&#225;rmol instalado' };
             var pisoBkey = null;
             if (F.tipoPiso === 'ceramica_45') pisoBkey = 'piso_cer';
             if (F.tipoPiso === 'porcelanato') pisoBkey = 'piso_porc';
@@ -4905,9 +4971,19 @@
             if (pisoPrice && F.tipoPiso) {
                 mats.push({ name: 'Piso (' + F.tipoPiso + ')', marca: pisoMarcas[F.tipoPiso] || '', qty: m2.toFixed(0), unit: 'm2', sub: m2 * pisoDesperdicio * pisoPrice * fmat * tf.acabados, bkey: pisoBkey });
             }
-            var apP = F.aplanado === 'cemento_arena' ? 95 : (P.yeso.p / P.yeso.r_m2);
+            var factorMurosAplanado = 1.8;
+            if (nivelesEfectivos >= 3) { factorMurosAplanado = 3.0; }
+            else if (nivelesEfectivos === 2) { factorMurosAplanado = 2.4; }
+            if (tipoProy === 'comercial') { factorMurosAplanado = 1.4; }
+            var m2MurosAplanado = m2 * factorMurosAplanado;
+            var apP = 220;
+            if (F.aplanado === 'yeso') { apP = 140; }
+            else if (F.aplanado === 'mixto') { apP = 180; }
+            var aplanadoMarca = 'Cemento-arena';
+            if (F.aplanado === 'yeso') { aplanadoMarca = P.yeso.marca; }
+            else if (F.aplanado === 'mixto') { aplanadoMarca = 'Cemento ext + Yeso int'; }
             if (F.aplanado !== 'no_incluir') {
-                mats.push({ name: 'Aplanado', marca: F.aplanado === 'cemento_arena' ? 'Local' : P.yeso.marca, qty: m2.toFixed(0), unit: 'm2', sub: m2 * apP * fmat * tf.acabados, bkey: null });
+                mats.push({ name: 'Aplanado (' + (F.aplanado || '') + ')', marca: aplanadoMarca, qty: m2MurosAplanado.toFixed(0), unit: 'm2', sub: m2MurosAplanado * apP * fmat * tf.acabados, bkey: null });
             }
             var pintIntCost = 0;
             var pintIntMarca = 'Comex Vinimex';
@@ -4991,6 +5067,29 @@
             var calNombres = { gas_paso_1ser: 'Calentador gas 1 servicio', gas_paso_2ser: 'Calentador gas 2 servicios', gas_paso_3ser: 'Calentador gas 3+ servicios', solar_200L: 'Calentador solar 200L' };
             var calCost = (calMap[F.calentador] || 0) * fmat;
             if (F.calentador && F.calentador !== 'ninguno') { mats.push({ name: calNombres[F.calentador] || 'Calentador', marca: 'Calorex / Rotoplas instalado', qty: '1', unit: 'pza', sub: calCost, bkey: null }); }
+            var costoCalentadorViv = 0;
+            var calVivCards = document.querySelectorAll('#calentador-viv-group .select-card.selected');
+            if (calVivCards.length > 0) {
+                var selCalViv = calVivCards[0].getAttribute('data-value');
+                if (selCalViv === 'gas_paso') { costoCalentadorViv = 3800; }
+                else if (selCalViv === 'solar') { costoCalentadorViv = 18000; }
+            }
+            if (costoCalentadorViv > 0) { mats.push({ name: 'Calentador de agua (vivienda)', marca: 'Calorex / Rotoplas instalado', qty: '1', unit: 'pza', sub: costoCalentadorViv * fmat, bkey: null }); }
+            var costoCisternaViv = 0;
+            var cistVivTogEl = document.getElementById('cisterna-viv-toggle');
+            if (cistVivTogEl && cistVivTogEl.classList.contains('on')) {
+                var cistVivCards = document.querySelectorAll('#cisterna-viv-group .select-card.selected');
+                if (cistVivCards.length > 0) {
+                    var cistVivVal = cistVivCards[0].getAttribute('data-value');
+                    if (cistVivVal === '5000') { costoCisternaViv = 18500; }
+                    else if (cistVivVal === '10000') { costoCisternaViv = 32000; }
+                }
+            }
+            if (costoCisternaViv > 0) { mats.push({ name: 'Cisterna vivienda (' + (costoCisternaViv === 18500 ? '5,000L' : '10,000L') + ')', marca: 'Mamposteria + impermeabilizacion', qty: '1', unit: 'pza', sub: costoCisternaViv * fmat, bkey: null }); }
+            var costoGasViv = 0;
+            var gasVivTogEl = document.getElementById('gas-viv-toggle');
+            if (gasVivTogEl && gasVivTogEl.classList.contains('on')) { costoGasViv = 5500; }
+            if (costoGasViv > 0) { mats.push({ name: 'Red interior gas LP (3 salidas)', marca: 'P10.02 NOM-002-SECRE', qty: '1', unit: 'servicio', sub: costoGasViv * fmat, bkey: null }); }
             var recExtra = Math.max(0, F.recamaras - 2) * 4500; var banExtra = Math.max(0, F.banos - 1) * 6800; var mBanExtra = (F.mediosBanos || 0) * 3500;
             if (recExtra > 0) { mats.push({ name: 'Rec&#225;maras adicionales (' + (F.recamaras - 2) + ')', marca: 'Muros + puerta + ventana', qty: (F.recamaras - 2) + '', unit: 'pza', sub: recExtra, bkey: null }); }
             if (banExtra > 0) { mats.push({ name: 'Ba&#241;os adicionales (' + (F.banos - 1) + ')', marca: 'Ins. completa + cer&#225;mica', qty: (F.banos - 1) + '', unit: 'pza', sub: banExtra, bkey: null }); }
@@ -5202,9 +5301,11 @@
             var calEl = document.getElementById('calentador-container');
             var instCom = document.getElementById('instalaciones-comercial');
             var instDep = document.getElementById('instalaciones-departamentos');
+            var instViv = document.getElementById('instalaciones-vivienda');
             if (calEl) calEl.style.display = (tp === 'vivienda') ? 'block' : 'none';
             if (instCom) instCom.style.display = (tp === 'comercial') ? 'block' : 'none';
             if (instDep) instDep.style.display = (tp === 'departamentos') ? 'block' : 'none';
+            if (instViv) instViv.style.display = (tp === 'vivienda') ? 'block' : 'none';
             var extViv = document.getElementById('extras-vivienda');
             var extCom = document.getElementById('extras-comercial');
             var extDep = document.getElementById('extras-departamentos');
@@ -5418,17 +5519,473 @@
             }
             var jsPDFLib = window.jspdf ? window.jspdf.jsPDF : jspdf.jsPDF;
             var doc = new jsPDFLib({ orientation: 'portrait', unit: 'mm', format: 'a4' });
-            var res = calcScenario(F.acabado);
             var m2 = F.superficie || 0;
             var pageW = 210;
             var mg = 14;
             var y = 0;
             var fechaHoy = new Date();
-            var dd = fechaHoy.getDate();
-            var mm2 = fechaHoy.getMonth() + 1;
-            var yy = fechaHoy.getFullYear();
-            var fechaStr = dd + '/' + mm2 + '/' + yy;
-            var fechaArch = dd + '-' + mm2 + '-' + yy;
+            var diaActual = fechaHoy.getDate();
+            var mesActual = fechaHoy.getMonth() + 1;
+            var anoActual = fechaHoy.getFullYear();
+            var fechaStr = diaActual + '/' + mesActual + '/' + anoActual;
+            var folioRand = Math.floor(1000 + Math.random() * 9000);
+            var folioActual = 'ODM-' + anoActual + '-' + folioRand;
+            var nivelesNum = F.nivelesDepto || F.niveles || 1;
+            var estadoData = ESTADOS[F.estado] || ESTADOS['nacional'];
+            var estadoNombre = estadoData ? (estadoData.nombre || 'Nacional') : 'Nacional';
+            var tipoTexto = { vivienda: 'Casa habitacion unifamiliar', comercial: 'Local comercial', departamentos: 'Edificio de departamentos' }[F.tipoProyecto] || (F.tipoProyecto || '');
+            var acabadoTexto = { economico: 'Economico', estandar: 'Estandar', premium: 'Premium' }[F.acabado] || (F.acabado || '');
+            var sistemaMuros = { block: 'Block hueco 15x20x40cm', tabique: 'Tabique rojo recocido', mixto: 'Muros mixtos (block + tablaroca)', no_incluir: 'No especificado' }[F.muros] || 'Por definir';
+            var tipoPisoTexto = { cemento: 'Cemento pulido', ceramica_33: 'Ceramica 33x33', ceramica_45: 'Ceramica 45x45', porcelanato: 'Porcelanato 60x60', madera_laminada: 'Madera laminada', marmol: 'Marmol / Gran formato' }[F.tipoPiso] || 'Por definir';
+            var factor_muros_pdf = 1.8;
+            if (nivelesNum >= 3) { factor_muros_pdf = 3.0; }
+            else if (nivelesNum === 2) { factor_muros_pdf = 2.4; }
+            if (F.tipoProyecto === 'comercial') { factor_muros_pdf = 1.4; }
+            var fmtPeso = function(v) {
+                if (!v || isNaN(v)) { return '$0'; }
+                return '$' + Math.round(v).toLocaleString('es-MX');
+            };
+            var fmtCant = function(v) {
+                return parseFloat(v).toFixed(2);
+            };
+
+            /* ==== PAGINA 1: PORTADA ==== */
+            doc.setFillColor(15, 22, 35);
+            doc.rect(0, 0, pageW, 297, 'F');
+            doc.setFillColor(79, 70, 229);
+            doc.rect(0, 0, pageW, 4, 'F');
+            doc.setTextColor(255, 255, 255);
+            doc.setFontSize(22);
+            doc.setFont('helvetica', 'bold');
+            doc.text('ObraDigitalMX', mg, 30);
+            doc.setFontSize(14);
+            doc.setTextColor(129, 140, 248);
+            doc.text('Presupuesto de Obra', mg, 42);
+            doc.setFontSize(10);
+            doc.setTextColor(180, 180, 200);
+            doc.setFont('helvetica', 'normal');
+            doc.text('Folio: ' + folioActual, mg, 52);
+            doc.setFontSize(24);
+            doc.setFont('helvetica', 'bold');
+            doc.setTextColor(255, 255, 255);
+            doc.text(tipoTexto, pageW / 2, 80, { align: 'center' });
+            doc.setFontSize(16);
+            doc.setTextColor(129, 140, 248);
+            doc.text(estadoNombre, pageW / 2, 94, { align: 'center' });
+            var tblY = 108;
+            doc.setFillColor(26, 34, 53);
+            doc.rect(mg, tblY, pageW - mg * 2, 70, 'F');
+            doc.setDrawColor(79, 70, 229);
+            doc.setLineWidth(0.3);
+            doc.rect(mg, tblY, pageW - mg * 2, 70);
+            var datosGen = [
+                ['Superficie construida', m2 + ' m2'],
+                ['Sistema constructivo', sistemaMuros],
+                ['Numero de niveles', nivelesNum + ''],
+                ['Nivel de acabados', acabadoTexto],
+                ['Tipo de piso', tipoPisoTexto],
+                ['Fecha de elaboracion', fechaStr],
+                ['Vigencia del presupuesto', '30 dias naturales'],
+                ['Version', 'v1.0']
+            ];
+            var dgy = tblY + 10;
+            var colDg1 = mg + 5;
+            var colDg2 = pageW / 2 + 5;
+            doc.setFontSize(8);
+            for (var di = 0; di < datosGen.length; di++) {
+                doc.setFont('helvetica', 'bold');
+                doc.setTextColor(180, 180, 200);
+                doc.text(datosGen[di][0] + ':', colDg1, dgy);
+                doc.setFont('helvetica', 'normal');
+                doc.setTextColor(255, 255, 255);
+                doc.text(datosGen[di][1], colDg2, dgy);
+                dgy += 8;
+            }
+            doc.setFontSize(7);
+            doc.setFont('helvetica', 'normal');
+            doc.setTextColor(150, 150, 170);
+            doc.text('Los precios corresponden a la zona ' + estadoNombre, mg, 242);
+            doc.text('Fuentes: CEICO-CMIC * INEGI-INPP * DOF-IMSS 2025', mg, 250);
+            doc.text('Precios sin IVA * Estimacion referencial', mg, 258);
+
+            /* ==== PAGINA 2: CATALOGO DE CONCEPTOS ==== */
+            doc.addPage();
+            y = 0;
+            var pnActual = 2;
+            var dibujarHeaderPagina = function(pgn) {
+                doc.setFillColor(15, 22, 35);
+                doc.rect(0, 0, pageW, 14, 'F');
+                doc.setTextColor(255, 255, 255);
+                doc.setFontSize(7);
+                doc.setFont('helvetica', 'normal');
+                doc.text('ObraDigitalMX * Folio: ' + folioActual, mg, 9);
+                doc.text('Pagina ' + pgn, pageW - mg, 9, { align: 'right' });
+            };
+            dibujarHeaderPagina(pnActual);
+            y = 20;
+            doc.setTextColor(15, 22, 35);
+            doc.setFontSize(13);
+            doc.setFont('helvetica', 'bold');
+            doc.text('CATALOGO DE CONCEPTOS', mg, y);
+            y += 6;
+            doc.setFontSize(8);
+            doc.setFont('helvetica', 'normal');
+            doc.setTextColor(80, 80, 100);
+            doc.text('Presupuesto a Costo Directo sin IVA', mg, y);
+            y += 8;
+            var colW = [18, 76, 14, 20, 24, 30];
+            var colH = ['CLAVE', 'CONCEPTO', 'UNIDAD', 'CANTIDAD', 'P.U.', 'IMPORTE'];
+            var dibujarEncabTabla = function() {
+                doc.setFillColor(15, 22, 35);
+                doc.rect(mg, y, pageW - mg * 2, 7, 'F');
+                doc.setTextColor(255, 255, 255);
+                doc.setFontSize(7);
+                doc.setFont('helvetica', 'bold');
+                var xh = mg + 2;
+                for (var hi = 0; hi < colH.length; hi++) {
+                    doc.text(colH[hi], xh, y + 4.5);
+                    xh += colW[hi];
+                }
+                y += 7;
+            };
+            dibujarEncabTabla();
+            var rowIdx = 0;
+            var dibujarPartida = function(titulo) {
+                if (y > 268) {
+                    doc.addPage();
+                    pnActual += 1;
+                    dibujarHeaderPagina(pnActual);
+                    y = 20;
+                    dibujarEncabTabla();
+                }
+                doc.setFillColor(26, 34, 53);
+                doc.rect(mg, y, pageW - mg * 2, 7, 'F');
+                doc.setTextColor(129, 140, 248);
+                doc.setFontSize(7.5);
+                doc.setFont('helvetica', 'bold');
+                doc.text(titulo, mg + 2, y + 5);
+                y += 7;
+                rowIdx = 0;
+            };
+            var dibujarConcepto = function(clave, concepto, unidad, cantidad, pu, importe) {
+                if (y > 268) {
+                    doc.addPage();
+                    pnActual += 1;
+                    dibujarHeaderPagina(pnActual);
+                    y = 20;
+                    dibujarEncabTabla();
+                }
+                var bgC = (rowIdx % 2 === 0) ? [248, 250, 252] : [255, 255, 255];
+                doc.setFillColor(bgC[0], bgC[1], bgC[2]);
+                doc.rect(mg, y, pageW - mg * 2, 6, 'F');
+                doc.setTextColor(15, 22, 35);
+                doc.setFontSize(6.5);
+                doc.setFont('helvetica', 'normal');
+                var xc = mg + 2;
+                var celdas = [clave, concepto, unidad, cantidad, pu, importe];
+                for (var ci = 0; ci < celdas.length; ci++) {
+                    var cell = (celdas[ci] || '') + '';
+                    var maxC = Math.floor(colW[ci] / 1.9);
+                    if (cell.length > maxC) { cell = cell.substring(0, maxC - 2) + '..'; }
+                    doc.text(cell, xc, y + 4);
+                    xc += colW[ci];
+                }
+                y += 6;
+                rowIdx += 1;
+            };
+            var p01T = 0; var p02T = 0; var p03T = 0; var p04T = 0;
+            var p05T = 0; var p06T = 0; var p07T = 0; var p08T = 0;
+            var p09T = 0; var p10T = 0; var p11T = 0;
+
+            /* P01 — TRABAJOS PRELIMINARES */
+            dibujarPartida('PARTIDA 1 - TRABAJOS PRELIMINARES');
+            var c0101 = m2 * 1.0; var i0101 = c0101 * 45; p01T += i0101;
+            dibujarConcepto('P01.01', 'Limpieza y desenraice de terreno', 'm2', fmtCant(c0101), fmtPeso(45), fmtPeso(i0101));
+            var c0102 = m2 * 1.0; var i0102 = c0102 * 35; p01T += i0102;
+            dibujarConcepto('P01.02', 'Trazo y nivelacion de la obra', 'm2', fmtCant(c0102), fmtPeso(35), fmtPeso(i0102));
+
+            /* P02 — CIMENTACION */
+            dibujarPartida('PARTIDA 2 - CIMENTACION');
+            var c0201 = m2 * 0.35; var i0201 = c0201 * 320; p02T += i0201;
+            dibujarConcepto('P02.01', 'Excavacion a mano terreno normal', 'm3', fmtCant(c0201), fmtPeso(320), fmtPeso(i0201));
+            var c0204 = m2 * 0.35; var i0204 = c0204 * 185; p02T += i0204;
+            dibujarConcepto('P02.04', 'Plantilla concreto fc=100 e=5cm', 'm2', fmtCant(c0204), fmtPeso(185), fmtPeso(i0204));
+            var c0205 = Math.ceil(m2 / 9); var i0205 = c0205 * 1900; p02T += i0205;
+            dibujarConcepto('P02.05', 'Zapata aislada fc=200 1.20x1.20m', 'pza', c0205 + '', fmtPeso(1900), fmtPeso(i0205));
+            var c0208 = m2 * 0.40; var i0208 = c0208 * 680; p02T += i0208;
+            dibujarConcepto('P02.08', 'Contratrabe fc=200 20x30cm', 'ml', fmtCant(c0208), fmtPeso(680), fmtPeso(i0208));
+
+            /* P03 — ESTRUCTURA */
+            dibujarPartida('PARTIDA 3 - ESTRUCTURA');
+            var c0301 = m2 * 0.67; var i0301 = c0301 * 185; p03T += i0301;
+            dibujarConcepto('P03.01', 'Castillo fc=200 12x12cm var 3/8', 'ml', fmtCant(c0301), fmtPeso(185), fmtPeso(i0301));
+            var c0302 = m2 * 0.40; var i0302 = c0302 * 220; p03T += i0302;
+            dibujarConcepto('P03.02', 'Dala de cerramiento fc=200 15x20cm', 'ml', fmtCant(c0302), fmtPeso(220), fmtPeso(i0302));
+            var losaClave = 'P03.05'; var losaDesc = 'Losa maciza fc=200 e=10cm'; var losaPU = 980;
+            if (F.losa === 'nervada') { losaClave = 'P03.06'; losaDesc = 'Losa vigueta y bovedilla prefabricada'; losaPU = 750; }
+            else if (F.losa === 'steeldeck') { losaClave = 'P03.07'; losaDesc = 'Losacero steel deck Cal.22'; losaPU = 950; }
+            if (F.losa !== 'no_incluir') {
+                var iLosa = m2 * losaPU; p03T += iLosa;
+                dibujarConcepto(losaClave, losaDesc, 'm2', fmtCant(m2), fmtPeso(losaPU), fmtPeso(iLosa));
+                var iCimbra = m2 * 420; p03T += iCimbra;
+                dibujarConcepto('P03.08', 'Cimbra triplay losa', 'm2', fmtCant(m2), fmtPeso(420), fmtPeso(iCimbra));
+            }
+
+            /* P04 — ALBANILERIA */
+            dibujarPartida('PARTIDA 4 - ALBANILERIA');
+            var m2Mur = m2 * factor_muros_pdf;
+            var mClave = 'P04.01'; var mDesc = 'Muro block hueco 15x20x40cm'; var mPU = 420;
+            if (F.muros === 'tabique') { mClave = 'P04.02'; mDesc = 'Muro tabique rojo recocido 7x14x28'; mPU = 390; }
+            if (F.muros !== 'no_incluir') {
+                var iMur = m2Mur * mPU; p04T += iMur;
+                dibujarConcepto(mClave, mDesc, 'm2', fmtCant(m2Mur), fmtPeso(mPU), fmtPeso(iMur));
+            }
+            var m2Ext = m2Mur * 0.40; var m2Int = m2Mur * 0.60;
+            var iAp04 = m2Ext * 120; p04T += iAp04;
+            dibujarConcepto('P04.04', 'Aplanado exterior cemento-arena e=2cm', 'm2', fmtCant(m2Ext), fmtPeso(120), fmtPeso(iAp04));
+            var iAf04 = m2Ext * 80; p04T += iAf04;
+            dibujarConcepto('P04.05', 'Afine de aplanado exterior', 'm2', fmtCant(m2Ext), fmtPeso(80), fmtPeso(iAf04));
+            var iYe04 = m2Int * 140; p04T += iYe04;
+            dibujarConcepto('P04.06', 'Aplanado yeso interior a plomo', 'm2', fmtCant(m2Int), fmtPeso(140), fmtPeso(iYe04));
+            var iFirme = m2 * 320; p04T += iFirme;
+            dibujarConcepto('P04.07', 'Firme concreto fc=150 e=8cm', 'm2', fmtCant(m2), fmtPeso(320), fmtPeso(iFirme));
+
+            /* P05 — INST. HIDRAULICA */
+            dibujarPartida('PARTIDA 5 - INSTALACION HIDRAULICA Y SANITARIA');
+            if (F.hidraulica !== 'no_incluir') {
+                var c0501 = m2 * 0.18; var i0501 = c0501 * 380; p05T += i0501;
+                dibujarConcepto('P05.01', 'Salida agua fria PVC 1/2 pulg', 'salida', fmtCant(c0501), fmtPeso(380), fmtPeso(i0501));
+                var c0502 = m2 * 0.10; var i0502 = c0502 * 480; p05T += i0502;
+                dibujarConcepto('P05.02', 'Salida agua caliente PPR 1/2 pulg', 'salida', fmtCant(c0502), fmtPeso(480), fmtPeso(i0502));
+                var c0503 = m2 * 0.12; var i0503 = c0503 * 320; p05T += i0503;
+                dibujarConcepto('P05.03', 'Salida drenaje PVC 2 pulg', 'salida', fmtCant(c0503), fmtPeso(320), fmtPeso(i0503));
+                var c0504 = m2 * 0.25; var i0504 = c0504 * 280; p05T += i0504;
+                dibujarConcepto('P05.04', 'Red drenaje principal PVC 4 pulg', 'ml', fmtCant(c0504), fmtPeso(280), fmtPeso(i0504));
+                p05T += 3800;
+                dibujarConcepto('P05.08', 'Tinaco polietileno 1100L en azotea', 'pza', '1', fmtPeso(3800), fmtPeso(3800));
+            }
+            var cVivTog = document.getElementById('cisterna-viv-toggle');
+            var tieneCistViv = cVivTog && cVivTog.classList.contains('on');
+            if (tieneCistViv || F.cisterna) {
+                var cistPU = 18500; var cistDesc = 'Cisterna mamposteria 5,000L';
+                if (F.cisternaTipo === '10000') { cistPU = 32000; cistDesc = 'Cisterna mamposteria 10,000L'; }
+                if (tieneCistViv) {
+                    var cvCards = document.querySelectorAll('#cisterna-viv-group .select-card.selected');
+                    if (cvCards.length > 0 && cvCards[0].getAttribute('data-value') === '10000') { cistPU = 32000; cistDesc = 'Cisterna mamposteria 10,000L'; }
+                }
+                p05T += cistPU;
+                dibujarConcepto('P05.09', cistDesc, 'pza', '1', fmtPeso(cistPU), fmtPeso(cistPU));
+            }
+
+            /* P06 — INST. ELECTRICA */
+            dibujarPartida('PARTIDA 6 - INSTALACION ELECTRICA');
+            if (F.electrica !== 'no_incluir') {
+                var c0601 = m2 * 0.20; var i0601 = c0601 * 280; p06T += i0601;
+                dibujarConcepto('P06.01', 'Salida iluminacion cal.14 NOM', 'salida', fmtCant(c0601), fmtPeso(280), fmtPeso(i0601));
+                var c0602 = m2 * 0.25; var i0602 = c0602 * 320; p06T += i0602;
+                dibujarConcepto('P06.02', 'Salida contacto polarizado cal.12', 'salida', fmtCant(c0602), fmtPeso(320), fmtPeso(i0602));
+                var banosTot = (F.banos || 0) + (F.mediosBanos || 0);
+                if (F.tipoProyecto === 'departamentos') { banosTot = (F.banosDepto || 1) * (F.numDeptos || 1); }
+                var c0603 = banosTot * 3; var i0603 = c0603 * 380; p06T += i0603;
+                dibujarConcepto('P06.03', 'Salida contacto tierra fisica bano', 'salida', c0603 + '', fmtPeso(380), fmtPeso(i0603));
+                var tableroClave = 'P06.05'; var tableroDesc = 'Tablero distribucion 8 circuitos'; var tableroPU = 2800;
+                if (m2 >= 120) { tableroClave = 'P06.06'; tableroDesc = 'Tablero distribucion 16 circuitos'; tableroPU = 4500; }
+                p06T += tableroPU;
+                dibujarConcepto(tableroClave, tableroDesc, 'pza', '1', fmtPeso(tableroPU), fmtPeso(tableroPU));
+            }
+
+            /* P07 — ACABADOS */
+            dibujarPartida('PARTIDA 7 - ACABADOS');
+            var pisoClave = 'P07.01'; var pisoDescP = 'Piso ceramico 45x45 adhesivo tipo II'; var pisoPU = 480;
+            if (F.tipoPiso === 'cemento') { pisoClave = 'P07.01'; pisoDescP = 'Piso cemento pulido y endurecido'; pisoPU = 355; }
+            else if (F.tipoPiso === 'ceramica_33') { pisoClave = 'P07.01'; pisoDescP = 'Piso ceramico 33x33 adhesivo tipo II'; pisoPU = 480; }
+            else if (F.tipoPiso === 'ceramica_45') { pisoClave = 'P07.01'; pisoDescP = 'Piso ceramico 45x45 adhesivo tipo II'; pisoPU = 480; }
+            else if (F.tipoPiso === 'porcelanato') { pisoClave = 'P07.02'; pisoDescP = 'Porcelanato 60x60 adhesivo flexible'; pisoPU = 830; }
+            else if (F.tipoPiso === 'madera_laminada') { pisoClave = 'P07.08'; pisoDescP = 'Piso madera laminada AC3 instalado'; pisoPU = 420; }
+            else if (F.tipoPiso === 'marmol') { pisoClave = 'P07.09'; pisoDescP = 'Marmol gran formato instalado'; pisoPU = 1470; }
+            if (F.tipoPiso) {
+                var iPiso = m2 * pisoPU; p07T += iPiso;
+                dibujarConcepto(pisoClave, pisoDescP, 'm2', fmtCant(m2), fmtPeso(pisoPU), fmtPeso(iPiso));
+            }
+            var iPint03 = m2Int * 95; p07T += iPint03;
+            dibujarConcepto('P07.03', 'Pintura vinilica interior 2 manos', 'm2', fmtCant(m2Int), fmtPeso(95), fmtPeso(iPint03));
+            var iPint04 = m2Ext * 125; p07T += iPint04;
+            dibujarConcepto('P07.04', 'Pintura elastomerica exterior', 'm2', fmtCant(m2Ext), fmtPeso(125), fmtPeso(iPint04));
+            if (F.impermeabilizar !== false) {
+                var iImp05 = m2 * 145; p07T += iImp05;
+                dibujarConcepto('P07.05', 'Impermeabilizacion azotea 2 manos 5 anos', 'm2', fmtCant(m2), fmtPeso(145), fmtPeso(iImp05));
+            }
+
+            /* P08 — CARPINTERIA */
+            dibujarPartida('PARTIDA 8 - CARPINTERIA Y CANCELERIA');
+            var ptPU = { economico: 2800, estandar: 3800, premium: 5500 }[F.acabado] || 3800;
+            var vtPU = { economico: 1200, estandar: 1850, premium: 2800 }[F.acabado] || 1850;
+            var cantPt = Math.ceil(m2 * 0.045); var iPt = cantPt * ptPU; p08T += iPt;
+            dibujarConcepto('P08.01', 'Puertas interiores madera con marco', 'pza', cantPt + '', fmtPeso(ptPU), fmtPeso(iPt));
+            var cantVt = m2 * 0.12; var iVt = cantVt * vtPU; p08T += iVt;
+            var vtClave = (F.acabado === 'premium') ? 'P08.04' : 'P08.03';
+            var vtDesc = (F.acabado === 'premium') ? 'Ventana aluminio anodizado doble vidrio' : 'Ventana aluminio natural vidrio 6mm';
+            if (F.acabado === 'economico') { vtClave = 'P08.03'; vtDesc = 'Ventana herreria con vidrio sencillo'; }
+            dibujarConcepto(vtClave, vtDesc, 'm2', fmtCant(cantVt), fmtPeso(vtPU), fmtPeso(iVt));
+
+            /* P09 — OBRAS EXTERIORES */
+            if (F.bardeo && F.bardeoMetros > 0) {
+                dibujarPartida('PARTIDA 9 - OBRAS EXTERIORES');
+                var iBardeo = F.bardeoMetros * 1850; p09T += iBardeo;
+                dibujarConcepto('P09.01', 'Barda perimetral block h=2.0m', 'ml', F.bardeoMetros + '', fmtPeso(1850), fmtPeso(iBardeo));
+            }
+
+            /* P10 — GAS */
+            var gasVivTog = document.getElementById('gas-viv-toggle');
+            if (gasVivTog && gasVivTog.classList.contains('on')) {
+                dibujarPartida('PARTIDA 10 - INSTALACION DE GAS');
+                p10T += 5500;
+                dibujarConcepto('P10.02', 'Red interior gas LP regulador + 3 salidas', 'servicio', '1', fmtPeso(5500), fmtPeso(5500));
+            }
+
+            /* P11 — LIMPIEZA */
+            dibujarPartida('PARTIDA 11 - LIMPIEZA Y ENTREGA');
+            var cantViajes = Math.ceil(m2 * 0.08); var iViajes = cantViajes * 1200; p11T += iViajes;
+            dibujarConcepto('P11.01', 'Retiro escombros camion volteo 7m3', 'viaje', cantViajes + '', fmtPeso(1200), fmtPeso(iViajes));
+            var iLimp = m2 * 35; p11T += iLimp;
+            dibujarConcepto('P11.02', 'Limpieza general de obra', 'm2', fmtCant(m2), fmtPeso(35), fmtPeso(iLimp));
+
+            /* ==== PAGINA 3: INTEGRACION DE COSTOS ==== */
+            doc.addPage();
+            pnActual += 1;
+            y = 0;
+            dibujarHeaderPagina(pnActual);
+            y = 20;
+            doc.setTextColor(15, 22, 35);
+            doc.setFontSize(13);
+            doc.setFont('helvetica', 'bold');
+            doc.text('INTEGRACION DE COSTOS', mg, y);
+            y += 10;
+            doc.setFillColor(15, 22, 35);
+            doc.rect(mg, y, pageW - mg * 2, 7, 'F');
+            doc.setTextColor(255, 255, 255);
+            doc.setFontSize(8);
+            doc.setFont('helvetica', 'bold');
+            doc.text('PARTIDA', mg + 3, y + 5);
+            doc.text('DESCRIPCION', mg + 25, y + 5);
+            doc.text('IMPORTE', pageW - mg - 3, y + 5, { align: 'right' });
+            y += 7;
+            var partidas = [
+                ['P01', 'Trabajos Preliminares', p01T],
+                ['P02', 'Cimentacion', p02T],
+                ['P03', 'Estructura', p03T],
+                ['P04', 'Albanileria', p04T],
+                ['P05', 'Inst. Hidraulica y Sanitaria', p05T],
+                ['P06', 'Inst. Electrica', p06T],
+                ['P07', 'Acabados', p07T],
+                ['P08', 'Carpinteria y Canceleria', p08T]
+            ];
+            if (p09T > 0) { partidas.push(['P09', 'Obras Exteriores', p09T]); }
+            if (p10T > 0) { partidas.push(['P10', 'Instalacion de Gas', p10T]); }
+            partidas.push(['P11', 'Limpieza y Entrega', p11T]);
+            var sumCD = 0;
+            for (var pi = 0; pi < partidas.length; pi++) {
+                sumCD += partidas[pi][2];
+                var bgR = (pi % 2 === 0) ? [248, 250, 252] : [255, 255, 255];
+                doc.setFillColor(bgR[0], bgR[1], bgR[2]);
+                doc.rect(mg, y, pageW - mg * 2, 7, 'F');
+                doc.setFontSize(8);
+                doc.setFont('helvetica', 'normal');
+                doc.setTextColor(15, 22, 35);
+                doc.text(partidas[pi][0], mg + 3, y + 5);
+                doc.text(partidas[pi][1], mg + 25, y + 5);
+                doc.setFont('helvetica', 'bold');
+                doc.text(fmtPeso(partidas[pi][2]), pageW - mg - 3, y + 5, { align: 'right' });
+                y += 7;
+            }
+            y += 4;
+            doc.setDrawColor(200, 200, 210);
+            doc.setLineWidth(0.4);
+            doc.line(mg, y, pageW - mg, y);
+            y += 6;
+            var costoInd = sumCD * 0.15;
+            var utilidad = sumCD * 0.10;
+            var subSinIva = sumCD + costoInd + utilidad;
+            var iva = subSinIva * 0.16;
+            var totalGen = subSinIva + iva;
+            var rengRes = [
+                ['SUBTOTAL COSTO DIRECTO:', fmtPeso(sumCD)],
+                ['COSTOS INDIRECTOS (15%):', fmtPeso(costoInd)],
+                ['UTILIDAD DEL CONSTRUCTOR (10%):', fmtPeso(utilidad)]
+            ];
+            doc.setFontSize(9);
+            for (var ri = 0; ri < rengRes.length; ri++) {
+                doc.setFont('helvetica', 'normal');
+                doc.setTextColor(71, 85, 105);
+                doc.text(rengRes[ri][0], mg + 3, y);
+                doc.setFont('helvetica', 'bold');
+                doc.setTextColor(15, 22, 35);
+                doc.text(rengRes[ri][1], pageW - mg - 3, y, { align: 'right' });
+                y += 7;
+            }
+            doc.setDrawColor(79, 70, 229);
+            doc.setLineWidth(0.5);
+            doc.line(mg, y, pageW - mg, y);
+            y += 5;
+            doc.setFont('helvetica', 'normal');
+            doc.setTextColor(71, 85, 105);
+            doc.text('SUBTOTAL SIN IVA:', mg + 3, y);
+            doc.setFont('helvetica', 'bold');
+            doc.setTextColor(15, 22, 35);
+            doc.text(fmtPeso(subSinIva), pageW - mg - 3, y, { align: 'right' });
+            y += 7;
+            doc.setFont('helvetica', 'normal');
+            doc.setTextColor(71, 85, 105);
+            doc.text('IVA (16%):', mg + 3, y);
+            doc.setFont('helvetica', 'bold');
+            doc.setTextColor(15, 22, 35);
+            doc.text(fmtPeso(iva), pageW - mg - 3, y, { align: 'right' });
+            y += 5;
+            doc.setDrawColor(79, 70, 229);
+            doc.setLineWidth(1);
+            doc.line(mg, y, pageW - mg, y);
+            y += 3;
+            doc.line(mg, y, pageW - mg, y);
+            y += 8;
+            doc.setFontSize(14);
+            doc.setFont('helvetica', 'bold');
+            doc.setTextColor(79, 70, 229);
+            doc.text('TOTAL GENERAL:', mg + 3, y);
+            doc.text(fmtPeso(totalGen), pageW - mg - 3, y, { align: 'right' });
+            y += 14;
+            doc.setFontSize(6.5);
+            doc.setFont('helvetica', 'normal');
+            doc.setTextColor(100, 116, 139);
+            var notas = [
+                'Los precios unitarios incluyen material, mano de obra y herramienta menor.',
+                'No incluye: proyecto ejecutivo, permisos, derechos de conexion ni mecanica de suelos.',
+                'Vigencia: 30 dias naturales. Precios sin IVA.',
+                'Fuentes: CEICO-CMIC * INEGI-INPP * DOF-IMSS 2025. Zona: ' + estadoNombre
+            ];
+            for (var ni = 0; ni < notas.length; ni++) {
+                doc.text(notas[ni], mg, y);
+                y += 5;
+            }
+            y += 10;
+            if (y > 255) { doc.addPage(); y = 20; }
+            doc.setDrawColor(180, 180, 190);
+            doc.setLineWidth(0.3);
+            var fw = (pageW - mg * 2 - 20) / 2;
+            doc.line(mg, y + 10, mg + fw, y + 10);
+            doc.line(mg + fw + 20, y + 10, pageW - mg, y + 10);
+            doc.setFontSize(7);
+            doc.setFont('helvetica', 'normal');
+            doc.setTextColor(100, 116, 139);
+            doc.text('Elaboro:', mg, y + 5);
+            doc.text('Acepta:', mg + fw + 20, y + 5);
+            doc.text('Arq./Ing. Responsable', mg, y + 15);
+            doc.text('Cliente/Propietario', mg + fw + 20, y + 15);
+            doc.text('Fecha: ' + fechaStr, mg, y + 21);
+            doc.text('Fecha: ___________', mg + fw + 20, y + 21);
+
+            var nombreArch = 'ObraDigitalMX-Presupuesto-' + folioActual + '.pdf';
+            doc.save(nombreArch);
+        }
 
             doc.setFillColor(15, 31, 61);
             doc.rect(0, 0, pageW, 32, 'F');
@@ -6252,6 +6809,8 @@
             setupCardGroup('acabado-group', 'acabado'); setupCardGroup('aplanado-group', 'aplanado');
             setupCardGroup('pintura-int-group', 'pinturaInt'); setupCardGroup('pintura-ext-group', 'pinturaExt');
             setupCardGroup('hidraulica-group', 'hidraulica'); setupCardGroup('electrica-group', 'electrica'); setupCardGroup('calentador-group', 'calentador');
+            setupCardGroup('calentador-viv-group', 'calentadorViv'); setupCardGroup('cisterna-viv-group', 'cistVivTipo');
+            setupToggle('cisterna-viv-toggle', 'cistVivActiva', 'cisterna-viv-sub'); setupToggle('gas-viv-toggle', 'gasVivActiva', null);
             setupCardGroup('cochera-espacios-group', 'cocheraEspacios'); setupCardGroup('cochera-porton-group', 'cocheraPorton');
             setupCardGroup('piso-group', 'tipoPiso'); setupCardGroup('escalera-group', 'escaleras');
             setupToggle('castillos-toggle', 'castillos', null); setupToggle('impermeabilizar-toggle', 'impermeabilizar', null);
