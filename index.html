@@ -4194,50 +4194,29 @@
                                         <div class="select-card" data-value="economico">
                                             <div class="card-title">Cer&#225;mica Est&#225;ndar</div>
                                             <div style="font-size:11px;color:var(--text-2);margin-top:4px">45x45 cm &#183; $160/m&#178;</div>
-                                            <div style="font-size:0.72rem;color:#9CA3AF;margin-top:4px;">Cer&#225;mica nacional &#183; zona centro 2026</div>
+                                            <div id="nota-acabado-piso-economico" class="nota-tecnica" style="display:none;font-size:0.72rem;color:#9CA3AF;margin-top:4px;opacity:0;transition:opacity 0.3s;">Cer&#225;mica nacional &#183; zona centro 2026</div>
                                         </div>
                                         <div class="select-card" data-value="estandar">
                                             <div class="card-badge">POPULAR</div>
                                             <div class="card-title">Porcelanato</div>
                                             <div style="font-size:11px;color:var(--text-2);margin-top:4px">60x60 cm &#183; $310/m&#178;</div>
-                                            <div style="font-size:0.72rem;color:#9CA3AF;margin-top:4px;">Porcelanato 60x60 &#183; precio CMIC</div>
+                                            <div id="nota-acabado-piso-estandar" class="nota-tecnica" style="display:none;font-size:0.72rem;color:#9CA3AF;margin-top:4px;opacity:0;transition:opacity 0.3s;">Porcelanato 60x60 &#183; precio CMIC</div>
                                         </div>
                                         <div class="select-card" data-value="premium">
                                             <div class="card-title">M&#225;rmol / Gran Formato</div>
                                             <div style="font-size:11px;color:var(--text-2);margin-top:4px">Lujo &#183; $950/m&#178;</div>
-                                            <div style="font-size:0.72rem;color:#9CA3AF;margin-top:4px;">Gran formato &#183; acabado premium</div>
+                                            <div id="nota-acabado-piso-premium" class="nota-tecnica" style="display:none;font-size:0.72rem;color:#9CA3AF;margin-top:4px;opacity:0;transition:opacity 0.3s;">Gran formato &#183; acabado premium</div>
                                         </div>
                                         <div class="select-card" data-value="ninguno">
                                             <div class="card-title" style="color:var(--text-3);">Sin Acabado</div>
                                             <div style="font-size:11px;color:var(--text-2);margin-top:4px">Solo firme &#183; $320/m&#178;</div>
-                                            <div style="font-size:0.72rem;color:#9CA3AF;margin-top:4px;">Firme fc=150 e=8cm &#183; concreto</div>
+                                            <div id="nota-acabado-piso-ninguno" class="nota-tecnica" style="display:none;font-size:0.72rem;color:#9CA3AF;margin-top:4px;opacity:0;transition:opacity 0.3s;">Firme fc=150 e=8cm &#183; concreto</div>
                                         </div>
                                     </div>
-                                </div>
-
-                                <div class="field-group">
-                                    <label class="field-label">&#9634; Muros y plafones</label>
-                                    <div class="cards-grid" id="muros-plafones-group">
-                                        <div class="select-card" data-value="basico">
-                                            <div class="card-title">Aplanados B&#225;sicos</div>
-                                            <div class="card-desc">Cemento ext. + yeso int.</div>
-                                            <div style="font-size:0.72rem;color:#9CA3AF;margin-top:4px;">Cemento ext. + yeso int. &#183; est&#225;ndar</div>
-                                        </div>
-                                        <div class="select-card" data-value="estandar">
-                                            <div class="card-badge">POPULAR</div>
-                                            <div class="card-title">Tablaroca Divisoria</div>
-                                            <div class="card-desc">Cara sencilla interior</div>
-                                            <div style="font-size:0.72rem;color:#9CA3AF;margin-top:4px;">Cara sencilla &#183; no estructural</div>
-                                        </div>
-                                        <div class="select-card" data-value="premium">
-                                            <div class="card-title">Tablaroca + Plaf&#243;n</div>
-                                            <div class="card-desc">Doble cara + ais. ac&#250;stico</div>
-                                            <div style="font-size:0.72rem;color:#9CA3AF;margin-top:4px;">Doble cara + ac&#250;stico + reticular</div>
-                                        </div>
-                                        <div class="select-card" data-value="ninguno">
-                                            <div class="card-title" style="color:var(--text-3);">Obra Negra</div>
-                                            <div class="card-desc" style="color:#D1D5DB;">Sin recubrimientos</div>
-                                            <div style="font-size:0.72rem;color:#9CA3AF;margin-top:4px;">Sin recubrimientos en muros</div>
+                                    <div style="margin-top:8px;">
+                                        <button type="button" onclick="toggleInfoPanel('info-toggle-piso')" style="background:none;border:1px solid var(--border);border-radius:6px;padding:5px 12px;font-size:0.72rem;font-weight:600;color:var(--text-3);cursor:pointer;font-family:inherit;">&#8505; &#191;C&#243;mo se calcula? &#9660;</button>
+                                        <div id="info-toggle-piso" style="display:none;margin-top:8px;">
+                                            <div class="info-panel">El costo de piso se calcula sobre el 100% de la superficie construida indicada. Se incluye material, pegamento (adhesivo tipo II seg&#250;n NMX-C-484) y mano de obra de colocaci&#243;n. Desperdicio est&#225;ndar aplicado: 10%. Fuente de precios: CMIC zona centro 2026.</div>
                                         </div>
                                     </div>
                                 </div>
@@ -4248,53 +4227,33 @@
                                         <div class="select-card" data-value="basico">
                                             <div class="card-title">B&#225;sica</div>
                                             <div class="card-desc">Puertas met&#225;licas + herrer&#237;a</div>
-                                            <div style="font-size:0.72rem;color:#9CA3AF;margin-top:4px;">Met&#225;lica + herrer&#237;a &#183; funcional</div>
+                                            <div id="nota-carpinteria-basico" class="nota-tecnica" style="display:none;font-size:0.72rem;color:#9CA3AF;margin-top:4px;opacity:0;transition:opacity 0.3s;">Met&#225;lica + herrer&#237;a &#183; funcional</div>
                                         </div>
                                         <div class="select-card" data-value="estandar">
                                             <div class="card-badge">POPULAR</div>
                                             <div class="card-title">Est&#225;ndar</div>
                                             <div class="card-desc">Madera + aluminio</div>
-                                            <div style="font-size:0.72rem;color:#9CA3AF;margin-top:4px;">Madera + aluminio natural &#183; vidrio 6mm</div>
+                                            <div id="nota-carpinteria-estandar" class="nota-tecnica" style="display:none;font-size:0.72rem;color:#9CA3AF;margin-top:4px;opacity:0;transition:opacity 0.3s;">Madera + aluminio natural &#183; vidrio 6mm</div>
                                         </div>
                                         <div class="select-card" data-value="premium">
                                             <div class="card-title">Premium</div>
                                             <div class="card-desc">Madera s&#243;lida + anodizado</div>
-                                            <div style="font-size:0.72rem;color:#9CA3AF;margin-top:4px;">Madera s&#243;lida + aluminio anodizado &#183; doble vidrio</div>
+                                            <div id="nota-carpinteria-premium" class="nota-tecnica" style="display:none;font-size:0.72rem;color:#9CA3AF;margin-top:4px;opacity:0;transition:opacity 0.3s;">Madera s&#243;lida + aluminio anodizado &#183; doble vidrio</div>
                                         </div>
                                         <div class="select-card" data-value="ninguno">
                                             <div class="card-title" style="color:var(--text-3);">No incluir</div>
                                             <div class="card-desc" style="color:#D1D5DB;">Por separado</div>
-                                            <div style="font-size:0.72rem;color:#9CA3AF;margin-top:4px;">Cliente contrata por separado</div>
+                                            <div id="nota-carpinteria-ninguno" class="nota-tecnica" style="display:none;font-size:0.72rem;color:#9CA3AF;margin-top:4px;opacity:0;transition:opacity 0.3s;">Cliente contrata por separado</div>
+                                        </div>
+                                    </div>
+                                    <div style="margin-top:8px;">
+                                        <button type="button" onclick="toggleInfoPanel('info-toggle-carp')" style="background:none;border:1px solid var(--border);border-radius:6px;padding:5px 12px;font-size:0.72rem;font-weight:600;color:var(--text-3);cursor:pointer;font-family:inherit;">&#8505; &#191;Qu&#233; incluye? &#9660;</button>
+                                        <div id="info-toggle-carp" style="display:none;margin-top:8px;">
+                                            <div class="info-panel">El costo se estima proporcional a la superficie total construida. Incluye puertas interiores, puerta principal, ventanas y herrajes. No incluye cocina integral ni closets (se cotizan por separado seg&#250;n dise&#241;o). Fuente: precios de mercado zona centro 2026.</div>
                                         </div>
                                     </div>
                                 </div>
 
-                                <div class="field-group">
-                                    <label class="field-label">&#128167; Instalaci&#243;n hidr&#225;ulica</label>
-                                    <div class="cards-grid" id="instalacion-hidro-group">
-                                        <div class="select-card" data-value="basica">
-                                            <div class="card-title">B&#225;sica</div>
-                                            <div class="card-desc">PVC agua fr&#237;a</div>
-                                            <div style="font-size:0.72rem;color:#9CA3AF;margin-top:4px;">PVC agua fr&#237;a &#183; uni&#243;n cemento azul</div>
-                                        </div>
-                                        <div class="select-card" data-value="completa">
-                                            <div class="card-badge">RECOMENDADO</div>
-                                            <div class="card-title">Completa</div>
-                                            <div class="card-desc">PVC fr&#237;a + PPR caliente</div>
-                                            <div style="font-size:0.72rem;color:#9CA3AF;margin-top:4px;">PPR termofusi&#243;n &#183; cero fugas recomendado</div>
-                                        </div>
-                                        <div class="select-card" data-value="premium">
-                                            <div class="card-title">Premium</div>
-                                            <div class="card-desc">PPR + muebles + cisterna</div>
-                                            <div style="font-size:0.72rem;color:#9CA3AF;margin-top:4px;">PPR + cisterna 5,000L + bombeo 1HP</div>
-                                        </div>
-                                        <div class="select-card" data-value="ninguno">
-                                            <div class="card-title" style="color:var(--text-3);">Solo obra negra</div>
-                                            <div class="card-desc" style="color:#D1D5DB;">Sin instalaci&#243;n</div>
-                                            <div style="font-size:0.72rem;color:#9CA3AF;margin-top:4px;">Sin tuber&#237;as ni muebles sanitarios</div>
-                                        </div>
-                                    </div>
-                                </div>
                             </div><!-- /secciones-nuevas -->
 
                             <div class="nav-buttons"><button type="button" class="btn-backward"
@@ -4463,6 +4422,58 @@
                                     <div style="color:#64748b;font-size:0.72rem;">Actualizados zona centro M&#233;xico</div>
                                 </div>
                             </div>
+                            <!-- Vista previa tabla de materiales -->
+                            <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(79,70,229,0.3);border-radius:12px;padding:16px;margin:0 0 16px 0;text-align:left;">
+                                <div style="color:#64748b;font-size:0.7rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:12px;">Vista previa &#8212; Tabla de materiales</div>
+                                <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:8px;padding:6px 0;border-bottom:1px solid rgba(79,70,229,0.2);margin-bottom:6px;">
+                                    <div style="color:#64748b;font-size:0.7rem;font-weight:600;">CONCEPTO</div>
+                                    <div style="color:#64748b;font-size:0.7rem;font-weight:600;text-align:center;">CANT.</div>
+                                    <div style="color:#64748b;font-size:0.7rem;font-weight:600;text-align:center;">P.U.</div>
+                                    <div style="color:#64748b;font-size:0.7rem;font-weight:600;text-align:right;">IMPORTE</div>
+                                </div>
+                                <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:8px;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.05);filter:blur(2.5px);">
+                                    <div style="color:#e2e8f0;font-size:0.75rem;">Cemento CPC 30R bolsa 50kg</div>
+                                    <div style="color:#94a3b8;font-size:0.75rem;text-align:center;">142</div>
+                                    <div style="color:#94a3b8;font-size:0.75rem;text-align:center;">$255</div>
+                                    <div style="color:#4F46E5;font-size:0.75rem;font-weight:600;text-align:right;">$36,210</div>
+                                </div>
+                                <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:8px;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.05);filter:blur(2.5px);">
+                                    <div style="color:#e2e8f0;font-size:0.75rem;">Varilla corrugada 3/8 pieza 12m</div>
+                                    <div style="color:#94a3b8;font-size:0.75rem;text-align:center;">86</div>
+                                    <div style="color:#94a3b8;font-size:0.75rem;text-align:center;">$195</div>
+                                    <div style="color:#4F46E5;font-size:0.75rem;font-weight:600;text-align:right;">$16,770</div>
+                                </div>
+                                <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:8px;padding:5px 0;filter:blur(2.5px);">
+                                    <div style="color:#e2e8f0;font-size:0.75rem;">Block hueco 15x20x40 cm</div>
+                                    <div style="color:#94a3b8;font-size:0.75rem;text-align:center;">1,840</div>
+                                    <div style="color:#94a3b8;font-size:0.75rem;text-align:center;">$18.50</div>
+                                    <div style="color:#4F46E5;font-size:0.75rem;font-weight:600;text-align:right;">$34,040</div>
+                                </div>
+                                <div style="text-align:center;margin-top:10px;color:#818cf8;font-size:0.78rem;font-weight:600;">&#128274; +47 conceptos m&#225;s al desbloquear</div>
+                            </div>
+
+                            <!-- Vista previa PDF profesional -->
+                            <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(79,70,229,0.3);border-radius:12px;padding:16px;margin:0 0 24px 0;text-align:left;">
+                                <div style="color:#64748b;font-size:0.7rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:12px;">Vista previa &#8212; PDF profesional</div>
+                                <div style="background:#fff;border-radius:8px;padding:16px;filter:blur(2px);">
+                                    <div style="display:flex;justify-content:space-between;align-items:flex-start;padding-bottom:12px;border-bottom:2px solid #4F46E5;margin-bottom:12px;">
+                                        <div>
+                                            <div style="background:#0F1623;color:#fff;font-size:0.8rem;font-weight:800;padding:4px 8px;border-radius:4px;display:inline-block;margin-bottom:4px;">ObraDigitalMX</div>
+                                            <div style="color:#1e293b;font-size:0.85rem;font-weight:700;">PRESUPUESTO DE OBRA</div>
+                                            <div style="color:#64748b;font-size:0.7rem;">Folio: ODM-2026-0001</div>
+                                        </div>
+                                        <div style="text-align:right;">
+                                            <div style="color:#64748b;font-size:0.7rem;">Fecha: 12/04/2026</div>
+                                            <div style="color:#64748b;font-size:0.7rem;">Vigencia: 30 d&#237;as</div>
+                                        </div>
+                                    </div>
+                                    <div style="height:8px;background:#e2e8f0;border-radius:4px;margin-bottom:6px;width:80%;"></div>
+                                    <div style="height:8px;background:#e2e8f0;border-radius:4px;margin-bottom:6px;width:60%;"></div>
+                                    <div style="height:8px;background:#e2e8f0;border-radius:4px;width:70%;"></div>
+                                </div>
+                                <div style="text-align:center;margin-top:10px;color:#818cf8;font-size:0.78rem;font-weight:600;">&#128196; PDF con formato oficial LOPSRM listo para firmar</div>
+                            </div>
+
                             <button type="button" onclick="iniciarPago()" style="background:linear-gradient(135deg,#4F46E5,#7C3AED);color:#fff;border:none;border-radius:12px;padding:16px 40px;font-size:1.1rem;font-weight:800;cursor:pointer;width:100%;font-family:inherit;box-shadow:0 4px 16px rgba(79,70,229,0.4);">
                                 &#128275; Desbloquear Presupuesto Completo
                             </button>
@@ -6063,6 +6074,37 @@
         /* ========================================
            SECCIONES NUEVAS — helper de selecci&#243;n
         ======================================== */
+
+        /* Muestra nota tecnica solo al seleccionar una opcion */
+        function mostrarNota(grupoId, notaId) {
+            var grupo = document.getElementById(grupoId);
+            if (!grupo) { return; }
+            var notas = grupo.getElementsByClassName('nota-tecnica');
+            for (var i = 0; i < notas.length; i++) {
+                notas[i].style.display = 'none';
+                notas[i].style.opacity = '0';
+            }
+            var notaActiva = document.getElementById(notaId);
+            if (notaActiva) {
+                notaActiva.style.display = 'block';
+                notaActiva.style.opacity = '0';
+                (function(n) {
+                    setTimeout(function() { n.style.opacity = '1'; }, 10);
+                })(notaActiva);
+            }
+        }
+
+        /* Abre y cierra pestana de informacion */
+        function toggleInfoPanel(panelId) {
+            var panel = document.getElementById(panelId);
+            if (!panel) { return; }
+            if (panel.style.display === 'none' || panel.style.display === '') {
+                panel.style.display = 'block';
+            } else {
+                panel.style.display = 'none';
+            }
+        }
+
         function setupVarCardGroup(groupId, varName) {
             var grp = document.getElementById(groupId);
             if (!grp) return;
@@ -6073,10 +6115,18 @@
                         var siblings = document.getElementById(groupId).querySelectorAll('.select-card');
                         for (var k = 0; k < siblings.length; k++) { siblings[k].classList.remove('selected'); }
                         card.classList.add('selected');
-                        if (varName === 'selAcabadoPiso') { selAcabadoPiso = card.getAttribute('data-value'); }
-                        else if (varName === 'selMurosPlafones') { selMurosPlafones = card.getAttribute('data-value'); }
-                        else if (varName === 'selCarpinteria') { selCarpinteria = card.getAttribute('data-value'); }
-                        else if (varName === 'selInstalacionHidro') { selInstalacionHidro = card.getAttribute('data-value'); }
+                        var val = card.getAttribute('data-value');
+                        if (varName === 'selAcabadoPiso') {
+                            selAcabadoPiso = val;
+                            mostrarNota(groupId, 'nota-acabado-piso-' + val);
+                        } else if (varName === 'selMurosPlafones') {
+                            selMurosPlafones = val;
+                        } else if (varName === 'selCarpinteria') {
+                            selCarpinteria = val;
+                            mostrarNota(groupId, 'nota-carpinteria-' + val);
+                        } else if (varName === 'selInstalacionHidro') {
+                            selInstalacionHidro = val;
+                        }
                         if (typeof updateLivePreview === 'function') { updateLivePreview(); }
                     });
                 })(cards[i]);
