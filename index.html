@@ -4780,6 +4780,17 @@
 
         var F = { tipoProyecto: null, estado: 'nacional', superficie: 0, niveles: 0, recamaras: 0, banos: 0, mediosBanos: null, cimentacion: null, muros: null, losa: null, castillos: true, acabado: null, tipoPiso: null, aplanado: null, pinturaInt: null, pinturaExt: null, impermeabilizar: true, hidraulica: null, electrica: null, calentador: null, bardeo: false, bardeoMetros: 0, cochera: false, cocheraEspacios: null, cocheraPorton: null, cisterna: false, cisternaTipo: null, escaleras: null, ventanas: 0, puertasInt: 0, alturaLibre: '2.70', usoSuelo: null, aforoEstimado: 0, numDeptos: 0, nivelesDepto: 0, banosDepto: 0, tieneEstacionamiento: false, tieneAreasComunes: false, plafonTipo: null, fachadaTipo: null, tienePlafon: false, hvac: null, hvacCantidad: 0, tieneTrampaGrasa: false, tieneExtraccion: false, tieneTrifasica: false, tieneElevador: false, tieneHidroneumatico: false, tieneSenaletica: false, tieneIluminacion: false, tieneBanosClientes: false, banosClientesNum: 0, tieneMezzanine: false, mezzanineM2: 0, tieneEstacionCom: false, cajonesCom: 0, tieneAreasComunesExt: false, tieneCisternaDepto: false, tieneSUM: false, acabadosComunes: null, calentadorDepto: null };
 
+        /* ── OBJETO GLOBAL DE PRESUPUESTO ──────────────────────────────────
+           doCalculate() lo llena con los valores YA calculados por el motor.
+           generarPDF() lo lee sin recalcular, garantizando que PDF = pantalla.
+        ─────────────────────────────────────────────────────────────────── */
+        var presupuestoActual = {
+            folio: '', fecha: '', m2: 0, tipoProyecto: '', estado: '', niveles: 0,
+            acabado: '', sistemaMuros: '', tipoPiso: '',
+            totalMateriales: 0, totalManoObra: 0, totalImprevistos: 0, totalGeneral: 0, costoM2: 0,
+            partidas: { p01: 0, p02: 0, p03: 0, p04: 0, p05: 0, p06: 0, p07: 0, p08: 0, p09: 0, p10: 0, p11: 0 }
+        };
+
         /* Variables de selecci&#243;n para secciones nuevas de acabados */
         var selAcabadoPiso = 'estandar';
         var selMurosPlafones = 'estandar';
@@ -5065,9 +5076,9 @@
             if (gasVivTogEl && gasVivTogEl.classList.contains('on')) { costoGasViv = 5500; }
             if (costoGasViv > 0) { mats.push({ name: 'Red interior gas LP (3 salidas)', marca: 'P10.02 NOM-002-SECRE', qty: '1', unit: 'servicio', sub: costoGasViv * fmat, bkey: null }); }
             var recExtra = Math.max(0, F.recamaras - 2) * 4500; var banExtra = Math.max(0, F.banos - 1) * 6800; var mBanExtra = (F.mediosBanos || 0) * 3500;
-            if (recExtra > 0) { mats.push({ name: 'Rec&#225;maras adicionales (' + (F.recamaras - 2) + ')', marca: 'Muros + puerta + ventana', qty: (F.recamaras - 2) + '', unit: 'pza', sub: recExtra, bkey: null }); }
-            if (banExtra > 0) { mats.push({ name: 'Ba&#241;os adicionales (' + (F.banos - 1) + ')', marca: 'Ins. completa + cer&#225;mica', qty: (F.banos - 1) + '', unit: 'pza', sub: banExtra, bkey: null }); }
-            if (mBanExtra > 0) { mats.push({ name: 'Medios ba&#241;os (' + F.mediosBanos + ')', marca: 'Ins. b&#225;sica', qty: F.mediosBanos + '', unit: 'pza', sub: mBanExtra, bkey: null }); }
+            if (recExtra > 0) { mats.push({ name: 'Rec&#225;maras adicionales (' + (F.recamaras - 2) + ')', marca: 'Muros + puerta + ventana', qty: (F.recamaras - 2) + '', unit: 'pza', sub: recExtra * fmat, bkey: null }); }
+            if (banExtra > 0) { mats.push({ name: 'Ba&#241;os adicionales (' + (F.banos - 1) + ')', marca: 'Ins. completa + cer&#225;mica', qty: (F.banos - 1) + '', unit: 'pza', sub: banExtra * fmat, bkey: null }); }
+            if (mBanExtra > 0) { mats.push({ name: 'Medios ba&#241;os (' + F.mediosBanos + ')', marca: 'Ins. b&#225;sica', qty: F.mediosBanos + '', unit: 'pza', sub: mBanExtra * fmat, bkey: null }); }
             var equipEspecial = calcEquipamientoEspecial(m2, nivelesEfectivos, subtipoKey);
             for (var ei = 0; ei < equipEspecial.items.length; ei++) {
                 mats.push({ name: equipEspecial.items[ei].name, marca: 'Equipamiento especializado', qty: '1', unit: 'lote', sub: equipEspecial.items[ei].sub, bkey: null });
@@ -5334,6 +5345,17 @@
         }
         function updateProgressBar() { var active = document.querySelector('.screen.active'); if (!active) return; var id = active.id; if (id === 'screen0') { document.getElementById('progress-container').style.display = 'none'; return; } else { document.getElementById('progress-container').style.display = ''; } var stepMap = { screen1: 1, screen2: 2, screen3: 3, screen4: 4, screen5: 5 }; var step = stepMap[id]; if (!step) return; var indicators = document.querySelectorAll('.step-indicator'); for (var i = 0; i < indicators.length; i++) { indicators[i].classList.remove('active', 'completed'); if (i + 1 < step) indicators[i].classList.add('completed'); if (i + 1 === step) indicators[i].classList.add('active'); } document.getElementById('progress-fill').style.width = ((step - 1) / 4 * 100) + '%'; if (id === 'screen5') { var esc = document.getElementById('escaleras-container'); if (esc) esc.style.display = F.niveles >= 2 ? 'block' : 'none'; } }
         function showErr(id, show) { var el = document.getElementById(id); if (el) el.style.display = show ? 'block' : 'none'; }
+        function scrollAlPrimerError() {
+            /* Buscar el primer .error-msg visible y hacer scroll hasta el */
+            var errs = document.querySelectorAll('.error-msg');
+            for (var se = 0; se < errs.length; se++) {
+                var st = errs[se].style.display;
+                if (st === 'block' || (st !== 'none' && errs[se].offsetParent !== null && errs[se].textContent.trim() !== '')) {
+                    errs[se].scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    return;
+                }
+            }
+        }
         function validateScreen(screenId) {
             if (screenId === 'screen1') {
                 var ok = true; F.superficie = parseFloat(document.getElementById('superficie').value) || 0;
@@ -5901,15 +5923,16 @@
             doc.setLineWidth(0.4);
             doc.line(mg, y, pageW - mg, y);
             y += 6;
-            var costoInd = sumCD * 0.15;
-            var utilidad = sumCD * 0.10;
-            var subSinIva = sumCD + costoInd + utilidad;
-            var iva = subSinIva * 0.16;
-            var totalGen = subSinIva + iva;
+            /* Usar totales del motor principal (iguales a pantalla) */
+            var totalGen = presupuestoActual.totalGeneral || 0;
+            var _matPDF = presupuestoActual.totalMateriales || 0;
+            var _moPDF = presupuestoActual.totalManoObra || 0;
+            var _impPDF = presupuestoActual.totalImprevistos || 0;
+            var _cdPDF = _matPDF + _moPDF;
             var rengRes = [
-                ['SUBTOTAL COSTO DIRECTO:', fmtPeso(sumCD)],
-                ['COSTOS INDIRECTOS (15%):', fmtPeso(costoInd)],
-                ['UTILIDAD DEL CONSTRUCTOR (10%):', fmtPeso(utilidad)]
+                ['SUBTOTAL MATERIALES:', fmtPeso(_matPDF)],
+                ['SUBTOTAL MANO DE OBRA:', fmtPeso(_moPDF)],
+                ['SUBTOTAL COSTO DIRECTO:', fmtPeso(_cdPDF)]
             ];
             doc.setFontSize(9);
             for (var ri = 0; ri < rengRes.length; ri++) {
@@ -5927,17 +5950,10 @@
             y += 5;
             doc.setFont('helvetica', 'normal');
             doc.setTextColor(71, 85, 105);
-            doc.text('SUBTOTAL SIN IVA:', mg + 3, y);
+            doc.text('IMPREVISTOS (10%):', mg + 3, y);
             doc.setFont('helvetica', 'bold');
             doc.setTextColor(15, 22, 35);
-            doc.text(fmtPeso(subSinIva), pageW - mg - 3, y, { align: 'right' });
-            y += 7;
-            doc.setFont('helvetica', 'normal');
-            doc.setTextColor(71, 85, 105);
-            doc.text('IVA (16%):', mg + 3, y);
-            doc.setFont('helvetica', 'bold');
-            doc.setTextColor(15, 22, 35);
-            doc.text(fmtPeso(iva), pageW - mg - 3, y, { align: 'right' });
+            doc.text(fmtPeso(_impPDF), pageW - mg - 3, y, { align: 'right' });
             y += 5;
             doc.setDrawColor(79, 70, 229);
             doc.setLineWidth(1);
@@ -5948,7 +5964,7 @@
             doc.setFontSize(14);
             doc.setFont('helvetica', 'bold');
             doc.setTextColor(79, 70, 229);
-            doc.text('TOTAL GENERAL:', mg + 3, y);
+            doc.text('TOTAL ESTIMADO:', mg + 3, y);
             doc.text(fmtPeso(totalGen), pageW - mg - 3, y, { align: 'right' });
             y += 14;
             doc.setFontSize(6.5);
@@ -6019,7 +6035,40 @@
             res.sub = res.mat + res.mo + (res.equipEspecial || 0);
             res.imp = Math.round(res.sub * 0.10);
             res.tot = res.sub + res.imp;
-            /* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+
+            /* ── Llenar presupuestoActual con valores YA calculados ──────────
+               PDF lee de aqu&#237; sin recalcular. Total PDF = Total pantalla.
+            ─────────────────────────────────────────────────────────────── */
+            var _anoFolio = new Date().getFullYear();
+            var _numFolio = Math.floor(1000 + Math.random() * 9000);
+            presupuestoActual.folio = 'ODM-' + _anoFolio + '-' + _numFolio;
+            presupuestoActual.fecha = new Date().toLocaleDateString('es-MX');
+            presupuestoActual.m2 = F.superficie || 0;
+            presupuestoActual.tipoProyecto = F.tipoProyecto || '';
+            presupuestoActual.estado = F.estado || 'nacional';
+            presupuestoActual.niveles = F.nivelesDepto || F.niveles || 1;
+            presupuestoActual.acabado = F.acabado || '';
+            presupuestoActual.tipoPiso = F.tipoPiso || '';
+            presupuestoActual.sistemaMuros = F.muros || '';
+            presupuestoActual.totalMateriales = res.mat;
+            presupuestoActual.totalManoObra = res.mo;
+            presupuestoActual.totalImprevistos = res.imp;
+            presupuestoActual.totalGeneral = res.tot;
+            presupuestoActual.costoM2 = (presupuestoActual.m2 > 0) ? (res.tot / presupuestoActual.m2) : 0;
+            var _cdPart = res.mat + res.mo;
+            presupuestoActual.partidas.p01 = _cdPart * 0.02;
+            presupuestoActual.partidas.p02 = _cdPart * 0.12;
+            presupuestoActual.partidas.p03 = _cdPart * 0.20;
+            presupuestoActual.partidas.p04 = _cdPart * 0.15;
+            presupuestoActual.partidas.p05 = _cdPart * 0.08;
+            presupuestoActual.partidas.p06 = _cdPart * 0.07;
+            presupuestoActual.partidas.p07 = _cdPart * 0.18;
+            presupuestoActual.partidas.p08 = _cdPart * 0.12;
+            presupuestoActual.partidas.p09 = (F.bardeo && F.bardeoMetros > 0) ? F.bardeoMetros * 1850 : 0;
+            var _gasTogEl = document.getElementById('gas-viv-toggle');
+            presupuestoActual.partidas.p10 = (_gasTogEl && _gasTogEl.classList.contains('on')) ? 5500 : 0;
+            presupuestoActual.partidas.p11 = _cdPart * 0.02;
+            /* ─────────────────────────────────────────────────────────────── */
             var estadoData = ESTADOS[F.estado] || ESTADOS['nacional'];
             var fmat = estadoData.fmat;
             var fmo = estadoData.fmo;
@@ -6578,10 +6627,10 @@
             setupToggle('castillos-toggle', 'castillos', null); setupToggle('impermeabilizar-toggle', 'impermeabilizar', null);
             setupToggle('bardeo-toggle', 'bardeo', 'bardeo-sub'); setupToggle('cochera-toggle', 'cochera', 'cochera-sub'); setupToggle('cisterna-toggle', 'cisterna', 'cisterna-sub');
             var fwdBtns = document.querySelectorAll('.btn-forward');
-            for (var i = 0; i < fwdBtns.length; i++) { (function (btn) { btn.addEventListener('click', function () { var screen = btn.closest('.screen'); if (!screen) return; var curId = screen.id; if (validateScreen(curId)) { mostrarScreen(btn.getAttribute('data-next')); updateProgressBar(); } }); })(fwdBtns[i]); }
+            for (var i = 0; i < fwdBtns.length; i++) { (function (btn) { btn.addEventListener('click', function () { var screen = btn.closest('.screen'); if (!screen) return; var curId = screen.id; if (validateScreen(curId)) { mostrarScreen(btn.getAttribute('data-next')); updateProgressBar(); } else { scrollAlPrimerError(); } }); })(fwdBtns[i]); }
             var backBtns = document.querySelectorAll('.btn-backward');
             for (var i = 0; i < backBtns.length; i++) { (function (btn) { btn.addEventListener('click', function () { mostrarScreen(btn.getAttribute('data-back')); updateProgressBar(); }); })(backBtns[i]); }
-            document.getElementById('btn-calcular').addEventListener('click', function () { if (validateScreen('screen5')) { launchCalculation(); } });
+            document.getElementById('btn-calcular').addEventListener('click', function () { if (validateScreen('screen5')) { launchCalculation(); } else { scrollAlPrimerError(); } });
             var tabBtns = document.querySelectorAll('.tab-btn');
             for (var i = 0; i < tabBtns.length; i++) { (function (tb) { tb.addEventListener('click', function () { var allTB = document.querySelectorAll('.tab-btn'); var allTC = document.querySelectorAll('.tab-content'); for (var k = 0; k < allTB.length; k++) { allTB[k].classList.remove('active'); } for (var k = 0; k < allTC.length; k++) { allTC[k].classList.remove('active'); } tb.classList.add('active'); document.getElementById(tb.getAttribute('data-tab')).classList.add('active'); }); })(tabBtns[i]); }
             var incBtn = document.getElementById('includes-toggle-btn'); var incBody = document.getElementById('includes-body'); var incArrow = document.getElementById('includes-arrow');
@@ -6592,7 +6641,9 @@
                     generarPDF();
                 });
             }
-            document.getElementById('btn-nueva').addEventListener('click', function () { window.location.reload(); });
+            document.getElementById('btn-nueva').addEventListener('click', function () {
+                if (confirm('&#191;Regresar al inicio? Se perder&#225; el presupuesto actual.')) { window.location.reload(); }
+            });
             var vInput = document.getElementById('ventanas'); var pInput = document.getElementById('puertas');
             if (vInput) { vInput.addEventListener('input', function () { F.ventanas = parseInt(this.value) || 0; calcVentanasRecomendacion(); }); }
             if (pInput) { pInput.addEventListener('input', function () { F.puertasInt = parseInt(this.value) || 0; calcVentanasRecomendacion(); }); }
