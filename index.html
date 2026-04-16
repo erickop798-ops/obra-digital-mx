@@ -3768,25 +3768,6 @@
                             <!-- Instalaciones vivienda adicionales -->
                             <div id="instalaciones-vivienda" style="display:none;">
                                 <div class="field-group">
-                                    <label class="field-label">&#128167; Calentador de agua</label>
-                                    <div class="cards-grid-2" id="calentador-viv-group">
-                                        <div class="select-card" data-value="gas_paso">
-                                            <div class="card-title">Gas de paso</div>
-                                            <div class="card-desc">~$3,800 instalado</div>
-                                        </div>
-                                        <div class="select-card" data-value="solar">
-                                            <div class="card-badge">ECO</div>
-                                            <div class="card-title">Solar 200L</div>
-                                            <div class="card-desc">~$18,000 instalado</div>
-                                        </div>
-                                        <div class="select-card" data-value="ninguno">
-                                            <div class="card-title" style="color:var(--text-3);">No incluir</div>
-                                            <div class="card-desc" style="color:#D1D5DB;">El propietario lo instala</div>
-                                        </div>
-                                    </div>
-                                    <div id="nota-calentador-viv" class="nota-tecnica" style="display:none;margin-top:8px;padding:10px;background:rgba(79,70,229,0.08);border-left:3px solid #4F46E5;border-radius:6px;font-size:12px;color:var(--text-2);"></div>
-                                </div>
-                                <div class="field-group">
                                     <div class="toggle-row">
                                         <span class="toggle-label">&#128167; &#191;Incluir cisterna?</span>
                                         <div class="toggle-switch" id="cisterna-viv-toggle">
@@ -5067,14 +5048,7 @@
             var calNombres = { gas_paso_1ser: 'Calentador gas 1 servicio', gas_paso_2ser: 'Calentador gas 2 servicios', gas_paso_3ser: 'Calentador gas 3+ servicios', solar_200L: 'Calentador solar 200L' };
             var calCost = (calMap[F.calentador] || 0) * fmat;
             if (F.calentador && F.calentador !== 'ninguno') { mats.push({ name: calNombres[F.calentador] || 'Calentador', marca: 'Calorex / Rotoplas instalado', qty: '1', unit: 'pza', sub: calCost, bkey: null }); }
-            var costoCalentadorViv = 0;
-            var calVivCards = document.querySelectorAll('#calentador-viv-group .select-card.selected');
-            if (calVivCards.length > 0) {
-                var selCalViv = calVivCards[0].getAttribute('data-value');
-                if (selCalViv === 'gas_paso') { costoCalentadorViv = 3800; }
-                else if (selCalViv === 'solar') { costoCalentadorViv = 18000; }
-            }
-            if (costoCalentadorViv > 0) { mats.push({ name: 'Calentador de agua (vivienda)', marca: 'Calorex / Rotoplas instalado', qty: '1', unit: 'pza', sub: costoCalentadorViv * fmat, bkey: null }); }
+            /* calentador-viv-group eliminado (duplicado). F.calentador ya maneja el costo via calCost */
             var costoCisternaViv = 0;
             var cistVivTogEl = document.getElementById('cisterna-viv-toggle');
             if (cistVivTogEl && cistVivTogEl.classList.contains('on')) {
@@ -6476,11 +6450,16 @@
         }
 
         /* ========================================
-           PAYWALL â€” ObraDigitalMX v1.0
+           PAYWALL &#8212; ObraDigitalMX v1.0
            Funciones de estado y desbloqueo
         ======================================== */
+        /* ================================================
+           PAYWALL DESACTIVADO TEMPORALMENTE PARA PRUEBAS
+           Para reactivar: cambiar return true por:
+           return localStorage.getItem('obraMX_unlocked') === 'true';
+           ================================================ */
         function estaDesbloqueado() {
-            return localStorage.getItem('obraMX_unlocked') === 'true';
+            return true; /* TEMPORAL - reactivar para producci&#243;n */
         }
 
         function aplicarEstadoPaywall() {
@@ -6592,7 +6571,7 @@
             setupCardGroup('acabado-group', 'acabado'); setupCardGroup('aplanado-group', 'aplanado');
             setupCardGroup('pintura-int-group', 'pinturaInt'); setupCardGroup('pintura-ext-group', 'pinturaExt');
             setupCardGroup('hidraulica-group', 'hidraulica'); setupCardGroup('electrica-group', 'electrica'); setupCardGroup('calentador-group', 'calentador');
-            setupCardGroup('calentador-viv-group', 'calentadorViv'); setupCardGroup('cisterna-viv-group', 'cistVivTipo');
+            setupCardGroup('cisterna-viv-group', 'cistVivTipo');
             setupToggle('cisterna-viv-toggle', 'cistVivActiva', 'cisterna-viv-sub'); setupToggle('gas-viv-toggle', 'gasVivActiva', null);
             setupCardGroup('cochera-espacios-group', 'cocheraEspacios'); setupCardGroup('cochera-porton-group', 'cocheraPorton');
             setupCardGroup('piso-group', 'tipoPiso'); setupCardGroup('escalera-group', 'escaleras');
