@@ -4018,22 +4018,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="field-group">
-                                    <div class="toggle-row"><span class="toggle-label">&#191;Incluir cisterna?</span>
-                                        <div class="toggle-switch" id="cisterna-toggle">
-                                            <div class="toggle-knob"></div>
-                                        </div>
-                                    </div>
-                                    <div class="toggle-sub" id="cisterna-sub"><label class="field-label"
-                                            for="cisterna-select">Capacidad</label><select id="cisterna-select"
-                                            class="field-select" style="margin-top:6px;">
-                                            <option value="5000">5,000 L</option>
-                                            <option value="10000">10,000 L</option>
-                                            <option value="20000">20,000 L</option>
-                                        </select>
-                                        <div id="cisterna-aviso" style="display:none;margin-top:6px;padding:8px 10px;background:var(--amber-soft);border-left:3px solid var(--amber);border-radius:6px;font-size:0.75rem;color:#FCD34D;"></div>
-                                    </div>
-                                </div>
                                 <div class="field-group" id="escaleras-container" style="display:none;">
                                     <label class="field-label">&#129308; Tipo de escalera</label>
                                     <p style="font-size:12px;color:var(--text-2);margin-bottom:10px">Fuente: NTE M&#233;xico +
@@ -4623,8 +4607,7 @@
                         </div>
                         </div><!-- /premium-wrapper -->
                     </div><!-- /tabs-container -->
-                    <div class="action-buttons seccion-premium"><button class="btn-print" onclick="window.print()">&#128424; Imprimir /
-                            PDF</button><button type="button" id="btn-pdf" style="background:var(--accent);color:#fff;border:none;border-radius:12px;padding:12px 24px;font-size:0.88rem;font-weight:700;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:8px;">&#128196; Descargar PDF</button><button id="btn-nueva">&#8617; Nueva Cotizaci&#243;n</button></div>
+                    <div class="action-buttons seccion-premium"><button type="button" id="btn-preview-pdf" onclick="mostrarPreviewPDF()" style="background:linear-gradient(135deg,#4F46E5,#7C3AED);color:#fff;border:none;border-radius:12px;padding:16px 32px;font-size:1rem;font-weight:700;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:10px;box-shadow:0 4px 16px rgba(79,70,229,0.4);">&#128196; Ver y Descargar PDF Profesional</button><button id="btn-nueva">&#8617; Nueva Cotizaci&#243;n</button></div>
                     <div style="font-size:.72rem;color:#9CA3AF;text-align:center;margin-bottom:12px;" id="print-date">
                     </div>
                 </div>
@@ -6001,6 +5984,70 @@
             doc.save(nombreArch);
         }
 
+        function mostrarPreviewPDF() {
+            var totalStr = '';
+            var totalEl = document.getElementById('res-total');
+            if (totalEl) { totalStr = totalEl.textContent || totalEl.innerText; }
+
+            var tipoStr = '';
+            var tipoMap = { vivienda: 'Casa habitaci&#243;n', comercial: 'Local comercial', departamentos: 'Edificio departamentos' };
+            if (F && F.tipoProyecto) { tipoStr = tipoMap[F.tipoProyecto] || F.tipoProyecto; }
+
+            var sup = (F && F.superficie) ? F.superficie + ' m&#178;' : 'N/D';
+            var estadoStr = '';
+            if (F && F.estado && typeof ESTADOS !== 'undefined' && ESTADOS[F.estado]) {
+                estadoStr = ESTADOS[F.estado].nombre || F.estado;
+            }
+
+            var overlay = document.createElement('div');
+            overlay.id = 'pdf-preview-overlay';
+            overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(15,22,35,0.85);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;box-sizing:border-box;';
+
+            var card = document.createElement('div');
+            card.style.cssText = 'background:#fff;border-radius:20px;padding:40px;max-width:480px;width:100%;box-shadow:0 24px 80px rgba(15,22,35,0.4);';
+
+            var html = '';
+            html += '<div style="text-align:center;margin-bottom:24px;">';
+            html += '<div style="font-size:3rem;margin-bottom:12px;">&#128196;</div>';
+            html += '<h2 style="font-size:1.3rem;font-weight:800;color:#0F1623;margin:0 0 6px 0;">Presupuesto listo para descargar</h2>';
+            html += '<p style="font-size:0.85rem;color:#64748b;margin:0;">Revisa los datos antes de generar el PDF</p>';
+            html += '</div>';
+
+            html += '<div style="background:#F5F4F0;border-radius:12px;padding:20px;margin-bottom:20px;">';
+            html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">';
+            html += '<div><div style="font-size:0.7rem;color:#94a3b8;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;">Tipo de obra</div><div style="font-size:0.9rem;font-weight:700;color:#0F1623;margin-top:2px;">' + tipoStr + '</div></div>';
+            html += '<div><div style="font-size:0.7rem;color:#94a3b8;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;">Superficie</div><div style="font-size:0.9rem;font-weight:700;color:#0F1623;margin-top:2px;">' + sup + '</div></div>';
+            html += '<div><div style="font-size:0.7rem;color:#94a3b8;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;">Estado</div><div style="font-size:0.9rem;font-weight:700;color:#0F1623;margin-top:2px;">' + (estadoStr || 'Nacional') + '</div></div>';
+            html += '<div><div style="font-size:0.7rem;color:#94a3b8;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;">Total estimado</div><div style="font-size:0.9rem;font-weight:700;color:#4F46E5;margin-top:2px;">' + (totalStr || 'Ver en pantalla') + '</div></div>';
+            html += '</div></div>';
+
+            html += '<p style="font-size:0.78rem;color:#64748b;text-align:center;margin:0 0 24px 0;line-height:1.5;">El PDF incluye portada, cat&#225;logo de conceptos por partida LOPSRM y hoja de integraci&#243;n de costos con espacio de firmas.</p>';
+
+            html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">';
+            html += '<button id="btn-cancelar-preview" style="background:#F0EDE8;color:#0F1623;border:none;border-radius:10px;padding:14px;font-size:0.9rem;font-weight:600;cursor:pointer;font-family:inherit;">Cancelar</button>';
+            html += '<button id="btn-confirmar-pdf" style="background:linear-gradient(135deg,#4F46E5,#7C3AED);color:#fff;border:none;border-radius:10px;padding:14px;font-size:0.9rem;font-weight:700;cursor:pointer;font-family:inherit;">&#11015; Descargar PDF</button>';
+            html += '</div>';
+
+            card.innerHTML = html;
+            overlay.appendChild(card);
+            document.body.appendChild(overlay);
+
+            document.getElementById('btn-cancelar-preview').onclick = function() {
+                var ov = document.getElementById('pdf-preview-overlay');
+                if (ov) { ov.parentNode.removeChild(ov); }
+            };
+            document.getElementById('btn-confirmar-pdf').onclick = function() {
+                var ov = document.getElementById('pdf-preview-overlay');
+                if (ov) { ov.parentNode.removeChild(ov); }
+                generarPDF();
+            };
+            overlay.onclick = function(e) {
+                if (e.target === overlay) {
+                    overlay.parentNode.removeChild(overlay);
+                }
+            };
+        }
+
         function doCalculate() {
             var m2 = F.superficie; var res = calcScenario(F.acabado);
             /* â”€â”€ Secciones nuevas: c&#225;lculo de acabados detallados â”€â”€ */
@@ -6635,12 +6682,6 @@
             for (var i = 0; i < tabBtns.length; i++) { (function (tb) { tb.addEventListener('click', function () { var allTB = document.querySelectorAll('.tab-btn'); var allTC = document.querySelectorAll('.tab-content'); for (var k = 0; k < allTB.length; k++) { allTB[k].classList.remove('active'); } for (var k = 0; k < allTC.length; k++) { allTC[k].classList.remove('active'); } tb.classList.add('active'); document.getElementById(tb.getAttribute('data-tab')).classList.add('active'); }); })(tabBtns[i]); }
             var incBtn = document.getElementById('includes-toggle-btn'); var incBody = document.getElementById('includes-body'); var incArrow = document.getElementById('includes-arrow');
             incBtn.addEventListener('click', function () { if (incBody.classList.contains('open')) { incBody.classList.remove('open'); incArrow.innerHTML = '&#9660;'; } else { incBody.classList.add('open'); incArrow.innerHTML = '&#9650;'; } });
-            var btnPDF = document.getElementById('btn-pdf');
-            if (btnPDF) {
-                btnPDF.addEventListener('click', function () {
-                    generarPDF();
-                });
-            }
             document.getElementById('btn-nueva').addEventListener('click', function () {
                 if (confirm('&#191;Regresar al inicio? Se perder&#225; el presupuesto actual.')) { window.location.reload(); }
             });
