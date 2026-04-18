@@ -4493,7 +4493,7 @@
                                         <div>
                                             <div style="background:#0F1623;color:#fff;font-size:0.8rem;font-weight:800;padding:4px 8px;border-radius:4px;display:inline-block;margin-bottom:4px;">ObraDigitalMX</div>
                                             <div style="color:#1e293b;font-size:0.85rem;font-weight:700;">PRESUPUESTO DE OBRA</div>
-                                            <div style="color:#64748b;font-size:0.7rem;">Folio: ODM-2026-0001</div>
+                                            <div style="color:#64748b;font-size:0.7rem;">Folio: ConstruIA-2026-0001</div>
                                         </div>
                                         <div style="text-align:right;">
                                             <div style="color:#64748b;font-size:0.7rem;">Fecha: 12/04/2026</div>
@@ -5531,8 +5531,7 @@
             var mesActual = fechaHoy.getMonth() + 1;
             var anoActual = fechaHoy.getFullYear();
             var fechaStr = diaActual + '/' + mesActual + '/' + anoActual;
-            var folioRand = Math.floor(1000 + Math.random() * 9000);
-            var folioActual = 'ODM-' + anoActual + '-' + folioRand;
+            var folioActual = presupuestoActual.folio || ('ConstruIA-' + anoActual + '-' + Math.floor(1000 + Math.random() * 9000));
             var nivelesNum = F.nivelesDepto || F.niveles || 1;
             var estadoData = ESTADOS[F.estado] || ESTADOS['nacional'];
             var estadoNombre = estadoData ? (estadoData.nombre || 'Nacional') : 'Nacional';
@@ -6088,7 +6087,7 @@
             ─────────────────────────────────────────────────────────────── */
             var _anoFolio = new Date().getFullYear();
             var _numFolio = Math.floor(1000 + Math.random() * 9000);
-            presupuestoActual.folio = 'ODM-' + _anoFolio + '-' + _numFolio;
+            presupuestoActual.folio = 'ConstruIA-' + _anoFolio + '-' + _numFolio;
             presupuestoActual.fecha = new Date().toLocaleDateString('es-MX');
             presupuestoActual.m2 = F.superficie || 0;
             presupuestoActual.tipoProyecto = F.tipoProyecto || '';
