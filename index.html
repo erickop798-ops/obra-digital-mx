@@ -4255,6 +4255,44 @@
                                 </div>
 
                                 <div class="field-group">
+                                    <label class="field-label">&#127968; Muros y plafones</label>
+                                    <div class="cards-grid" id="muros-plafones-group">
+                                        <div class="select-card" data-value="basico">
+                                            <div class="card-title">B&#225;sico</div>
+                                            <div style="font-size:11px;color:var(--text-2);margin-top:4px">Yeso liso &#183; $130/m&#178;</div>
+                                        </div>
+                                        <div class="select-card selected" data-value="estandar">
+                                            <div class="card-badge">POPULAR</div>
+                                            <div class="card-title">Est&#225;ndar</div>
+                                            <div style="font-size:11px;color:var(--text-2);margin-top:4px">Yeso + molduras &#183; $182/m&#178;</div>
+                                        </div>
+                                        <div class="select-card" data-value="premium">
+                                            <div class="card-title">Premium</div>
+                                            <div style="font-size:11px;color:var(--text-2);margin-top:4px">Plaf&#243;n + duela &#183; $436/m&#178;</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="field-group">
+                                    <label class="field-label">&#128167; Instalaci&#243;n hidr&#225;ulica detallada</label>
+                                    <div class="cards-grid" id="instalacion-hidro-group">
+                                        <div class="select-card" data-value="basica">
+                                            <div class="card-title">B&#225;sica</div>
+                                            <div style="font-size:11px;color:var(--text-2);margin-top:4px">PVC 1/2&quot; &#183; $280/m&#178;</div>
+                                        </div>
+                                        <div class="select-card selected" data-value="completa">
+                                            <div class="card-badge">RECOMENDADO</div>
+                                            <div class="card-title">Completa</div>
+                                            <div style="font-size:11px;color:var(--text-2);margin-top:4px">PVC 3/4&quot; + agua caliente &#183; $680/m&#178;</div>
+                                        </div>
+                                        <div class="select-card" data-value="premium">
+                                            <div class="card-title">Premium</div>
+                                            <div style="font-size:11px;color:var(--text-2);margin-top:4px">CPVC + hidrostatica &#183; $1,200/m&#178;</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="field-group">
                                     <label class="field-label">&#128683; Carpinter&#237;a y ventanas</label>
                                     <div class="cards-grid" id="carpinteria-group">
                                         <div class="select-card" data-value="basico">
@@ -5023,17 +5061,6 @@
             var cocheraPortonCost = (F.cochera && F.cocheraPorton) ? (portonMap[F.cocheraPorton] || 0) * fmat : 0;
             if (F.cochera && F.cocheraPorton && F.cocheraPorton !== 'sin_porton') { mats.push({ name: 'Port&#243;n autom&#225;tico (' + F.cocheraPorton + ')', marca: 'Motor + riel instalado', qty: '1', unit: 'pza', sub: cocheraPortonCost, bkey: null }); }
             var cocheraCost = cocheraEspaciosCost + cocheraPortonCost;
-            var cisternaCost = F.cisterna ? ({ '5000': 18000, '10000': 28500, '20000': 45000 }[F.cisternaTipo || '5000']) : 0;
-            if (F.cisterna) { mats.push({ name: 'Cisterna ' + (F.cisternaTipo || '5000') + ' L', marca: 'Rotoplas o concreto armado', qty: '1', unit: 'pza', sub: cisternaCost, bkey: null }); }
-            if (F.cisterna && F.cisternaTipo) {
-                var dotMin = (F.banos || 1) * 2 * 150;
-                var volCist = parseInt(F.cisternaTipo || '5000');
-                var diasAuton = Math.floor(volCist / (dotMin > 0 ? dotMin : 150));
-                if (diasAuton < 2) {
-                    var cisAvEl = document.getElementById('cisterna-aviso');
-                    if (cisAvEl) { cisAvEl.innerHTML = '&#9888;&#65039; La cisterna de ' + volCist + 'L da autonomia de ' + diasAuton + ' dia(s) para ' + (F.banos || 1) + ' banos. NTC recomienda minimo 2 dias (150L/hab/dia).'; cisAvEl.style.display = 'block'; }
-                }
-            }
             var escMap = { recta: 18500, l_barandal: 24000, u_barandal: 29500, caracol_met: 32000, flotante: 48000 };
             var escNombres = { recta: 'Escalera recta concreto', l_barandal: 'Escalera en L + barandal', u_barandal: 'Escalera en U + barandal', caracol_met: 'Escalera caracol met&#225;lica', flotante: 'Escalera flotante concreto' };
             var escCost = (F.niveles >= 2 && F.escaleras) ? (escMap[F.escaleras] || 18500) * fmat : 0;
@@ -5447,11 +5474,6 @@
                     if (escErrEl) escErrEl.style.display = 'none';
                 }
 
-                // Cisterna: solo para vivienda
-                if (tp5 === 'vivienda' && F.cisterna) {
-                    var cistEl = document.getElementById('cisterna-select');
-                    if (cistEl) F.cisternaTipo = cistEl.value;
-                }
 
                 // Ventanas y puertas: solo para vivienda
                 if (tp5 === 'vivienda') {
@@ -5768,7 +5790,7 @@
             }
             var cVivTog = document.getElementById('cisterna-viv-toggle');
             var tieneCistViv = cVivTog && cVivTog.classList.contains('on');
-            if (tieneCistViv || F.cisterna) {
+            if (tieneCistViv) {
                 var cistPU = 18500; var cistDesc = 'Cisterna mamposteria 5,000L';
                 if (F.cisternaTipo === '10000') { cistPU = 32000; cistDesc = 'Cisterna mamposteria 10,000L'; }
                 if (tieneCistViv) {
@@ -6671,7 +6693,7 @@
             setupCardGroup('cochera-espacios-group', 'cocheraEspacios'); setupCardGroup('cochera-porton-group', 'cocheraPorton');
             setupCardGroup('piso-group', 'tipoPiso'); setupCardGroup('escalera-group', 'escaleras');
             setupToggle('castillos-toggle', 'castillos', null); setupToggle('impermeabilizar-toggle', 'impermeabilizar', null);
-            setupToggle('bardeo-toggle', 'bardeo', 'bardeo-sub'); setupToggle('cochera-toggle', 'cochera', 'cochera-sub'); setupToggle('cisterna-toggle', 'cisterna', 'cisterna-sub');
+            setupToggle('bardeo-toggle', 'bardeo', 'bardeo-sub'); setupToggle('cochera-toggle', 'cochera', 'cochera-sub');
             var fwdBtns = document.querySelectorAll('.btn-forward');
             for (var i = 0; i < fwdBtns.length; i++) { (function (btn) { btn.addEventListener('click', function () { var screen = btn.closest('.screen'); if (!screen) return; var curId = screen.id; if (validateScreen(curId)) { mostrarScreen(btn.getAttribute('data-next')); updateProgressBar(); } else { scrollAlPrimerError(); } }); })(fwdBtns[i]); }
             var backBtns = document.querySelectorAll('.btn-backward');
