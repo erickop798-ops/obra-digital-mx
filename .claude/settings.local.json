@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(grep -cn \"\\\\`\" \"C:\\\\Users\\\\erick\\\\OneDrive\\\\Escritorio\\\\ObraDigitalMX\\\\index.html\")"
+    ]
+  }
+}
