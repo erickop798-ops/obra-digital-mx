@@ -16,6 +16,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="db_conocimiento.js"></script>
+    <script src="db_permisos.js"></script>
     <script src="ObraDigitalEngine.js"></script>
     <style>
         :root {
@@ -2625,6 +2626,241 @@
 
         .obra-footer-sep { color: var(--border-strong); }
 
+        /* ---- PANTALLA PERMISOS ---- */
+        #screen-permisos {
+            padding: 24px 0 48px;
+        }
+        .permisos-header {
+            margin-bottom: 28px;
+        }
+        .permisos-header h1 {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 6px;
+        }
+        .permisos-header p {
+            font-size: 0.85rem;
+            color: var(--text-2);
+        }
+        .permisos-selectores {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 28px;
+        }
+        @media (max-width: 600px) {
+            .permisos-selectores { grid-template-columns: 1fr; }
+        }
+        .permisos-select-group label {
+            display: block;
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: var(--text-2);
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            margin-bottom: 8px;
+        }
+        .permisos-select-group select {
+            width: 100%;
+            padding: 11px 14px;
+            border: 1px solid var(--border-strong);
+            border-radius: var(--r-md);
+            font-family: inherit;
+            font-size: 0.92rem;
+            font-weight: 600;
+            color: var(--text-1);
+            background: var(--bg-card);
+            appearance: none;
+            -webkit-appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%234A5568' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 14px center;
+            cursor: pointer;
+        }
+        .permisos-select-group select:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-glow);
+        }
+        #permisos-resultado {
+            display: none;
+        }
+        .permisos-info-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 20px;
+            padding: 16px 20px;
+            background: var(--accent-soft);
+            border: 1px solid rgba(79,70,229,0.2);
+            border-radius: var(--r-lg);
+        }
+        .permisos-info-item {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            flex: 1;
+            min-width: 140px;
+        }
+        .permisos-info-label {
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--accent);
+        }
+        .permisos-info-val {
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: var(--text-1);
+        }
+        .permisos-lista-titulo {
+            font-size: 0.78rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-2);
+            margin-bottom: 12px;
+        }
+        .permisos-lista {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 24px;
+        }
+        .permisos-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 14px 16px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--r-md);
+            cursor: pointer;
+            transition: border-color 0.15s, box-shadow 0.15s;
+        }
+        .permisos-item:hover {
+            border-color: var(--accent);
+            box-shadow: var(--shadow-sm);
+        }
+        .permisos-item.checked {
+            border-color: var(--success);
+            background: rgba(5,150,105,0.04);
+        }
+        .permisos-cb {
+            width: 20px;
+            height: 20px;
+            min-width: 20px;
+            border: 2px solid var(--border-strong);
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 1px;
+            transition: background 0.15s, border-color 0.15s;
+        }
+        .permisos-item.checked .permisos-cb {
+            background: var(--success);
+            border-color: var(--success);
+            color: #fff;
+            font-size: 12px;
+        }
+        .permisos-item-content {
+            flex: 1;
+        }
+        .permisos-item-top {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 3px;
+        }
+        .permisos-item-doc {
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: var(--text-1);
+            flex: 1;
+        }
+        .badge-obligatorio {
+            font-size: 0.60rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            padding: 3px 8px;
+            border-radius: 999px;
+            white-space: nowrap;
+        }
+        .badge-obligatorio.ob {
+            background: rgba(220,38,38,0.10);
+            color: #DC2626;
+        }
+        .badge-obligatorio.op {
+            background: var(--bg-subtle);
+            color: var(--text-3);
+        }
+        .permisos-item-nota {
+            font-size: 0.75rem;
+            color: var(--text-2);
+            line-height: 1.4;
+        }
+        .permisos-contador {
+            font-size: 0.8rem;
+            color: var(--text-2);
+            margin-bottom: 16px;
+        }
+        .permisos-contador span {
+            font-weight: 700;
+            color: var(--success);
+        }
+        .btn-permisos-pdf {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--primary);
+            color: #fff;
+            font-size: 0.88rem;
+            font-weight: 700;
+            padding: 14px 28px;
+            border: none;
+            border-radius: var(--r-lg);
+            cursor: pointer;
+            letter-spacing: 0.5px;
+            box-shadow: var(--shadow-md);
+            transition: background 0.15s, transform 0.1s;
+        }
+        .btn-permisos-pdf:hover {
+            background: var(--primary-mid);
+            transform: translateY(-1px);
+        }
+        .btn-back-permisos {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: none;
+            border: 1px solid var(--border-strong);
+            border-radius: var(--r-md);
+            padding: 9px 18px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--text-2);
+            cursor: pointer;
+            margin-bottom: 24px;
+        }
+        .btn-back-permisos:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+        .permisos-nota-legal {
+            margin-top: 20px;
+            padding: 12px 16px;
+            background: var(--bg-subtle);
+            border-radius: var(--r-md);
+            font-size: 0.72rem;
+            color: var(--text-3);
+            line-height: 1.5;
+        }
+
     </style>
 </head>
 
@@ -2984,6 +3220,12 @@
                                 <div class="home-tool-name">Presupuesto de construcci&#243;n</div>
                                 <div class="home-tool-desc">Calcula materiales, mano de obra e indirectos para vivienda, comercial o departamentos.</div>
                             </div>
+                            <div class="home-tool-card active-tool" id="home-card-permisos" onclick="mostrarScreen('screen-permisos')">
+                                <span class="home-tool-badge available">Disponible</span>
+                                <div class="home-tool-icon">&#128196;</div>
+                                <div class="home-tool-name">Checklist de Permisos</div>
+                                <div class="home-tool-desc">Revisa qu&#233; documentos necesitas para tramitar tu licencia de construcci&#243;n en 10 estados.</div>
+                            </div>
                             <div class="home-tool-card coming-soon">
                                 <span class="home-tool-badge soon">Pr&#243;ximamente</span>
                                 <div class="home-tool-icon">&#128203;</div>
@@ -3021,6 +3263,59 @@
                         <div class="home-stat">
                             <span class="home-stat-val">PDF</span>
                             <span class="home-stat-label">Descargable instant&#225;neo</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SCREEN PERMISOS -->
+                <div id="screen-permisos" class="screen">
+                    <button type="button" class="btn-back-permisos" onclick="mostrarScreen('screen-home')">
+                        &#8592; Volver al inicio
+                    </button>
+                    <div class="permisos-header">
+                        <h1>&#128196; Checklist de Permisos de Construcci&#243;n</h1>
+                        <p>Selecciona tu estado y tipo de obra para ver los documentos que necesitas tramitar.</p>
+                    </div>
+                    <div class="permisos-selectores">
+                        <div class="permisos-select-group">
+                            <label for="permisos-estado">Estado</label>
+                            <select id="permisos-estado" onchange="actualizarPermisos()">
+                                <option value="">-- Selecciona un estado --</option>
+                                <option value="cdmx">Ciudad de M&#233;xico (CDMX)</option>
+                                <option value="edomex">Estado de M&#233;xico</option>
+                                <option value="guanajuato">Guanajuato (Le&#243;n / Irapuato)</option>
+                                <option value="jalisco">Jalisco (Guadalajara)</option>
+                                <option value="nuevo_leon">Nuevo Le&#243;n (Monterrey)</option>
+                                <option value="puebla">Puebla</option>
+                                <option value="queretaro">Quer&#233;taro</option>
+                                <option value="tlaxcala">Tlaxcala</option>
+                                <option value="veracruz">Veracruz</option>
+                                <option value="yucatan">Yucat&#225;n (M&#233;rida)</option>
+                            </select>
+                        </div>
+                        <div class="permisos-select-group">
+                            <label for="permisos-tipo">Tipo de obra</label>
+                            <select id="permisos-tipo" onchange="actualizarPermisos()">
+                                <option value="">-- Selecciona tipo --</option>
+                                <option value="nueva">Obra Nueva</option>
+                                <option value="ampliacion">Ampliaci&#243;n / Remodelaci&#243;n</option>
+                                <option value="uso">Cambio de Uso de Suelo</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div id="permisos-resultado">
+                        <div class="permisos-info-bar" id="permisos-info-bar"></div>
+                        <div class="permisos-lista-titulo">Documentos requeridos</div>
+                        <div class="permisos-contador" id="permisos-contador"></div>
+                        <div class="permisos-lista" id="permisos-lista"></div>
+                        <button type="button" class="btn-permisos-pdf" onclick="generarPermisosPDF()">
+                            &#128196; Descargar Checklist PDF
+                        </button>
+                        <div class="permisos-nota-legal">
+                            &#9888;&#65039; <strong>Nota:</strong> Los requisitos mostrados son referenciales y est&#225;n basados en los reglamentos estatales y municipales vigentes.
+                            Verificar siempre con la dependencia correspondiente antes de iniciar el tr&#225;mite.
+                            ObraDigitalMX no se hace responsable de cambios en los requisitos oficiales.
                         </div>
                     </div>
                 </div>
@@ -7498,6 +7793,276 @@
             }
             var sugs = document.getElementById('agente-sugerencias');
             if (sugs) { sugs.style.display = 'none'; }
+        }
+
+        /* ======================================================
+           CHECKLIST DE PERMISOS DE CONSTRUCCION
+           ====================================================== */
+
+        var permisosChecked = {};
+
+        function actualizarPermisos() {
+            var estado = document.getElementById('permisos-estado').value;
+            var tipo = document.getElementById('permisos-tipo').value;
+            var resultado = document.getElementById('permisos-resultado');
+
+            if (!estado || !tipo) {
+                resultado.style.display = 'none';
+                return;
+            }
+
+            var datos = DB_PERMISOS[estado];
+            if (!datos) {
+                resultado.style.display = 'none';
+                return;
+            }
+
+            permisosChecked = {};
+
+            var tipoTexto = '';
+            if (tipo === 'nueva') { tipoTexto = 'Obra Nueva'; }
+            else if (tipo === 'ampliacion') { tipoTexto = 'Ampliaci\u00f3n / Remodelaci\u00f3n'; }
+            else { tipoTexto = 'Cambio de Uso de Suelo'; }
+
+            var infoBar = document.getElementById('permisos-info-bar');
+            infoBar.innerHTML = '<div class="permisos-info-item"><div class="permisos-info-label">Estado</div><div class="permisos-info-val">' + datos.nombre + '</div></div>'
+                + '<div class="permisos-info-item"><div class="permisos-info-label">Tipo de obra</div><div class="permisos-info-val">' + tipoTexto + '</div></div>'
+                + '<div class="permisos-info-item"><div class="permisos-info-label">Dependencia</div><div class="permisos-info-val">' + datos.dependencia + '</div></div>'
+                + '<div class="permisos-info-item"><div class="permisos-info-label">Tiempo estimado</div><div class="permisos-info-val">' + datos.tiempo + '</div></div>'
+                + '<div class="permisos-info-item"><div class="permisos-info-label">Costo de derechos</div><div class="permisos-info-val">' + datos.costo + '</div></div>';
+
+            var lista = document.getElementById('permisos-lista');
+            lista.innerHTML = '';
+
+            var tramites = datos.tramites;
+            if (tipo === 'ampliacion') {
+                tramites = [];
+                for (var i = 0; i < datos.tramites.length; i++) {
+                    var t = datos.tramites[i];
+                    if (t.doc.indexOf('mecanica de suelos') === -1 && t.doc.indexOf('Calculo') === -1) {
+                        tramites.push(t);
+                    } else {
+                        tramites.push({ doc: t.doc, obligatorio: false, notas: t.notas + ' (opcional en remodelaci\u00f3n menor)' });
+                    }
+                }
+            } else if (tipo === 'uso') {
+                tramites = [];
+                for (var j = 0; j < datos.tramites.length; j++) {
+                    var u = datos.tramites[j];
+                    tramites.push(u);
+                }
+                tramites.push({ doc: 'Estudio de impacto urbano y ambiental', obligatorio: true, notas: 'Requerido especificamente para cambio de uso de suelo' });
+                tramites.push({ doc: 'Dictamen de factibilidad de servicios', obligatorio: true, notas: 'Agua, drenaje y electricidad para nuevo uso' });
+            }
+
+            for (var k = 0; k < tramites.length; k++) {
+                var tr = tramites[k];
+                var itemId = 'perm-item-' + k;
+                permisosChecked[itemId] = false;
+                var badgeClass = tr.obligatorio ? 'ob' : 'op';
+                var badgeText = tr.obligatorio ? 'OBLIGATORIO' : 'OPCIONAL';
+                var div = document.createElement('div');
+                div.className = 'permisos-item';
+                div.id = itemId;
+                div.setAttribute('onclick', 'togglePermisoItem("' + itemId + '")');
+                div.innerHTML = '<div class="permisos-cb" id="cb-' + itemId + '"></div>'
+                    + '<div class="permisos-item-content">'
+                    + '<div class="permisos-item-top">'
+                    + '<div class="permisos-item-doc">' + tr.doc + '</div>'
+                    + '<span class="badge-obligatorio ' + badgeClass + '">' + badgeText + '</span>'
+                    + '</div>'
+                    + '<div class="permisos-item-nota">' + tr.notas + '</div>'
+                    + '</div>';
+                lista.appendChild(div);
+            }
+
+            actualizarContadorPermisos();
+            resultado.style.display = 'block';
+        }
+
+        function togglePermisoItem(itemId) {
+            permisosChecked[itemId] = !permisosChecked[itemId];
+            var item = document.getElementById(itemId);
+            var cb = document.getElementById('cb-' + itemId);
+            if (permisosChecked[itemId]) {
+                item.classList.add('checked');
+                cb.innerHTML = '&#10003;';
+            } else {
+                item.classList.remove('checked');
+                cb.innerHTML = '';
+            }
+            actualizarContadorPermisos();
+        }
+
+        function actualizarContadorPermisos() {
+            var total = 0;
+            var marcados = 0;
+            for (var id in permisosChecked) {
+                total++;
+                if (permisosChecked[id]) { marcados++; }
+            }
+            var cont = document.getElementById('permisos-contador');
+            if (cont) {
+                cont.innerHTML = '<span>' + marcados + ' de ' + total + '</span> documentos reunidos';
+            }
+        }
+
+        function generarPermisosPDF() {
+            if (typeof window.jspdf === 'undefined' && typeof jspdf === 'undefined') {
+                alert('Error: jsPDF no disponible. Verifica tu conexi\u00f3n a internet.');
+                return;
+            }
+            var jsPDFLib = window.jspdf ? window.jspdf.jsPDF : jspdf.jsPDF;
+            var doc = new jsPDFLib({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+
+            var estado = document.getElementById('permisos-estado').value;
+            var tipo = document.getElementById('permisos-tipo').value;
+            var datos = DB_PERMISOS[estado];
+            if (!datos) { return; }
+
+            var tipoTexto = '';
+            if (tipo === 'nueva') { tipoTexto = 'Obra Nueva'; }
+            else if (tipo === 'ampliacion') { tipoTexto = 'Ampliacion / Remodelacion'; }
+            else { tipoTexto = 'Cambio de Uso de Suelo'; }
+
+            var fecha = new Date();
+            var dia = fecha.getDate();
+            var mes = fecha.getMonth() + 1;
+            var anio = fecha.getFullYear();
+            var fechaStr = dia + '/' + mes + '/' + anio;
+
+            var pageW = 210;
+            var marginL = 18;
+            var marginR = 18;
+            var usableW = pageW - marginL - marginR;
+            var y = 0;
+
+            doc.setFillColor(15, 22, 35);
+            doc.rect(0, 0, pageW, 38, 'F');
+
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(18);
+            doc.setTextColor(255, 255, 255);
+            doc.text('ObraDigitalMX', marginL, 16);
+
+            doc.setFont('helvetica', 'normal');
+            doc.setFontSize(9);
+            doc.setTextColor(180, 190, 210);
+            doc.text('Checklist de Documentos para Licencia de Construccion', marginL, 24);
+            doc.text('Generado: ' + fechaStr, marginL, 31);
+
+            y = 50;
+
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(13);
+            doc.setTextColor(15, 22, 35);
+            doc.text('Checklist de Permisos de Construccion', marginL, y);
+            y += 10;
+
+            doc.setFillColor(240, 237, 232);
+            doc.roundedRect(marginL, y, usableW, 26, 3, 3, 'F');
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(8);
+            doc.setTextColor(74, 85, 104);
+            doc.text('ESTADO:', marginL + 4, y + 8);
+            doc.text('TIPO DE OBRA:', marginL + 4, y + 16);
+            doc.text('DEPENDENCIA:', marginL + 60, y + 8);
+            doc.text('TIEMPO ESTIMADO:', marginL + 60, y + 16);
+            doc.text('COSTO DE DERECHOS:', marginL + 115, y + 8);
+            doc.setFont('helvetica', 'normal');
+            doc.setTextColor(15, 22, 35);
+            doc.text(datos.nombre, marginL + 22, y + 8);
+            doc.text(tipoTexto, marginL + 26, y + 16);
+            doc.setFontSize(7);
+            doc.text(datos.dependencia, marginL + 78, y + 8);
+            doc.text(datos.tiempo, marginL + 92, y + 16);
+            doc.text(datos.costo, marginL + 141, y + 8);
+            y += 34;
+
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(8);
+            doc.setTextColor(74, 85, 104);
+            doc.text('DOCUMENTOS REQUERIDOS', marginL, y);
+            y += 6;
+
+            var items = document.querySelectorAll('#permisos-lista .permisos-item');
+            for (var i = 0; i < items.length; i++) {
+                if (y > 265) {
+                    doc.addPage();
+                    y = 20;
+                }
+                var itemEl = items[i];
+                var isChecked = itemEl.classList.contains('checked');
+                var docName = itemEl.querySelector('.permisos-item-doc').textContent;
+                var docNota = itemEl.querySelector('.permisos-item-nota').textContent;
+                var isObl = itemEl.querySelector('.badge-obligatorio').classList.contains('ob');
+
+                doc.setDrawColor(220, 215, 207);
+                doc.setFillColor(255, 255, 255);
+                if (isChecked) { doc.setFillColor(240, 253, 248); }
+                doc.roundedRect(marginL, y, usableW, 14, 2, 2, 'FD');
+
+                doc.setDrawColor(isChecked ? 5 : 180, isChecked ? 150 : 180, isChecked ? 105 : 190);
+                doc.rect(marginL + 3, y + 3, 8, 8);
+                if (isChecked) {
+                    doc.setFont('helvetica', 'bold');
+                    doc.setFontSize(8);
+                    doc.setTextColor(5, 150, 105);
+                    doc.text('x', marginL + 5.5, y + 9.5);
+                }
+
+                doc.setFont('helvetica', 'bold');
+                doc.setFontSize(8.5);
+                doc.setTextColor(15, 22, 35);
+                doc.text(docName, marginL + 15, y + 7);
+
+                if (isObl) {
+                    doc.setFont('helvetica', 'bold');
+                    doc.setFontSize(6.5);
+                    doc.setTextColor(220, 38, 38);
+                    doc.text('OBLIGATORIO', pageW - marginR - 22, y + 7);
+                } else {
+                    doc.setFont('helvetica', 'normal');
+                    doc.setFontSize(6.5);
+                    doc.setTextColor(138, 155, 176);
+                    doc.text('OPCIONAL', pageW - marginR - 18, y + 7);
+                }
+
+                doc.setFont('helvetica', 'normal');
+                doc.setFontSize(7);
+                doc.setTextColor(74, 85, 104);
+                doc.text(docNota, marginL + 15, y + 12);
+                y += 17;
+            }
+
+            y += 6;
+            if (y > 255) { doc.addPage(); y = 20; }
+            doc.setFillColor(240, 237, 232);
+            doc.roundedRect(marginL, y, usableW, 18, 2, 2, 'F');
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(7.5);
+            doc.setTextColor(74, 85, 104);
+            doc.text('DEPENDENCIA RESPONSABLE:', marginL + 4, y + 7);
+            doc.text('TIEMPO DE TRAMITACION:', marginL + 4, y + 14);
+            doc.setFont('helvetica', 'normal');
+            doc.setTextColor(15, 22, 35);
+            doc.text(datos.dependencia, marginL + 52, y + 7);
+            doc.text(datos.tiempo + '  |  Costo estimado: ' + datos.costo, marginL + 46, y + 14);
+            y += 26;
+
+            doc.setFillColor(255, 248, 230);
+            doc.roundedRect(marginL, y, usableW, 16, 2, 2, 'F');
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(7);
+            doc.setTextColor(120, 90, 20);
+            doc.text('NOTA LEGAL:', marginL + 4, y + 7);
+            doc.setFont('helvetica', 'normal');
+            doc.setTextColor(80, 60, 0);
+            var notaLines = doc.splitTextToSize('Requisitos referenciales basados en reglamentos municipales vigentes. Verificar con la dependencia correspondiente antes de iniciar el tramite. ObraDigitalMX no se hace responsable de cambios en los requisitos oficiales.', usableW - 30);
+            doc.text(notaLines, marginL + 24, y + 7);
+
+            var nombreArchivo = 'ChecklistPermisos_' + estado + '_' + tipo + '_' + anio + '.pdf';
+            doc.save(nombreArchivo);
         }
 
     </script>
