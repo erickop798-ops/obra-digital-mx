@@ -4783,7 +4783,8 @@
 
         /* ── AGENTE IA CONSTRUIA ─────────────────────────────────────────── */
         /* PRODUCCION: agregar API key de Gemini aqui */
-        var GEMINI_KEY = 'AIzaSyA-GKvRUVd5ulqZvJ734ebmeX3Kv0wWnGs';
+        var GEMINI_KEY = '';
+        /* API key movida a Vercel environment variables por seguridad */
         var agenteHistorial = [];
         var agentePanelAbierto = false;
         var agenteContextoObra = '';
@@ -7313,11 +7314,9 @@
                     agenteContextoObra;
             }
 
-            var endpoint = 'https://generativelanguage.googleapis.com/v1beta/models/' +
-                'gemini-2.0-flash:generateContent?key=' + GEMINI_KEY;
+            var endpoint = '/api/agente';
             var cuerpo = JSON.stringify({
                 system_instruction: { parts: [{ text: systemFinal }] },
-                tools: [{ google_search: {} }],
                 contents: agenteHistorial
             });
 
@@ -7342,15 +7341,34 @@
                             'Hubo un error al procesar la respuesta. Int\u00e9ntalo de nuevo.'
                         );
                     }
+                } else if (xhr.status === 429) {
+                    agenteAgregarMensaje('agente',
+                        'El agente recibi\u00f3 demasiadas solicitudes. ' +
+                        'Espera unos segundos e intenta de nuevo.'
+                    );
+                    var btnEnviar = document.querySelector('#agente-panel button[onclick="agenteEnviarMensaje()"]');
+                    if (btnEnviar) {
+                        btnEnviar.disabled = true;
+                        btnEnviar.style.opacity = '0.5';
+                        setTimeout(function() {
+                            btnEnviar.disabled = false;
+                            btnEnviar.style.opacity = '1';
+                        }, 5000);
+                    }
                 } else if (xhr.status === 400 || xhr.status === 403) {
                     agenteAgregarMensaje('agente',
-                        'API key no configurada o inv\u00e1lida. ' +
-                        'Configura tu GEMINI_KEY para activar el agente.'
+                        'Error de configuraci\u00f3n del agente. ' +
+                        'Contacta al administrador.'
+                    );
+                } else if (xhr.status === 500) {
+                    agenteAgregarMensaje('agente',
+                        'Error interno del servidor. ' +
+                        'Intenta de nuevo en unos momentos.'
                     );
                 } else {
                     agenteAgregarMensaje('agente',
-                        'Error de conexi\u00f3n (' + xhr.status + '). ' +
-                        'Verifica tu conexi\u00f3n a internet e int\u00e9ntalo de nuevo.'
+                        'Error temporal de conexi\u00f3n. ' +
+                        'Verifica tu internet e intenta de nuevo.'
                     );
                 }
             };
