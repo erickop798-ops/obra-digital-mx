@@ -4460,6 +4460,12 @@
                                     </li>
                                 </ul>
                             </div>
+                            <div style=”margin:16px 0;”>
+                                <button onclick=”abrirAgenteConContexto()” style=”background:linear-gradient(135deg,#4F46E5,#7C3AED);color:#ffffff;border:none;border-radius:12px;padding:14px 24px;font-size:0.9rem;font-weight:700;cursor:pointer;font-family:inherit;width:100%;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 4px 16px rgba(79,70,229,0.3);transition:opacity 0.2s;” onmouseover=”this.style.opacity='0.9'” onmouseout=”this.style.opacity='1'”>
+                                    &#129302; Preguntarle al Agente sobre esta obra
+                                </button>
+                                <p style=”text-align:center;color:#94a3b8;font-size:0.75rem;margin-top:6px;”>El agente ya conoce los datos de tu presupuesto</p>
+                            </div>
                         </div>
                         <!-- PAYWALL CARD â€” elemento normal en el flujo, NO position:absolute -->
                         <div id="paywall-card" style="background:linear-gradient(135deg,#1a1f35,#1e2640);border:1.5px solid #4F46E5;border-radius:20px;padding:40px 32px;margin:24px 0;text-align:center;box-shadow:0 8px 32px rgba(79,70,229,0.25);display:none;">
@@ -4811,6 +4817,39 @@
             totalMateriales: 0, totalManoObra: 0, totalImprevistos: 0, totalGeneral: 0, costoM2: 0,
             partidas: { p01: 0, p02: 0, p03: 0, p04: 0, p05: 0, p06: 0, p07: 0, p08: 0, p09: 0, p10: 0, p11: 0 }
         };
+
+        /* ── AGENTE IA CONSTRUIA ─────────────────────────────────────────── */
+        /* PRODUCCION: agregar API key de Gemini aqui */
+        var GEMINI_KEY = '';
+        var agenteHistorial = [];
+        var agentePanelAbierto = false;
+        var agenteContextoObra = '';
+
+        var AGENTE_SYSTEM_PROMPT = 'Eres el Agente IA de ConstruIA.mx, ' +
+            'el copiloto de inteligencia artificial para arquitectos ' +
+            'e ingenieros civiles en Mexico. ' +
+            'Tienes conocimiento profundo y verificado de: ' +
+            '(1) Precios de materiales de construccion en Mexico 2025-2026 ' +
+            'zona centro (Puebla, Tlaxcala, CDMX, Bajio). ' +
+            '(2) Rendimientos de mano de obra segun tablas CMIC. ' +
+            '(3) Normas oficiales: LOPSRM DOF 16-abr-2025, ' +
+            'NTC-RCDF 2023, NOM-001-SEDE, NOM-002-CNA-2016. ' +
+            '(4) Costos parametricos CEICO-CMIC 2025. ' +
+            '(5) Factores regionales por estado de Mexico. ' +
+            '(6) Estructura de presupuestos profesionales formato LOPSRM. ' +
+            '(7) Partidas de obra P01 a P11 con cuantias y rendimientos. ' +
+            'Reglas de comportamiento: ' +
+            'Responde SIEMPRE en espanol mexicano formal pero accesible. ' +
+            'Se conciso: maximo 4 parrafos por respuesta. ' +
+            'Cuando el usuario pregunte precios, da rangos reales ' +
+            'de la zona centro Mexico con fuente (CMIC, INEGI, etc). ' +
+            'Cuando el usuario tenga un presupuesto de obra activo, ' +
+            'usalo como contexto para tus respuestas. ' +
+            'NUNCA inventes datos ni fuentes. ' +
+            'NUNCA respondas temas ajenos a construccion, ' +
+            'arquitectura, ingenieria civil o presupuestos. ' +
+            'Si te preguntan algo fuera de tu nicho, di: ' +
+            'Solo puedo ayudarte con temas de construccion y arquitectura.';
 
         /* Variables de selecci&#243;n para secciones nuevas de acabados */
         var selAcabadoPiso = 'estandar';
@@ -7221,7 +7260,239 @@
             /* Aplicar estado paywall al cargar (respeta localStorage previo) */
             aplicarEstadoPaywall();
         };
+
+        /* ═══════════════════════════════════════════════════════════════
+           AGENTE IA CONSTRUIA — FUNCIONES
+        ═══════════════════════════════════════════════════════════════ */
+
+        function abrirPanelAgente() {
+            var panel = document.getElementById('agente-panel');
+            var overlay = document.getElementById('agente-overlay');
+            if (!panel) { return; }
+            agentePanelAbierto = true;
+            panel.style.display = 'flex';
+            if (overlay) { overlay.style.display = 'block'; }
+            if (typeof gsap !== 'undefined') {
+                gsap.fromTo(panel,
+                    { x: 400, opacity: 0 },
+                    { x: 0, opacity: 1, duration: 0.35, ease: 'power2.out' }
+                );
+            }
+            var campo = document.getElementById('agente-input');
+            if (campo) { campo.focus(); }
+            var mensajes = document.getElementById('agente-mensajes');
+            if (mensajes && mensajes.children.length === 0) {
+                agenteAgregarMensaje('agente',
+                    'Hola, soy el Agente de ConstruIA. Puedo ayudarte con ' +
+                    'precios de materiales, normas mexicanas (LOPSRM, NTC, CMIC), ' +
+                    'procesos constructivos y dudas sobre tu presupuesto. ' +
+                    '\u00bfEn qu\u00e9 te ayudo hoy?'
+                );
+            }
+        }
+
+        function cerrarPanelAgente() {
+            var panel = document.getElementById('agente-panel');
+            var overlay = document.getElementById('agente-overlay');
+            agentePanelAbierto = false;
+            if (typeof gsap !== 'undefined' && panel) {
+                gsap.to(panel, {
+                    x: 400, opacity: 0, duration: 0.25, ease: 'power2.in',
+                    onComplete: function() {
+                        panel.style.display = 'none';
+                        if (overlay) { overlay.style.display = 'none'; }
+                    }
+                });
+            } else {
+                if (panel) { panel.style.display = 'none'; }
+                if (overlay) { overlay.style.display = 'none'; }
+            }
+        }
+
+        function agenteAgregarMensaje(tipo, texto) {
+            var contenedor = document.getElementById('agente-mensajes');
+            if (!contenedor) { return; }
+            var burbuja = document.createElement('div');
+            burbuja.style.cssText = 'margin-bottom:12px;display:flex;' +
+                (tipo === 'usuario' ? 'justify-content:flex-end;' : 'justify-content:flex-start;');
+            var inner = document.createElement('div');
+            inner.style.cssText = 'max-width:80%;padding:10px 14px;' +
+                'border-radius:' + (tipo === 'usuario' ? '16px 16px 4px 16px' : '16px 16px 16px 4px') + ';' +
+                'font-size:0.85rem;line-height:1.5;font-family:inherit;' +
+                (tipo === 'usuario' ?
+                    'background:#4F46E5;color:#ffffff;' :
+                    'background:#2D3A52;color:#e2e8f0;');
+            inner.textContent = texto;
+            burbuja.appendChild(inner);
+            contenedor.appendChild(burbuja);
+            contenedor.scrollTop = contenedor.scrollHeight;
+        }
+
+        function agenteEnviarMensaje() {
+            var campo = document.getElementById('agente-input');
+            if (!campo) { return; }
+            var texto = campo.value.trim();
+            if (!texto) { return; }
+            campo.value = '';
+            agenteAgregarMensaje('usuario', texto);
+            agenteHistorial.push({ role: 'user', parts: [{ text: texto }] });
+
+            var contenedor = document.getElementById('agente-mensajes');
+            var typing = document.createElement('div');
+            typing.id = 'agente-typing';
+            typing.style.cssText = 'margin-bottom:12px;display:flex;justify-content:flex-start;';
+            typing.innerHTML = '<div style="background:#2D3A52;color:#94a3b8;' +
+                'padding:10px 14px;border-radius:16px 16px 16px 4px;' +
+                'font-size:0.85rem;">Pensando...</div>';
+            if (contenedor) {
+                contenedor.appendChild(typing);
+                contenedor.scrollTop = contenedor.scrollHeight;
+            }
+
+            var systemFinal = AGENTE_SYSTEM_PROMPT;
+            if (presupuestoActual && presupuestoActual.totalGeneral > 0) {
+                var estadoNombreCtx = '';
+                if (typeof ESTADOS !== 'undefined' && F.estado && ESTADOS[F.estado]) {
+                    estadoNombreCtx = ESTADOS[F.estado].nombre || F.estado;
+                }
+                systemFinal = systemFinal +
+                    ' CONTEXTO DE OBRA ACTIVA DEL USUARIO: ' +
+                    'Tipo: ' + (presupuestoActual.tipoProyecto || '') +
+                    '. Superficie: ' + (presupuestoActual.m2 || 0) + 'm2.' +
+                    ' Estado: ' + estadoNombreCtx +
+                    '. Acabado: ' + (presupuestoActual.acabado || '') +
+                    '. Total general: $' + Math.round(presupuestoActual.totalGeneral).toLocaleString('es-MX') +
+                    ' MXN. Materiales: $' + Math.round(presupuestoActual.totalMateriales).toLocaleString('es-MX') +
+                    ' MXN. Mano de obra: $' + Math.round(presupuestoActual.totalManoObra).toLocaleString('es-MX') + ' MXN.';
+            }
+
+            var endpoint = 'https://generativelanguage.googleapis.com/v1beta/models/' +
+                'gemini-2.0-flash:generateContent?key=' + GEMINI_KEY;
+            var cuerpo = JSON.stringify({
+                system_instruction: { parts: [{ text: systemFinal }] },
+                contents: agenteHistorial
+            });
+
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', endpoint, true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState !== 4) { return; }
+                var typingEl = document.getElementById('agente-typing');
+                if (typingEl) { typingEl.parentNode.removeChild(typingEl); }
+                if (xhr.status === 200) {
+                    try {
+                        var resp = JSON.parse(xhr.responseText);
+                        var respTexto = resp.candidates[0].content.parts[0].text;
+                        agenteAgregarMensaje('agente', respTexto);
+                        agenteHistorial.push({ role: 'model', parts: [{ text: respTexto }] });
+                        if (agenteHistorial.length > 20) {
+                            agenteHistorial = agenteHistorial.slice(agenteHistorial.length - 20);
+                        }
+                    } catch (e) {
+                        agenteAgregarMensaje('agente',
+                            'Hubo un error al procesar la respuesta. Int\u00e9ntalo de nuevo.'
+                        );
+                    }
+                } else if (xhr.status === 400 || xhr.status === 403) {
+                    agenteAgregarMensaje('agente',
+                        'API key no configurada o inv\u00e1lida. ' +
+                        'Configura tu GEMINI_KEY para activar el agente.'
+                    );
+                } else {
+                    agenteAgregarMensaje('agente',
+                        'Error de conexi\u00f3n (' + xhr.status + '). ' +
+                        'Verifica tu conexi\u00f3n a internet e int\u00e9ntalo de nuevo.'
+                    );
+                }
+            };
+            xhr.send(cuerpo);
+        }
+
+        function abrirAgenteConContexto() {
+            abrirPanelAgente();
+            if (!presupuestoActual || presupuestoActual.totalGeneral <= 0) { return; }
+            var estadoNombreCtx2 = '';
+            if (typeof ESTADOS !== 'undefined' && F.estado && ESTADOS[F.estado]) {
+                estadoNombreCtx2 = ESTADOS[F.estado].nombre || F.estado;
+            }
+            var tipoTextoCtx = {
+                vivienda: 'casa habitaci\u00f3n',
+                comercial: 'local comercial',
+                departamentos: 'edificio de departamentos'
+            }[presupuestoActual.tipoProyecto] || presupuestoActual.tipoProyecto;
+            var totalFormateado = '$' +
+                Math.round(presupuestoActual.totalGeneral).toLocaleString('es-MX') + ' MXN';
+            var mensajeContexto = 'Tengo una obra de ' + tipoTextoCtx +
+                ' de ' + (presupuestoActual.m2 || 0) + 'm\u00b2 en ' + estadoNombreCtx2 +
+                '. El presupuesto total es ' + totalFormateado +
+                '. \u00bfLos costos son razonables para esa zona? ' +
+                '\u00bfQu\u00e9 partidas podr\u00eda optimizar?';
+            var campo = document.getElementById('agente-input');
+            if (campo) {
+                campo.value = mensajeContexto;
+                campo.focus();
+            }
+        }
+
+        function agenteKeyPress(evento) {
+            if (evento.key === 'Enter' && !evento.shiftKey) {
+                evento.preventDefault();
+                agenteEnviarMensaje();
+            }
+        }
+
+        function usarSugerencia(boton) {
+            var texto = boton.getAttribute('data-texto');
+            if (!texto) { return; }
+            var campo = document.getElementById('agente-input');
+            if (campo) {
+                campo.value = texto;
+                campo.focus();
+            }
+            var sugs = document.getElementById('agente-sugerencias');
+            if (sugs) { sugs.style.display = 'none'; }
+        }
+
     </script>
+
+    <!-- OVERLAY AGENTE -->
+    <div id="agente-overlay" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(15,22,35,0.5);z-index:998;" onclick="cerrarPanelAgente()"></div>
+
+    <!-- PANEL AGENTE -->
+    <div id="agente-panel" style="display:none;position:fixed;top:0;right:0;width:380px;height:100vh;background:#1A1F35;border-left:1px solid #2D3A52;box-shadow:-8px 0 32px rgba(15,22,35,0.5);z-index:999;flex-direction:column;font-family:'Plus Jakarta Sans','Inter',sans-serif;">
+        <div style="padding:20px;border-bottom:1px solid #2D3A52;display:flex;align-items:center;justify-content:space-between;background:#0F1623;flex-shrink:0;">
+            <div style="display:flex;align-items:center;gap:10px;">
+                <div style="width:36px;height:36px;background:linear-gradient(135deg,#4F46E5,#7C3AED);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;">&#129302;</div>
+                <div>
+                    <div style="color:#ffffff;font-weight:700;font-size:0.95rem;">Agente ConstruIA</div>
+                    <div style="color:#10B981;font-size:0.75rem;display:flex;align-items:center;gap:4px;">
+                        <span style="width:6px;height:6px;background:#10B981;border-radius:50%;display:inline-block;"></span>
+                        En l&#237;nea
+                    </div>
+                </div>
+            </div>
+            <button onclick="cerrarPanelAgente()" style="background:none;border:none;color:#64748b;cursor:pointer;font-size:1.3rem;padding:4px;border-radius:6px;transition:color 0.2s;" onmouseover="this.style.color='#ffffff'" onmouseout="this.style.color='#64748b'">&#10005;</button>
+        </div>
+        <div id="agente-mensajes" style="flex:1;overflow-y:auto;padding:20px;display:flex;flex-direction:column;scrollbar-width:thin;scrollbar-color:#2D3A52 #1A1F35;"></div>
+        <div id="agente-sugerencias" style="padding:0 16px 12px;display:flex;flex-wrap:wrap;gap:6px;flex-shrink:0;">
+            <button onclick="usarSugerencia(this)" data-texto="&#191;Cu&#225;nto cuesta el cemento Cruz Azul en 2026?" style="background:#2D3A52;color:#94a3b8;border:none;border-radius:20px;padding:6px 12px;font-size:0.75rem;cursor:pointer;font-family:inherit;transition:background 0.2s;" onmouseover="this.style.background='#4F46E5';this.style.color='#fff'" onmouseout="this.style.background='#2D3A52';this.style.color='#94a3b8'">&#128176; Precio del cemento</button>
+            <button onclick="usarSugerencia(this)" data-texto="&#191;Cu&#225;les son los requisitos m&#237;nimos de una losa seg&#250;n NTC?" style="background:#2D3A52;color:#94a3b8;border:none;border-radius:20px;padding:6px 12px;font-size:0.75rem;cursor:pointer;font-family:inherit;transition:background 0.2s;" onmouseover="this.style.background='#4F46E5';this.style.color='#fff'" onmouseout="this.style.background='#2D3A52';this.style.color='#94a3b8'">&#128218; NTC Losas</button>
+            <button onclick="usarSugerencia(this)" data-texto="&#191;Cu&#225;nto cuesta la mano de obra de un alba&#241;il por d&#237;a en 2026?" style="background:#2D3A52;color:#94a3b8;border:none;border-radius:20px;padding:6px 12px;font-size:0.75rem;cursor:pointer;font-family:inherit;transition:background 0.2s;" onmouseover="this.style.background='#4F46E5';this.style.color='#fff'" onmouseout="this.style.background='#2D3A52';this.style.color='#94a3b8'">&#128119; Mano de obra</button>
+            <button onclick="usarSugerencia(this)" data-texto="&#191;Qu&#233; es el FASAR y c&#243;mo se calcula en 2025?" style="background:#2D3A52;color:#94a3b8;border:none;border-radius:20px;padding:6px 12px;font-size:0.75rem;cursor:pointer;font-family:inherit;transition:background 0.2s;" onmouseover="this.style.background='#4F46E5';this.style.color='#fff'" onmouseout="this.style.background='#2D3A52';this.style.color='#94a3b8'">&#129518; FASAR 2025</button>
+        </div>
+        <div style="padding:16px;border-top:1px solid #2D3A52;background:#0F1623;flex-shrink:0;">
+            <div style="display:flex;gap:8px;align-items:flex-end;background:#1A1F35;border:1px solid #2D3A52;border-radius:12px;padding:8px 12px;">
+                <textarea id="agente-input" placeholder="Pregunta sobre materiales, normas o tu presupuesto..." onkeypress="agenteKeyPress(event)" rows="1" style="flex:1;background:none;border:none;outline:none;color:#ffffff;font-size:0.875rem;font-family:inherit;resize:none;max-height:100px;min-height:24px;line-height:1.5;overflow-y:auto;"></textarea>
+                <button onclick="agenteEnviarMensaje()" style="background:#4F46E5;border:none;border-radius:8px;width:36px;height:36px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1rem;transition:background 0.2s;" onmouseover="this.style.background='#3D35C7'" onmouseout="this.style.background='#4F46E5'">&#10148;</button>
+            </div>
+            <p style="color:#475569;font-size:0.7rem;text-align:center;margin-top:8px;">ConstruIA &#183; Datos CMIC &#183; LOPSRM &#183; INEGI 2026</p>
+        </div>
+    </div>
+
+    <!-- BOTON FLOTANTE -->
+    <button id="agente-fab" onclick="abrirPanelAgente()" style="position:fixed;bottom:28px;right:28px;width:56px;height:56px;background:linear-gradient(135deg,#4F46E5,#7C3AED);border:none;border-radius:50%;cursor:pointer;z-index:997;box-shadow:0 4px 20px rgba(79,70,229,0.5);display:flex;align-items:center;justify-content:center;font-size:1.4rem;transition:transform 0.2s,box-shadow 0.2s;" onmouseover="this.style.transform='scale(1.1)';this.style.boxShadow='0 6px 28px rgba(79,70,229,0.7)'" onmouseout="this.style.transform='scale(1)';this.style.boxShadow='0 4px 20px rgba(79,70,229,0.5)'">&#129302;</button>
+
     <button type="button" id="btn-ir-calculadora" style="display:none!important;position:absolute;left:-9999px;" aria-hidden="true">hidden</button>
 </body>
 
