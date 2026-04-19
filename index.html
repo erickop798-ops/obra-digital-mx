@@ -4255,44 +4255,6 @@
                                 </div>
 
                                 <div class="field-group">
-                                    <label class="field-label">&#127968; Muros y plafones</label>
-                                    <div class="cards-grid" id="muros-plafones-group">
-                                        <div class="select-card" data-value="basico">
-                                            <div class="card-title">B&#225;sico</div>
-                                            <div style="font-size:11px;color:var(--text-2);margin-top:4px">Yeso liso &#183; $130/m&#178;</div>
-                                        </div>
-                                        <div class="select-card selected" data-value="estandar">
-                                            <div class="card-badge">POPULAR</div>
-                                            <div class="card-title">Est&#225;ndar</div>
-                                            <div style="font-size:11px;color:var(--text-2);margin-top:4px">Yeso + molduras &#183; $182/m&#178;</div>
-                                        </div>
-                                        <div class="select-card" data-value="premium">
-                                            <div class="card-title">Premium</div>
-                                            <div style="font-size:11px;color:var(--text-2);margin-top:4px">Plaf&#243;n + duela &#183; $436/m&#178;</div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="field-group">
-                                    <label class="field-label">&#128167; Instalaci&#243;n hidr&#225;ulica detallada</label>
-                                    <div class="cards-grid" id="instalacion-hidro-group">
-                                        <div class="select-card" data-value="basica">
-                                            <div class="card-title">B&#225;sica</div>
-                                            <div style="font-size:11px;color:var(--text-2);margin-top:4px">PVC 1/2&quot; &#183; $280/m&#178;</div>
-                                        </div>
-                                        <div class="select-card selected" data-value="completa">
-                                            <div class="card-badge">RECOMENDADO</div>
-                                            <div class="card-title">Completa</div>
-                                            <div style="font-size:11px;color:var(--text-2);margin-top:4px">PVC 3/4&quot; + agua caliente &#183; $680/m&#178;</div>
-                                        </div>
-                                        <div class="select-card" data-value="premium">
-                                            <div class="card-title">Premium</div>
-                                            <div style="font-size:11px;color:var(--text-2);margin-top:4px">CPVC + hidrostatica &#183; $1,200/m&#178;</div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="field-group">
                                     <label class="field-label">&#128683; Carpinter&#237;a y ventanas</label>
                                     <div class="cards-grid" id="carpinteria-group">
                                         <div class="select-card" data-value="basico">
@@ -4459,12 +4421,6 @@
                                     <li>Imprevistos: 10% est&#225;ndar industria. Sin IVA. Estimaci&#243;n referencial.
                                     </li>
                                 </ul>
-                            </div>
-                            <div style=”margin:16px 0;”>
-                                <button onclick=”abrirAgenteConContexto()” style=”background:linear-gradient(135deg,#4F46E5,#7C3AED);color:#ffffff;border:none;border-radius:12px;padding:14px 24px;font-size:0.9rem;font-weight:700;cursor:pointer;font-family:inherit;width:100%;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 4px 16px rgba(79,70,229,0.3);transition:opacity 0.2s;” onmouseover=”this.style.opacity='0.9'” onmouseout=”this.style.opacity='1'”>
-                                    &#129302; Preguntarle al Agente sobre esta obra
-                                </button>
-                                <p style=”text-align:center;color:#94a3b8;font-size:0.75rem;margin-top:6px;”>El agente ya conoce los datos de tu presupuesto</p>
                             </div>
                         </div>
                         <!-- PAYWALL CARD â€” elemento normal en el flujo, NO position:absolute -->
@@ -4729,6 +4685,13 @@
                 </div>
             </div>
 
+            <div style="margin-top:16px;padding-top:16px;border-top:1px solid rgba(255,255,255,0.08);">
+                <button onclick="abrirAgenteConContexto()" style="background:linear-gradient(135deg,#4F46E5,#7C3AED);color:#fff;border:none;border-radius:10px;padding:12px 16px;font-size:0.82rem;font-weight:700;cursor:pointer;font-family:inherit;width:100%;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 4px 14px rgba(79,70,229,0.35);transition:opacity 0.2s;" onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">
+                    &#129302; Analizar con Agente IA
+                </button>
+                <p style="color:#64748b;font-size:0.7rem;text-align:center;margin-top:6px;line-height:1.4;">Lee tu presupuesto en tiempo real</p>
+            </div>
+
             <div
                 style="font-size:0.6rem;color:rgba(255,255,255,0.18);text-align:center;margin-top:auto;padding-top:12px;line-height:1.5;">
                 Fuentes: CMIC &#183; SICT 2025 &#183; SOyS CDMX &#183; CENAPRED<br>Estimaci&#243;n referencial. Precios sin IVA.
@@ -4820,7 +4783,7 @@
 
         /* ── AGENTE IA CONSTRUIA ─────────────────────────────────────────── */
         /* PRODUCCION: agregar API key de Gemini aqui */
-        var GEMINI_KEY = '';
+        var GEMINI_KEY = 'AIzaSyA-GKvRUVd5ulqZvJ734ebmeX3Kv0wWnGs';
         var agenteHistorial = [];
         var agentePanelAbierto = false;
         var agenteContextoObra = '';
@@ -4853,9 +4816,7 @@
 
         /* Variables de selecci&#243;n para secciones nuevas de acabados */
         var selAcabadoPiso = 'estandar';
-        var selMurosPlafones = 'estandar';
         var selCarpinteria = 'estandar';
-        var selInstalacionHidro = 'completa';
 
         var INFO_DATA = {
             'cimentacion-group': { zapatas: '&#9989; &#211;ptima para terrenos firmes | Cimentaci&#243;n aislada bajo cada columna. Relaci&#243;n de concreto: 0.20-0.22 m&#179;/m&#178; (NTC 2026). Cuant&#237;a de acero: 60-80 kg/m&#179; de concreto. Costo m&#225;s bajo. Requiere estudio de suelos si el terreno tiene rellenos o arcilla.', losa_cim: '&#9888;&#65039; Para terrenos problem&#225;ticos | Plataforma de concreto continua. Ratio de concreto: 0.25-0.30 m&#179;/m&#178;, acero: 8-12 kg/m&#178; (losa maciza seg&#250;n NTC 2026). Distribuye el peso uniformemente. Protecci&#243;n s&#237;smica superior. Costo 65% mayor que zapatas seg&#250;n datos CDMX 2026.', pilotes: '&#128679; Solo para suelos muy d&#233;biles | Elementos de concreto que llegan a estrato firme. Cuant&#237;as de acero: 120-150 kg/m&#179; en columnas (NTC 2026 zona s&#237;smica). Obligatorio estudio de mec&#225;nica de suelos. Incremento de costo: +80-120% vs zapatas. Solo bajo dictamen de ingeniero civil certificado.' },
@@ -6113,31 +6074,16 @@
             /* â”€â”€ Secciones nuevas: c&#225;lculo de acabados detallados â”€â”€ */
             var superficie = m2 || 0;
             var costoAcabadoPiso = 0;
-            var costoMuros = 0;
             var costoCarpinteria = 0;
-            var costoHidro = 0;
             if (selAcabadoPiso === 'economico') { costoAcabadoPiso = superficie * 160; }
             else if (selAcabadoPiso === 'estandar') { costoAcabadoPiso = superficie * 310; }
             else if (selAcabadoPiso === 'premium') { costoAcabadoPiso = superficie * 950; }
             else { costoAcabadoPiso = superficie * 320; }
-            if (selMurosPlafones === 'basico') { costoMuros = superficie * 0.65 * 200; }
-            else if (selMurosPlafones === 'estandar') { costoMuros = superficie * 0.65 * 280; }
-            else if (selMurosPlafones === 'premium') { costoMuros = superficie * 0.65 * 670; }
-            else { costoMuros = 0; }
             if (selCarpinteria === 'basico') { costoCarpinteria = superficie * 850; }
             else if (selCarpinteria === 'estandar') { costoCarpinteria = superficie * 1450; }
             else if (selCarpinteria === 'premium') { costoCarpinteria = superficie * 2800; }
             else { costoCarpinteria = 0; }
-            if (selInstalacionHidro === 'basica') { costoHidro = superficie * 280; }
-            else if (selInstalacionHidro === 'completa') { costoHidro = superficie * 680; }
-            else if (selInstalacionHidro === 'premium') { costoHidro = superficie * 1200; }
-            else { costoHidro = 0; }
-            var costoNuevosSistemas = costoAcabadoPiso + costoMuros + costoCarpinteria + costoHidro;
-            console.log('Piso:', costoAcabadoPiso);
-            console.log('Muros:', costoMuros);
-            console.log('Carpinteria:', costoCarpinteria);
-            console.log('Hidro:', costoHidro);
-            console.log('Total nuevos:', costoNuevosSistemas);
+            var costoNuevosSistemas = costoAcabadoPiso + costoCarpinteria;
             res.mat = res.mat + costoNuevosSistemas;
             res.sub = res.mat + res.mo + (res.equipEspecial || 0);
             res.imp = Math.round(res.sub * 0.10);
@@ -6308,6 +6254,7 @@
             document.getElementById('budgetForm').style.display = 'none';
             document.getElementById('screen-loading').classList.remove('active');
             document.getElementById('screen-results').classList.add('active');
+            actualizarContextoAgente();
             aplicarEstadoPaywall();
             var donutCtx = document.getElementById('donut-chart');
             var donutCont = document.getElementById('donut-container');
@@ -6399,19 +6346,11 @@
                 else if (selAcabadoPiso === 'estandar') { lvPiso = m2lv * 310; }
                 else if (selAcabadoPiso === 'premium') { lvPiso = m2lv * 950; }
                 else { lvPiso = m2lv * 320; }
-                var lvMuros = 0;
-                if (selMurosPlafones === 'basico') { lvMuros = m2lv * 0.65 * 200; }
-                else if (selMurosPlafones === 'estandar') { lvMuros = m2lv * 0.65 * 280; }
-                else if (selMurosPlafones === 'premium') { lvMuros = m2lv * 0.65 * 670; }
                 var lvCarp = 0;
                 if (selCarpinteria === 'basico') { lvCarp = m2lv * 850; }
                 else if (selCarpinteria === 'estandar') { lvCarp = m2lv * 1450; }
                 else if (selCarpinteria === 'premium') { lvCarp = m2lv * 2800; }
-                var lvHidro = 0;
-                if (selInstalacionHidro === 'basica') { lvHidro = m2lv * 280; }
-                else if (selInstalacionHidro === 'completa') { lvHidro = m2lv * 680; }
-                else if (selInstalacionHidro === 'premium') { lvHidro = m2lv * 1200; }
-                var lvNuevos = lvPiso + lvMuros + lvCarp + lvHidro;
+                var lvNuevos = lvPiso + lvCarp;
                 res.mat = res.mat + lvNuevos;
                 res.sub = res.mat + res.mo + (res.equipEspecial || 0);
                 res.imp = Math.round(res.sub * 0.10);
@@ -7350,20 +7289,9 @@
             }
 
             var systemFinal = AGENTE_SYSTEM_PROMPT;
-            if (presupuestoActual && presupuestoActual.totalGeneral > 0) {
-                var estadoNombreCtx = '';
-                if (typeof ESTADOS !== 'undefined' && F.estado && ESTADOS[F.estado]) {
-                    estadoNombreCtx = ESTADOS[F.estado].nombre || F.estado;
-                }
-                systemFinal = systemFinal +
-                    ' CONTEXTO DE OBRA ACTIVA DEL USUARIO: ' +
-                    'Tipo: ' + (presupuestoActual.tipoProyecto || '') +
-                    '. Superficie: ' + (presupuestoActual.m2 || 0) + 'm2.' +
-                    ' Estado: ' + estadoNombreCtx +
-                    '. Acabado: ' + (presupuestoActual.acabado || '') +
-                    '. Total general: $' + Math.round(presupuestoActual.totalGeneral).toLocaleString('es-MX') +
-                    ' MXN. Materiales: $' + Math.round(presupuestoActual.totalMateriales).toLocaleString('es-MX') +
-                    ' MXN. Mano de obra: $' + Math.round(presupuestoActual.totalManoObra).toLocaleString('es-MX') + ' MXN.';
+            if (agenteContextoObra && agenteContextoObra.length > 0) {
+                systemFinal = systemFinal + ' CONTEXTO DE OBRA ACTIVA: ' +
+                    agenteContextoObra;
             }
 
             var endpoint = 'https://generativelanguage.googleapis.com/v1beta/models/' +
@@ -7433,6 +7361,39 @@
                 campo.value = mensajeContexto;
                 campo.focus();
             }
+        }
+
+        function actualizarContextoAgente() {
+            if (!presupuestoActual || presupuestoActual.totalGeneral <= 0) { return; }
+            var estadoNombreAct = '';
+            if (typeof ESTADOS !== 'undefined' && F.estado && ESTADOS[F.estado]) {
+                estadoNombreAct = ESTADOS[F.estado].nombre || F.estado;
+            }
+            var tipoTextoAct = {
+                vivienda: 'Casa habitaci\u00f3n',
+                comercial: 'Local comercial',
+                departamentos: 'Edificio de departamentos'
+            }[presupuestoActual.tipoProyecto] || (presupuestoActual.tipoProyecto || '');
+            agenteContextoObra = 'El usuario tiene un presupuesto activo en ConstruIA: ' +
+                'Tipo de obra: ' + tipoTextoAct + '. ' +
+                'Superficie: ' + (presupuestoActual.m2 || 0) + 'm2. ' +
+                'Estado: ' + estadoNombreAct + '. ' +
+                'Nivel de acabados: ' + (presupuestoActual.acabado || '') + '. ' +
+                'Total general: $' +
+                Math.round(presupuestoActual.totalGeneral).toLocaleString('es-MX') +
+                ' MXN. ' +
+                'Subtotal materiales: $' +
+                Math.round(presupuestoActual.totalMateriales).toLocaleString('es-MX') +
+                ' MXN. ' +
+                'Mano de obra: $' +
+                Math.round(presupuestoActual.totalManoObra).toLocaleString('es-MX') +
+                ' MXN. ' +
+                'Imprevistos (10pct): $' +
+                Math.round(presupuestoActual.totalImprevistos).toLocaleString('es-MX') +
+                ' MXN. ' +
+                'Costo por m2: $' +
+                Math.round(presupuestoActual.costoM2 || 0).toLocaleString('es-MX') +
+                ' MXN/m2.';
         }
 
         function agenteKeyPress(evento) {
