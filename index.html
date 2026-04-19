@@ -6255,6 +6255,14 @@
             document.getElementById('screen-loading').classList.remove('active');
             document.getElementById('screen-results').classList.add('active');
             actualizarContextoAgente();
+            if (presupuestoActual && presupuestoActual.totalGeneral > 0) {
+                var costoM2redondeado = Math.round(presupuestoActual.costoM2 || 0);
+                mostrarRecomendacionVivo(
+                    'Presupuesto listo. Costo/m\u00b2: $' +
+                    costoM2redondeado.toLocaleString('es-MX') +
+                    ' MXN. \u00bfQuieres que analice si es competitivo para la zona?'
+                );
+            }
             aplicarEstadoPaywall();
             var donutCtx = document.getElementById('donut-chart');
             var donutCont = document.getElementById('donut-container');
@@ -6417,6 +6425,9 @@
                         } else {
                             card.classList.add('selected');
                             F[stateKey] = card.getAttribute('data-value');
+                            if (typeof generarRecomendacionSegunSeleccion === 'function') {
+                                generarRecomendacionSegunSeleccion(groupId, F[stateKey]);
+                            }
                         }
                         if (typeof updateLivePreview === 'function') { updateLivePreview(); }
                         var infoDiv = document.getElementById('info-' + groupId);
@@ -7204,6 +7215,14 @@
            AGENTE IA CONSTRUIA — FUNCIONES
         ═══════════════════════════════════════════════════════════════ */
 
+        function togglePanelAgente() {
+            if (agentePanelAbierto) {
+                cerrarPanelAgente();
+            } else {
+                abrirPanelAgente();
+            }
+        }
+
         function abrirPanelAgente() {
             var panel = document.getElementById('agente-panel');
             var overlay = document.getElementById('agente-overlay');
@@ -7298,6 +7317,7 @@
                 'gemini-2.0-flash:generateContent?key=' + GEMINI_KEY;
             var cuerpo = JSON.stringify({
                 system_instruction: { parts: [{ text: systemFinal }] },
+                tools: [{ google_search: {} }],
                 contents: agenteHistorial
             });
 
@@ -7361,6 +7381,52 @@
                 campo.value = mensajeContexto;
                 campo.focus();
             }
+        }
+
+        function mostrarRecomendacionVivo(texto) {
+            var burbuja = document.getElementById('agente-burbuja-vivo');
+            var burbujaTexto = document.getElementById('agente-burbuja-texto');
+            var punto = document.getElementById('agente-punto');
+            if (!burbuja || !burbujaTexto) { return; }
+            burbujaTexto.textContent = texto;
+            burbuja.style.display = 'block';
+            burbuja.style.opacity = '0';
+            if (punto) { punto.style.display = 'block'; }
+            if (typeof gsap !== 'undefined') {
+                gsap.to(burbuja, { opacity: 1, duration: 0.4, ease: 'power2.out' });
+            } else {
+                burbuja.style.opacity = '1';
+            }
+            setTimeout(function() {
+                if (typeof gsap !== 'undefined') {
+                    gsap.to(burbuja, {
+                        opacity: 0, duration: 0.4,
+                        onComplete: function() { burbuja.style.display = 'none'; }
+                    });
+                } else {
+                    burbuja.style.display = 'none';
+                }
+            }, 8000);
+        }
+
+        function generarRecomendacionSegunSeleccion(grupoId, valor) {
+            var recomendaciones = {
+                'vivienda': 'Casa habitaci\u00f3n seleccionada. Recuerda incluir castillos y dalas seg\u00fan NTC para zona s\u00edsmica.',
+                'comercial': 'Local comercial. Considera instalaci\u00f3n trif\u00e1sica si tendr\u00e1s equipos de alto consumo.',
+                'departamentos': 'Edificio de departamentos. Se recomienda sistema hidroneumático y elevador desde 4 niveles.',
+                'block': 'Block 15x20x40 es el sistema m\u00e1s usado en M\u00e9xico. Rendimiento: 10-12 m2/d\u00eda por cuadrilla.',
+                'tabique': 'Tabique rojo ofrece mejor aislamiento t\u00e9rmico que el block seg\u00fan NTC de eficiencia energ\u00e9tica.',
+                'nervada': 'Losa nervada: 30% m\u00e1s ligera que maciza. Ahorra en cimentaci\u00f3n y columnas.',
+                'maciza': 'Losa maciza: m\u00e1xima resistencia. Requiere m\u00e1s concreto y acero que la nervada.',
+                'economico': 'Acabado econ\u00f3mico: ideal para vivienda de inter\u00e9s social. Vida \u00fatil estimada 10-15 a\u00f1os.',
+                'estandar': 'Acabado est\u00e1ndar: el m\u00e1s solicitado. Buena relaci\u00f3n costo-durabilidad para vivienda media.',
+                'premium': 'Acabado premium: inversi\u00f3n que aumenta el valor de la propiedad 20-30% sobre el costo.',
+                'porcelanato': 'Porcelanato 60x60: absorci\u00f3n menor a 0.5%, ideal para zonas de alto tr\u00e1nsito.',
+                'zapatas': 'Zapatas aisladas: ideales para terreno firme. Costo referencia: $1,900 por pieza CMIC 2026.',
+                'losa_cim': 'Losa de cimentaci\u00f3n: mejor para suelos blandos o arcillosos. Mayor \u00e1rea de distribuci\u00f3n de cargas.'
+            };
+            var rec = recomendaciones[valor];
+            if (rec) { mostrarRecomendacionVivo(rec); }
         }
 
         function actualizarContextoAgente() {
@@ -7451,8 +7517,17 @@
         </div>
     </div>
 
-    <!-- BOTON FLOTANTE -->
-    <button id="agente-fab" onclick="abrirPanelAgente()" style="position:fixed;bottom:28px;right:28px;width:56px;height:56px;background:linear-gradient(135deg,#4F46E5,#7C3AED);border:none;border-radius:50%;cursor:pointer;z-index:997;box-shadow:0 4px 20px rgba(79,70,229,0.5);display:flex;align-items:center;justify-content:center;font-size:1.4rem;transition:transform 0.2s,box-shadow 0.2s;" onmouseover="this.style.transform='scale(1.1)';this.style.boxShadow='0 6px 28px rgba(79,70,229,0.7)'" onmouseout="this.style.transform='scale(1)';this.style.boxShadow='0 4px 20px rgba(79,70,229,0.5)'">&#129302;</button>
+    <!-- BOTON FLOTANTE CON BURBUJA -->
+    <div id="agente-fab-container" style="position:fixed;bottom:24px;right:24px;z-index:997;display:flex;flex-direction:column;align-items:flex-end;gap:8px;">
+        <div id="agente-burbuja-vivo" style="display:none;background:#1A1F35;border:1px solid #4F46E5;border-radius:16px 16px 4px 16px;padding:10px 14px;max-width:240px;font-size:0.78rem;color:#e2e8f0;line-height:1.4;box-shadow:0 4px 20px rgba(15,22,35,0.5);cursor:pointer;transition:opacity 0.3s;" onclick="abrirPanelAgente()">
+            <div style="color:#818cf8;font-size:0.7rem;font-weight:600;margin-bottom:4px;">&#129302; Agente ConstruIA</div>
+            <div id="agente-burbuja-texto">Selecciona opciones para ver recomendaciones en vivo</div>
+        </div>
+        <button id="agente-fab" onclick="togglePanelAgente()" style="width:52px;height:52px;background:linear-gradient(135deg,#4F46E5,#7C3AED);border:none;border-radius:50%;cursor:pointer;box-shadow:0 4px 16px rgba(79,70,229,0.45);display:flex;align-items:center;justify-content:center;font-size:1.3rem;transition:transform 0.2s,box-shadow 0.2s;position:relative;" onmouseover="this.style.transform='scale(1.08)'" onmouseout="this.style.transform='scale(1)'">
+            &#129302;
+            <div id="agente-punto" style="display:none;position:absolute;top:2px;right:2px;width:10px;height:10px;background:#10B981;border-radius:50%;border:2px solid #0F1623;"></div>
+        </button>
+    </div>
 
     <button type="button" id="btn-ir-calculadora" style="display:none!important;position:absolute;left:-9999px;" aria-hidden="true">hidden</button>
 </body>
