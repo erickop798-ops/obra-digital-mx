@@ -7343,8 +7343,9 @@
                     }
                 } else if (xhr.status === 429) {
                     agenteAgregarMensaje('agente',
-                        'El agente recibi\u00f3 demasiadas solicitudes. ' +
-                        'Espera unos segundos e intenta de nuevo.'
+                        'El agente est\u00e1 procesando muchas solicitudes. ' +
+                        'Espera 30 segundos e int\u00e9ntalo de nuevo. ' +
+                        '(L\u00edmite del servicio gratuito de IA)'
                     );
                     var btnEnviar = document.querySelector('#agente-panel button[onclick="agenteEnviarMensaje()"]');
                     if (btnEnviar) {
