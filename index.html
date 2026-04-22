@@ -17,6 +17,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="db_conocimiento.js"></script>
     <script src="db_permisos.js"></script>
+    <script src="db_insumos.js"></script>
     <script src="ObraDigitalEngine.js"></script>
     <style>
         :root {
@@ -2910,6 +2911,129 @@
             border-bottom: 1px solid var(--border);
         }
 
+        /* ---- PANTALLA MATERIALES T-2 ---- */
+        #screen-materiales { padding: 24px 0 48px; }
+        .materiales-header { margin-bottom: 28px; }
+        .materiales-header h1 { font-size: 1.5rem; font-weight: 800; color: var(--primary); margin-bottom: 6px; }
+        .materiales-header p { font-size: 0.85rem; color: var(--text-2); }
+        .mat-step-label {
+            font-size: 0.78rem; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 1px; color: var(--text-2); margin-bottom: 14px;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .materiales-tipos-grid {
+            display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 24px;
+        }
+        @media (min-width: 640px) { .materiales-tipos-grid { grid-template-columns: repeat(4, 1fr); } }
+        .mat-tipo-card {
+            border: 2px solid var(--border); border-radius: 14px; padding: 14px 12px;
+            cursor: pointer; background: var(--bg-card); transition: all .18s cubic-bezier(.4,0,.2,1);
+            text-align: center; position: relative;
+        }
+        .mat-tipo-card:hover {
+            border-color: var(--accent); background: rgba(79,70,229,0.03);
+            transform: translateY(-2px); box-shadow: 0 8px 20px rgba(79,70,229,0.12);
+        }
+        .mat-tipo-card.selected {
+            border-color: var(--accent); background: var(--primary);
+            box-shadow: 0 4px 16px rgba(79,70,229,0.35);
+        }
+        .mat-tipo-card.selected::after {
+            content: '\2713'; position: absolute; top: 8px; right: 10px;
+            width: 20px; height: 20px; border-radius: 50%; background: var(--accent);
+            color: #fff; font-size: 0.7rem; font-weight: 900; display: flex;
+            align-items: center; justify-content: center; line-height: 20px; text-align: center;
+        }
+        .mat-tipo-icono { font-size: 1.7rem; margin-bottom: 7px; display: block; }
+        .mat-tipo-titulo { font-size: 0.76rem; font-weight: 700; color: var(--text-1); line-height: 1.3; margin-bottom: 3px; }
+        .mat-tipo-desc { font-size: 0.62rem; color: var(--text-2); line-height: 1.4; }
+        .mat-tipo-card.selected .mat-tipo-titulo,
+        .mat-tipo-card.selected .mat-tipo-desc { color: rgba(255,255,255,0.85); }
+        .mat-inputs-panel {
+            background: var(--bg-card); border: 1px solid var(--border);
+            border-radius: var(--r-lg); padding: 22px 22px 18px; margin-bottom: 20px; display: none;
+        }
+        .mat-inputs-panel.visible { display: block; }
+        .mat-fields-grid {
+            display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-bottom: 20px;
+        }
+        @media (max-width: 480px) { .mat-fields-grid { grid-template-columns: 1fr; } }
+        .mat-field-group { display: flex; flex-direction: column; gap: 6px; }
+        .mat-field-label { font-size: 0.78rem; font-weight: 600; color: var(--text-1); }
+        .mat-field-input, .mat-field-select {
+            width: 100%; padding: 10px 14px; border: 1.5px solid var(--border);
+            border-radius: var(--r-sm); background: var(--bg-card); font-size: 0.88rem;
+            font-family: inherit; color: var(--text-1); outline: none;
+            transition: border-color .2s, box-shadow .2s; -webkit-appearance: none; appearance: none;
+        }
+        .mat-field-input:focus, .mat-field-select:focus {
+            border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft);
+        }
+        .btn-calcular-mat {
+            width: 100%; padding: 15px; border: none; border-radius: var(--r-lg);
+            background: var(--accent); color: #fff; font-size: 0.92rem; font-weight: 800;
+            cursor: pointer; font-family: inherit; letter-spacing: .5px; text-transform: uppercase;
+            transition: all .2s cubic-bezier(.4,0,.2,1);
+        }
+        .btn-calcular-mat:hover {
+            background: var(--accent-hover); transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(79,70,229,0.35);
+        }
+        .mat-resultado { display: none; margin-top: 24px; }
+        .mat-resultado.visible { display: block; }
+        .mat-resultado-header {
+            background: var(--primary); border-radius: var(--r-xl) var(--r-xl) 0 0;
+            padding: 20px 24px;
+        }
+        .mat-resultado-titulo { font-size: 1.05rem; font-weight: 800; color: #fff; margin-bottom: 4px; }
+        .mat-resultado-sub { font-size: 0.78rem; color: rgba(255,255,255,0.60); }
+        .mat-tabla-wrap {
+            background: var(--bg-card); border: 1px solid var(--border); border-top: none;
+            border-radius: 0 0 var(--r-xl) var(--r-xl); overflow: hidden;
+        }
+        .mat-tabla { width: 100%; border-collapse: collapse; }
+        .mat-tabla thead tr { background: var(--bg-subtle); }
+        .mat-tabla th {
+            padding: 9px 12px; font-size: 0.65rem; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 0.8px; color: var(--text-2); text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        .mat-tabla th:last-child, .mat-tabla td:last-child { text-align: right; }
+        .mat-tabla td {
+            padding: 9px 12px; font-size: 0.82rem; color: var(--text-1);
+            border-bottom: 1px solid var(--border);
+        }
+        .mat-tabla tr:last-child td { border-bottom: none; }
+        .mat-tabla .td-material { font-weight: 600; }
+        .mat-tabla .td-total { font-weight: 700; }
+        .mat-totales { padding: 14px 18px; background: var(--bg-card); border-top: 2px solid var(--border); }
+        .mat-total-row {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 5px 0; font-size: 0.86rem; color: var(--text-2);
+        }
+        .mat-total-row.grand {
+            font-size: 0.98rem; font-weight: 800; color: var(--primary);
+            border-top: 1px solid var(--border); padding-top: 11px; margin-top: 6px;
+        }
+        .mat-total-row.grand .mat-total-val { color: var(--accent); font-size: 1.15rem; }
+        .mat-total-val { font-weight: 700; color: var(--text-1); }
+        .mat-nota {
+            padding: 10px 18px 14px; font-size: 0.70rem; color: var(--text-3); line-height: 1.5;
+        }
+        .mat-acciones { display: flex; gap: 10px; margin-top: 16px; }
+        .btn-mat-reset {
+            flex: 1; padding: 13px; border: 1px solid var(--border-strong);
+            border-radius: var(--r-md); background: var(--surface-2); color: var(--text-2);
+            font-size: 0.82rem; font-weight: 600; cursor: pointer; font-family: inherit; transition: all .2s;
+        }
+        .btn-mat-reset:hover { background: var(--surface-3); color: var(--text-1); }
+        .btn-mat-pdf {
+            flex: 2; padding: 13px; border: none; border-radius: var(--r-md);
+            background: var(--primary); color: #fff; font-size: 0.82rem; font-weight: 700;
+            cursor: pointer; font-family: inherit; transition: all .2s;
+        }
+        .btn-mat-pdf:hover { background: #1A2235; transform: translateY(-1px); }
+
     </style>
 </head>
 
@@ -3273,25 +3397,25 @@
                                 <span class="home-tool-badge available">Disponible</span>
                                 <div class="home-tool-icon">&#128196;</div>
                                 <div class="home-tool-name">Checklist de Permisos</div>
-                                <div class="home-tool-desc">Revisa qu&#233; documentos necesitas para tramitar tu licencia de construcci&#243;n en 10 estados.</div>
+                                <div class="home-tool-desc">Revisa qu&#233; documentos necesitas para tramitar tu licencia de construcci&#243;n en 32 estados.</div>
+                            </div>
+                            <div class="home-tool-card active-tool" id="home-card-materiales" onclick="mostrarScreen('screen-materiales')">
+                                <span class="home-tool-badge available">Disponible</span>
+                                <div class="home-tool-icon">&#127959;</div>
+                                <div class="home-tool-name">Calculadora de Materiales</div>
+                                <div class="home-tool-desc">Calcula exactamente cu&#225;nto material comprar con precios reales 2026. Sin desperdiciar ni quedarte corto.</div>
                             </div>
                             <div class="home-tool-card coming-soon">
                                 <span class="home-tool-badge soon">Pr&#243;ximamente</span>
-                                <div class="home-tool-icon">&#128203;</div>
-                                <div class="home-tool-name">Generador de cat&#225;logos</div>
-                                <div class="home-tool-desc">Genera cat&#225;logos de conceptos con precios unitarios listos para exportar.</div>
+                                <div class="home-tool-icon">&#127968;</div>
+                                <div class="home-tool-name">Simulador de Remodelaci&#243;n</div>
+                                <div class="home-tool-desc">Estima costos de remodelaci&#243;n por cuarto o zona, con acabados y mano de obra.</div>
                             </div>
                             <div class="home-tool-card coming-soon">
                                 <span class="home-tool-badge soon">Pr&#243;ximamente</span>
-                                <div class="home-tool-icon">&#128200;</div>
-                                <div class="home-tool-name">Control de obra</div>
-                                <div class="home-tool-desc">Seguimiento de avance, estimaciones y control de costos por etapa.</div>
-                            </div>
-                            <div class="home-tool-card coming-soon">
-                                <span class="home-tool-badge soon">Pr&#243;ximamente</span>
-                                <div class="home-tool-icon">&#128081;</div>
-                                <div class="home-tool-name">Honorarios profesionales</div>
-                                <div class="home-tool-desc">Calcula honorarios de dise&#241;o y supervisi&#243;n con base en normativa CAM-SAM.</div>
+                                <div class="home-tool-icon">&#127891;</div>
+                                <div class="home-tool-name">Asistente de Tesis</div>
+                                <div class="home-tool-desc">Genera memorias de c&#225;lculo y presupuestos para proyectos de titulaci&#243;n.</div>
                             </div>
                         </div>
                     </div>
@@ -3392,6 +3516,188 @@
                             &#9888;&#65039; <strong>Nota:</strong> Los requisitos mostrados son referenciales y est&#225;n basados en los reglamentos estatales y municipales vigentes.
                             Verificar siempre con la dependencia correspondiente antes de iniciar el tr&#225;mite.
                             ObraDigitalMX no se hace responsable de cambios en los requisitos oficiales.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SCREEN MATERIALES T-2 -->
+                <div id="screen-materiales" class="screen">
+                    <button type="button" class="btn-back-permisos" onclick="mostrarScreen('screen-home')">
+                        &#8592; Volver al inicio
+                    </button>
+                    <div class="materiales-header">
+                        <h1>&#127959; Calculadora de Materiales</h1>
+                        <p>Selecciona qu&#233; vas a construir, ingresa las dimensiones y obtiene tu lista de compra exacta con factor de desperdicio incluido.</p>
+                    </div>
+
+                    <div class="mat-step-label">&#9312; &#191;Qu&#233; vas a construir?</div>
+                    <div class="materiales-tipos-grid">
+                        <div class="mat-tipo-card" id="mat-card-losa" onclick="seleccionarTipoMat('losa')">
+                            <span class="mat-tipo-icono">&#9632;</span>
+                            <div class="mat-tipo-titulo">Losa de entrepiso</div>
+                            <div class="mat-tipo-desc">Losa maciza o nervada. Concreto, varilla y cimbra.</div>
+                        </div>
+                        <div class="mat-tipo-card" id="mat-card-muros" onclick="seleccionarTipoMat('muros')">
+                            <span class="mat-tipo-icono">&#9646;</span>
+                            <div class="mat-tipo-titulo">Muros</div>
+                            <div class="mat-tipo-desc">Block de concreto 15 cm o tabique rojo. Incluye mortero.</div>
+                        </div>
+                        <div class="mat-tipo-card" id="mat-card-piso" onclick="seleccionarTipoMat('piso')">
+                            <span class="mat-tipo-icono">&#11036;</span>
+                            <div class="mat-tipo-titulo">Piso</div>
+                            <div class="mat-tipo-desc">Cer&#225;mica o porcelanato. Pegamento y lechada incluidos.</div>
+                        </div>
+                        <div class="mat-tipo-card" id="mat-card-cimentacion" onclick="seleccionarTipoMat('cimentacion')">
+                            <span class="mat-tipo-icono">&#128970;</span>
+                            <div class="mat-tipo-titulo">Cimentaci&#243;n</div>
+                            <div class="mat-tipo-desc">Zapatas aisladas o losa de cimentaci&#243;n. Concreto y varilla.</div>
+                        </div>
+                        <div class="mat-tipo-card" id="mat-card-aplanado" onclick="seleccionarTipoMat('aplanado')">
+                            <span class="mat-tipo-icono">&#128396;</span>
+                            <div class="mat-tipo-titulo">Aplanado y pintura</div>
+                            <div class="mat-tipo-desc">Mortero para aplanar muros y pintura interior o exterior.</div>
+                        </div>
+                        <div class="mat-tipo-card" id="mat-card-impermeabilizacion" onclick="seleccionarTipoMat('impermeabilizacion')">
+                            <span class="mat-tipo-icono">&#128167;</span>
+                            <div class="mat-tipo-titulo">Impermeabilizaci&#243;n</div>
+                            <div class="mat-tipo-desc">Impermeabilizante y sellador para azotea plana.</div>
+                        </div>
+                        <div class="mat-tipo-card" id="mat-card-barda" onclick="seleccionarTipoMat('barda')">
+                            <span class="mat-tipo-icono">&#128683;</span>
+                            <div class="mat-tipo-titulo">Barda perimetral</div>
+                            <div class="mat-tipo-desc">Block o tabique para barda seg&#250;n metros lineales y altura.</div>
+                        </div>
+                        <div class="mat-tipo-card" id="mat-card-cuarto" onclick="seleccionarTipoMat('cuarto')">
+                            <span class="mat-tipo-icono">&#127968;</span>
+                            <div class="mat-tipo-titulo">Cuarto completo</div>
+                            <div class="mat-tipo-desc">Muros, losa, piso y aplanado para un cuarto nuevo de una planta.</div>
+                        </div>
+                    </div>
+
+                    <!-- SUB-PASO 2: Inputs -->
+                    <div class="mat-inputs-panel" id="mat-inputs-panel">
+                        <div class="mat-step-label" id="mat-panel-titulo">&#9313; Datos del &#225;rea</div>
+                        <div class="mat-fields-grid">
+                            <div class="mat-field-group" id="mat-grp-largo" style="display:none">
+                                <label class="mat-field-label">Largo (metros)</label>
+                                <input type="number" id="mat-largo" class="mat-field-input" min="1" max="200" placeholder="Ej: 6">
+                            </div>
+                            <div class="mat-field-group" id="mat-grp-ancho" style="display:none">
+                                <label class="mat-field-label">Ancho (metros)</label>
+                                <input type="number" id="mat-ancho" class="mat-field-input" min="1" max="200" placeholder="Ej: 4">
+                            </div>
+                            <div class="mat-field-group" id="mat-grp-m2" style="display:none">
+                                <label class="mat-field-label">Superficie total (m&#178;)</label>
+                                <input type="number" id="mat-m2" class="mat-field-input" min="1" max="2000" placeholder="Ej: 40">
+                            </div>
+                            <div class="mat-field-group" id="mat-grp-ml" style="display:none">
+                                <label class="mat-field-label">Metros lineales de muro</label>
+                                <input type="number" id="mat-ml" class="mat-field-input" min="1" max="500" placeholder="Ej: 20">
+                            </div>
+                            <div class="mat-field-group" id="mat-grp-altura-muro" style="display:none">
+                                <label class="mat-field-label">Altura del muro</label>
+                                <select id="mat-altura-muro" class="mat-field-select">
+                                    <option value="2.40">2.40 m</option>
+                                    <option value="2.70" selected>2.70 m</option>
+                                    <option value="3.00">3.00 m</option>
+                                    <option value="3.50">3.50 m</option>
+                                    <option value="4.00">4.00 m</option>
+                                </select>
+                            </div>
+                            <div class="mat-field-group" id="mat-grp-altura-barda" style="display:none">
+                                <label class="mat-field-label">Altura de barda</label>
+                                <select id="mat-altura-barda" class="mat-field-select">
+                                    <option value="1.20">1.20 m</option>
+                                    <option value="1.60" selected>1.60 m</option>
+                                    <option value="2.00">2.00 m</option>
+                                    <option value="2.40">2.40 m</option>
+                                </select>
+                            </div>
+                            <div class="mat-field-group" id="mat-grp-profundidad" style="display:none">
+                                <label class="mat-field-label">Profundidad de excavaci&#243;n</label>
+                                <select id="mat-profundidad" class="mat-field-select">
+                                    <option value="0.40">0.40 m</option>
+                                    <option value="0.60" selected>0.60 m</option>
+                                    <option value="0.80">0.80 m</option>
+                                    <option value="1.00">1.00 m</option>
+                                    <option value="1.20">1.20 m</option>
+                                </select>
+                            </div>
+                            <div class="mat-field-group" id="mat-grp-tipo-losa" style="display:none">
+                                <label class="mat-field-label">Tipo de losa</label>
+                                <select id="mat-tipo-losa" class="mat-field-select">
+                                    <option value="losa_nervada" selected>Losa nervada (vigueta + bovedilla)</option>
+                                    <option value="losa_maciza">Losa maciza 10 cm</option>
+                                </select>
+                            </div>
+                            <div class="mat-field-group" id="mat-grp-tipo-muro" style="display:none">
+                                <label class="mat-field-label">Tipo de muro</label>
+                                <select id="mat-tipo-muro" class="mat-field-select">
+                                    <option value="block15" selected>Block concreto 15&#215;20&#215;40 cm</option>
+                                    <option value="tabique">Tabique rojo recocido</option>
+                                </select>
+                            </div>
+                            <div class="mat-field-group" id="mat-grp-tipo-piso" style="display:none">
+                                <label class="mat-field-label">Tipo de piso</label>
+                                <select id="mat-tipo-piso" class="mat-field-select">
+                                    <option value="ceramica_33">Cer&#225;mica 33&#215;33 cm</option>
+                                    <option value="ceramica_45" selected>Cer&#225;mica 45&#215;45 cm</option>
+                                    <option value="porcelanato_60">Porcelanato 60&#215;60 cm</option>
+                                    <option value="porcelanato_80">Porcelanato 80&#215;80 cm</option>
+                                </select>
+                            </div>
+                            <div class="mat-field-group" id="mat-grp-tipo-cimiento" style="display:none">
+                                <label class="mat-field-label">Tipo de cimentaci&#243;n</label>
+                                <select id="mat-tipo-cimiento" class="mat-field-select">
+                                    <option value="zapatas" selected>Zapatas aisladas</option>
+                                    <option value="losa_cim">Losa de cimentaci&#243;n</option>
+                                </select>
+                            </div>
+                            <div class="mat-field-group" id="mat-grp-tipo-superficie" style="display:none">
+                                <label class="mat-field-label">Superficie a aplanar</label>
+                                <select id="mat-tipo-superficie" class="mat-field-select">
+                                    <option value="interior" selected>Muros interiores</option>
+                                    <option value="exterior">Fachada exterior</option>
+                                    <option value="ambos">Interior y exterior</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button type="button" class="btn-calcular-mat" onclick="calcularMateriales()">
+                            CALCULAR MATERIALES &#8594;
+                        </button>
+                    </div>
+
+                    <!-- RESULTADO -->
+                    <div class="mat-resultado" id="mat-resultado">
+                        <div class="mat-resultado-header">
+                            <div class="mat-resultado-titulo" id="mat-res-titulo">&#128203; Lista de compra</div>
+                            <div class="mat-resultado-sub" id="mat-res-sub"></div>
+                        </div>
+                        <div class="mat-tabla-wrap">
+                            <table class="mat-tabla">
+                                <thead>
+                                    <tr>
+                                        <th>Material</th>
+                                        <th>Cantidad</th>
+                                        <th>Precio unit.</th>
+                                        <th>Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="mat-tabla-body"></tbody>
+                            </table>
+                            <div class="mat-totales" id="mat-totales"></div>
+                            <div class="mat-nota">
+                                &#9989; Ya incluye factor de desperdicio real por material. Precios zona centro M&#233;xico, abril 2026.
+                                Verificar siempre con proveedor local antes de comprar.
+                            </div>
+                        </div>
+                        <div class="mat-acciones">
+                            <button type="button" class="btn-mat-reset" onclick="resetCalculadoraMat()">
+                                &#128269; Calcular otra cantidad
+                            </button>
+                            <button type="button" class="btn-mat-pdf" onclick="generarListaMaterialesPDF()">
+                                &#128196; Descargar lista PDF
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -8189,6 +8495,484 @@
 
             var nombreArchivo = 'ChecklistPermisos_' + estado + '_' + tipo + '_' + anio + '.pdf';
             doc.save(nombreArchivo);
+        }
+
+
+        // ===== CALCULADORA DE MATERIALES T-2 =====
+
+        var matTipoSeleccionado = '';
+        var matResultadoActual = null;
+        var matFolioNum = 1001;
+
+        var _dbM = (typeof db_insumos !== 'undefined' && db_insumos.materiales_base) ? db_insumos.materiales_base : {};
+        var _dbA = (typeof db_insumos !== 'undefined' && db_insumos.acero) ? db_insumos.acero : {};
+        var _dbAca = (typeof db_insumos !== 'undefined' && db_insumos.acabados) ? db_insumos.acabados : {};
+
+        var PRECIOS_MAT = {
+            cemento_bolsa:        (_dbM.cemento_cpc30r    ? _dbM.cemento_cpc30r.precio    : 160),
+            block_15_pieza:       (_dbM.block_15x20x40   ? _dbM.block_15x20x40.precio    : 14),
+            tabique_pieza:        (_dbM.tabique_rojo      ? _dbM.tabique_rojo.precio       : 5.5),
+            varilla_38_12m:       (_dbA.varilla_3_8       ? _dbA.varilla_3_8.precio        : 185),
+            varilla_12_12m:       (_dbA.varilla_1_2       ? _dbA.varilla_1_2.precio        : 310),
+            varilla_14_12m:       (_dbA.varilla_1_4       ? _dbA.varilla_1_4.precio        : 95),
+            arena_m3:             (_dbM.arena_fina        ? _dbM.arena_fina.precio         : 400),
+            grava_m3:             (_dbM.grava_19mm        ? _dbM.grava_19mm.precio         : 430),
+            alambre_kg:           13,
+            vigueta_6m:           145,
+            bovedilla_pieza:      28,
+            ceramica_33_caja:     220,
+            ceramica_45_caja:     310,
+            porcelanato_60_caja:  580,
+            porcelanato_80_caja:  890,
+            pegamento_bolsa:      185,
+            lechada_bolsa:        95,
+            pintura_int_19L:      (_dbAca.pintura_vinilica  ? _dbAca.pintura_vinilica.precio  : 650),
+            pintura_ext_19L:      (_dbAca.pintura_exterior  ? _dbAca.pintura_exterior.precio   : 780),
+            imper_19L:            (_dbAca.impermeabilizante ? _dbAca.impermeabilizante.precio  : 850),
+            sellador_3p8L:        220,
+            malla_m2:             94
+        };
+
+        var FACTOR_CEMENTO     = 1.07;
+        var FACTOR_BLOCK       = 1.05;
+        var FACTOR_TABIQUE     = 1.06;
+        var FACTOR_CER33       = 1.10;
+        var FACTOR_CER45       = 1.08;
+        var FACTOR_POR60       = 1.07;
+        var FACTOR_POR80       = 1.06;
+        var FACTOR_VARILLA     = 1.05;
+        var FACTOR_ARENA       = 1.10;
+        var FACTOR_GRAVA       = 1.10;
+        var FACTOR_PINTURA     = 1.12;
+        var FACTOR_IMPER       = 1.05;
+
+        var MAT_INPUTS_MAP = {
+            losa:               ['largo', 'ancho', 'tipo-losa'],
+            muros:              ['ml', 'altura-muro', 'tipo-muro'],
+            piso:               ['largo', 'ancho', 'tipo-piso'],
+            cimentacion:        ['largo', 'ancho', 'profundidad', 'tipo-cimiento'],
+            aplanado:           ['m2', 'tipo-superficie'],
+            impermeabilizacion: ['largo', 'ancho'],
+            barda:              ['ml', 'altura-barda', 'tipo-muro'],
+            cuarto:             ['largo', 'ancho', 'altura-muro', 'tipo-losa', 'tipo-muro', 'tipo-piso']
+        };
+
+        var MAT_GRP_MAP = {
+            'largo':            'mat-grp-largo',
+            'ancho':            'mat-grp-ancho',
+            'm2':               'mat-grp-m2',
+            'ml':               'mat-grp-ml',
+            'altura-muro':      'mat-grp-altura-muro',
+            'altura-barda':     'mat-grp-altura-barda',
+            'profundidad':      'mat-grp-profundidad',
+            'tipo-losa':        'mat-grp-tipo-losa',
+            'tipo-muro':        'mat-grp-tipo-muro',
+            'tipo-piso':        'mat-grp-tipo-piso',
+            'tipo-cimiento':    'mat-grp-tipo-cimiento',
+            'tipo-superficie':  'mat-grp-tipo-superficie'
+        };
+
+        var MAT_TODOS_LOS_CAMPOS = ['largo', 'ancho', 'm2', 'ml', 'altura-muro', 'altura-barda', 'profundidad', 'tipo-losa', 'tipo-muro', 'tipo-piso', 'tipo-cimiento', 'tipo-superficie'];
+
+        function seleccionarTipoMat(id) {
+            matTipoSeleccionado = id;
+            var tarjetas = document.querySelectorAll('.mat-tipo-card');
+            for (var i = 0; i < tarjetas.length; i++) { tarjetas[i].classList.remove('selected'); }
+            var card = document.getElementById('mat-card-' + id);
+            if (card) { card.classList.add('selected'); }
+            var res = document.getElementById('mat-resultado');
+            if (res) { res.classList.remove('visible'); }
+            var panel = document.getElementById('mat-inputs-panel');
+            if (panel) { panel.classList.add('visible'); }
+            for (var j = 0; j < MAT_TODOS_LOS_CAMPOS.length; j++) {
+                var grpEl = document.getElementById(MAT_GRP_MAP[MAT_TODOS_LOS_CAMPOS[j]]);
+                if (grpEl) { grpEl.style.display = 'none'; }
+            }
+            var inputsDelTipo = MAT_INPUTS_MAP[id] || [];
+            for (var k = 0; k < inputsDelTipo.length; k++) {
+                var grpEl2 = document.getElementById(MAT_GRP_MAP[inputsDelTipo[k]]);
+                if (grpEl2) { grpEl2.style.display = 'flex'; }
+            }
+            if (panel) {
+                setTimeout(function() { panel.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 150);
+            }
+        }
+
+        function _getMatNum(id) {
+            var el = document.getElementById(id);
+            return el ? (parseFloat(el.value) || 0) : 0;
+        }
+        function _getMatSel(id) {
+            var el = document.getElementById(id);
+            return el ? el.value : '';
+        }
+        function _fmxn(n) {
+            var s = n.toFixed(2);
+            var parts = s.split('.');
+            parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+            return '$' + parts[0] + '.' + parts[1];
+        }
+        function _tipoNombre(id) {
+            var n = { losa:'Losa de entrepiso', muros:'Muros', piso:'Piso', cimentacion:'Cimentaci\u00f3n', aplanado:'Aplanado y pintura', impermeabilizacion:'Impermeabilizaci\u00f3n de azotea', barda:'Barda perimetral', cuarto:'Cuarto adicional completo' };
+            return n[id] || id;
+        }
+
+        function calcularMateriales() {
+            if (!matTipoSeleccionado) { alert('Selecciona primero qu\u00e9 vas a construir.'); return; }
+            var tipo = matTipoSeleccionado;
+            var largo     = _getMatNum('mat-largo');
+            var ancho     = _getMatNum('mat-ancho');
+            var m2inp     = _getMatNum('mat-m2');
+            var ml        = _getMatNum('mat-ml');
+            var altMuro   = parseFloat(_getMatSel('mat-altura-muro')) || 2.70;
+            var altBarda  = parseFloat(_getMatSel('mat-altura-barda')) || 1.60;
+            var profund   = parseFloat(_getMatSel('mat-profundidad')) || 0.60;
+            var tipoLosa  = _getMatSel('mat-tipo-losa') || 'losa_nervada';
+            var tipoMuro  = _getMatSel('mat-tipo-muro') || 'block15';
+            var tipoPiso  = _getMatSel('mat-tipo-piso') || 'ceramica_45';
+            var tipoCim   = _getMatSel('mat-tipo-cimiento') || 'zapatas';
+            var tipoSup   = _getMatSel('mat-tipo-superficie') || 'interior';
+
+            var items = [];
+            var subMat = 0;
+            var desc = '';
+
+            function ag(nombre, cantidad, pu, unidad) {
+                var tot = Math.round(cantidad * pu * 100) / 100;
+                subMat += tot;
+                items.push({ nombre: nombre, cantidad: cantidad, precioUnit: pu, unidad: unidad, total: tot });
+            }
+
+            if (tipo === 'losa') {
+                if (largo <= 0 || ancho <= 0) { alert('Ingresa largo y ancho mayores a 0.'); return; }
+                desc = largo + 'm \u00d7 ' + ancho + 'm = ' + parseFloat((largo * ancho).toFixed(1)) + ' m\u00b2';
+                if (tipoLosa === 'losa_maciza') {
+                    var vc = largo * ancho * 0.10;
+                    ag('Cemento CPC 30R', Math.ceil((vc * 7) * FACTOR_CEMENTO), PRECIOS_MAT.cemento_bolsa, 'bolsas');
+                    ag('Arena (m\u00b3)', parseFloat(((vc * 0.54) * FACTOR_ARENA).toFixed(2)), PRECIOS_MAT.arena_m3, 'm\u00b3');
+                    ag('Grava 19mm (m\u00b3)', parseFloat(((vc * 0.64) * FACTOR_GRAVA).toFixed(2)), PRECIOS_MAT.grava_m3, 'm\u00b3');
+                    ag('Varilla 3/8" \u00d7 12m', Math.ceil(((largo * ancho * 3.5) / 12) * FACTOR_VARILLA), PRECIOS_MAT.varilla_38_12m, 'piezas');
+                    ag('Alambre recocido', Math.ceil(largo * ancho * 0.3), PRECIOS_MAT.alambre_kg, 'kg');
+                } else {
+                    var aL = largo * ancho;
+                    ag('Vigueta prefabricada 6m', Math.ceil((aL / 0.60) * 1.05), PRECIOS_MAT.vigueta_6m, 'piezas');
+                    ag('Bovedilla', Math.ceil((aL / 0.24) * 1.05), PRECIOS_MAT.bovedilla_pieza, 'piezas');
+                    ag('Cemento capa compresi\u00f3n', Math.ceil((aL * 0.04 * 7) * FACTOR_CEMENTO), PRECIOS_MAT.cemento_bolsa, 'bolsas');
+                    ag('Arena (m\u00b3)', parseFloat(((aL * 0.04 * 0.54) * FACTOR_ARENA).toFixed(2)), PRECIOS_MAT.arena_m3, 'm\u00b3');
+                    ag('Varilla 3/8" \u00d7 12m', Math.ceil(((aL * 1.2) / 12) * FACTOR_VARILLA), PRECIOS_MAT.varilla_38_12m, 'piezas');
+                    ag('Alambre recocido', Math.ceil(aL * 0.2), PRECIOS_MAT.alambre_kg, 'kg');
+                }
+            } else if (tipo === 'muros') {
+                if (ml <= 0) { alert('Ingresa metros lineales mayores a 0.'); return; }
+                var aM = ml * altMuro;
+                desc = ml + ' ml \u00d7 ' + altMuro + 'm = ' + parseFloat(aM.toFixed(1)) + ' m\u00b2';
+                if (tipoMuro === 'block15') {
+                    ag('Block 15\u00d720\u00d740 cm', Math.ceil(aM * 12.5 * FACTOR_BLOCK), PRECIOS_MAT.block_15_pieza, 'piezas');
+                    ag('Cemento mortero', Math.ceil(aM * 0.25 * FACTOR_CEMENTO), PRECIOS_MAT.cemento_bolsa, 'bolsas');
+                    ag('Arena (m\u00b3)', parseFloat(((aM * 0.035) * FACTOR_ARENA).toFixed(2)), PRECIOS_MAT.arena_m3, 'm\u00b3');
+                    ag('Varilla 3/8" castillos', Math.ceil(Math.ceil(ml / 3) * (altMuro / 12) * 4 * FACTOR_VARILLA), PRECIOS_MAT.varilla_38_12m, 'piezas');
+                } else {
+                    ag('Tabique rojo recocido', Math.ceil(aM * 32 * FACTOR_TABIQUE), PRECIOS_MAT.tabique_pieza, 'piezas');
+                    ag('Cemento mortero', Math.ceil(aM * 0.45 * FACTOR_CEMENTO), PRECIOS_MAT.cemento_bolsa, 'bolsas');
+                    ag('Arena (m\u00b3)', parseFloat(((aM * 0.055) * FACTOR_ARENA).toFixed(2)), PRECIOS_MAT.arena_m3, 'm\u00b3');
+                }
+            } else if (tipo === 'piso') {
+                if (largo <= 0 || ancho <= 0) { alert('Ingresa largo y ancho.'); return; }
+                var aP = largo * ancho;
+                desc = largo + 'm \u00d7 ' + ancho + 'm = ' + parseFloat(aP.toFixed(1)) + ' m\u00b2';
+                if (tipoPiso === 'ceramica_33') {
+                    ag('Cer\u00e1mica 33\u00d733 cm (cajas ~11 pzs)', Math.ceil(Math.ceil(aP * 9.18 * FACTOR_CER33) / 11), PRECIOS_MAT.ceramica_33_caja, 'cajas');
+                    ag('Pegamento para piso', Math.ceil(aP / 6 * FACTOR_CEMENTO), PRECIOS_MAT.pegamento_bolsa, 'bolsas');
+                    ag('Lechada / fragua', Math.ceil(aP / 20), PRECIOS_MAT.lechada_bolsa, 'bolsas');
+                } else if (tipoPiso === 'ceramica_45') {
+                    ag('Cer\u00e1mica 45\u00d745 cm (cajas ~6 pzs)', Math.ceil(Math.ceil(aP * 4.94 * FACTOR_CER45) / 6), PRECIOS_MAT.ceramica_45_caja, 'cajas');
+                    ag('Pegamento para piso', Math.ceil(aP / 6 * FACTOR_CEMENTO), PRECIOS_MAT.pegamento_bolsa, 'bolsas');
+                    ag('Lechada / fragua', Math.ceil(aP / 20), PRECIOS_MAT.lechada_bolsa, 'bolsas');
+                } else if (tipoPiso === 'porcelanato_60') {
+                    ag('Porcelanato 60\u00d760 cm (cajas ~4 pzs)', Math.ceil(Math.ceil(aP * 2.78 * FACTOR_POR60) / 4), PRECIOS_MAT.porcelanato_60_caja, 'cajas');
+                    ag('Pegamento para piso', Math.ceil(aP / 5 * FACTOR_CEMENTO), PRECIOS_MAT.pegamento_bolsa, 'bolsas');
+                    ag('Lechada / fragua', Math.ceil(aP / 18), PRECIOS_MAT.lechada_bolsa, 'bolsas');
+                } else {
+                    ag('Porcelanato 80\u00d780 cm (cajas ~3 pzs)', Math.ceil(Math.ceil(aP * 1.5625 * FACTOR_POR80) / 3), PRECIOS_MAT.porcelanato_80_caja, 'cajas');
+                    ag('Pegamento para piso', Math.ceil(aP / 4.5 * FACTOR_CEMENTO), PRECIOS_MAT.pegamento_bolsa, 'bolsas');
+                    ag('Lechada / fragua', Math.ceil(aP / 16), PRECIOS_MAT.lechada_bolsa, 'bolsas');
+                }
+            } else if (tipo === 'cimentacion') {
+                if (largo <= 0 || ancho <= 0) { alert('Ingresa largo y ancho.'); return; }
+                desc = largo + 'm \u00d7 ' + ancho + 'm, profundidad ' + profund + 'm';
+                if (tipoCim === 'zapatas') {
+                    var vZ = largo * ancho * 0.30;
+                    ag('Cemento CPC 30R', Math.ceil((vZ * 7) * FACTOR_CEMENTO), PRECIOS_MAT.cemento_bolsa, 'bolsas');
+                    ag('Arena (m\u00b3)', parseFloat(((vZ * 0.54) * FACTOR_ARENA).toFixed(2)), PRECIOS_MAT.arena_m3, 'm\u00b3');
+                    ag('Grava 19mm (m\u00b3)', parseFloat(((vZ * 0.64) * FACTOR_GRAVA).toFixed(2)), PRECIOS_MAT.grava_m3, 'm\u00b3');
+                    ag('Varilla 1/2" \u00d7 12m', Math.ceil(((largo * ancho * 5) / 12) * FACTOR_VARILLA), PRECIOS_MAT.varilla_12_12m, 'piezas');
+                    ag('Varilla 3/8" \u00d7 12m', Math.ceil(((largo * ancho * 8) / 12) * FACTOR_VARILLA), PRECIOS_MAT.varilla_38_12m, 'piezas');
+                } else {
+                    var vL2 = largo * ancho * 0.15;
+                    ag('Cemento CPC 30R', Math.ceil((vL2 * 7) * FACTOR_CEMENTO), PRECIOS_MAT.cemento_bolsa, 'bolsas');
+                    ag('Arena (m\u00b3)', parseFloat(((vL2 * 0.54) * FACTOR_ARENA).toFixed(2)), PRECIOS_MAT.arena_m3, 'm\u00b3');
+                    ag('Grava 19mm (m\u00b3)', parseFloat(((vL2 * 0.64) * FACTOR_GRAVA).toFixed(2)), PRECIOS_MAT.grava_m3, 'm\u00b3');
+                    ag('Varilla 3/8" \u00d7 12m', Math.ceil(((largo * ancho * 4.5) / 12) * FACTOR_VARILLA), PRECIOS_MAT.varilla_38_12m, 'piezas');
+                    ag('Malla electrosoldada (m\u00b2)', Math.ceil(largo * ancho * 1.08), PRECIOS_MAT.malla_m2, 'm\u00b2');
+                }
+            } else if (tipo === 'aplanado') {
+                if (m2inp <= 0) { alert('Ingresa la superficie en m\u00b2.'); return; }
+                desc = m2inp + ' m\u00b2 de superficie';
+                if (tipoSup === 'interior') {
+                    ag('Cemento CPC 30R', Math.ceil((m2inp / 4) * FACTOR_CEMENTO), PRECIOS_MAT.cemento_bolsa, 'bolsas');
+                    ag('Arena fina (m\u00b3)', parseFloat(((m2inp * 0.012) * FACTOR_ARENA).toFixed(2)), PRECIOS_MAT.arena_m3, 'm\u00b3');
+                    ag('Pintura vinilica interior (cubeta 19L)', Math.ceil(Math.ceil((m2inp / 12) * FACTOR_PINTURA) / 19), PRECIOS_MAT.pintura_int_19L, 'cubetas');
+                } else if (tipoSup === 'exterior') {
+                    ag('Cemento CPC 30R', Math.ceil((m2inp / 3) * FACTOR_CEMENTO), PRECIOS_MAT.cemento_bolsa, 'bolsas');
+                    ag('Arena gruesa (m\u00b3)', parseFloat(((m2inp * 0.018) * FACTOR_ARENA).toFixed(2)), PRECIOS_MAT.arena_m3, 'm\u00b3');
+                    ag('Pintura exterior (cubeta 19L)', Math.ceil(Math.ceil((m2inp / 10) * FACTOR_PINTURA) / 19), PRECIOS_MAT.pintura_ext_19L, 'cubetas');
+                } else {
+                    ag('Cemento aplanado int. + ext.', Math.ceil((m2inp / 4) * FACTOR_CEMENTO) + Math.ceil((m2inp / 3) * FACTOR_CEMENTO), PRECIOS_MAT.cemento_bolsa, 'bolsas');
+                    ag('Arena (int. + ext.) m\u00b3', parseFloat(((m2inp * 0.012 + m2inp * 0.018) * FACTOR_ARENA).toFixed(2)), PRECIOS_MAT.arena_m3, 'm\u00b3');
+                    ag('Pintura interior (cubeta 19L)', Math.ceil(Math.ceil((m2inp / 12) * FACTOR_PINTURA) / 19), PRECIOS_MAT.pintura_int_19L, 'cubetas');
+                    ag('Pintura exterior (cubeta 19L)', Math.ceil(Math.ceil((m2inp / 10) * FACTOR_PINTURA) / 19), PRECIOS_MAT.pintura_ext_19L, 'cubetas');
+                }
+            } else if (tipo === 'impermeabilizacion') {
+                if (largo <= 0 || ancho <= 0) { alert('Ingresa largo y ancho.'); return; }
+                var aAz = largo * ancho;
+                desc = largo + 'm \u00d7 ' + ancho + 'm = ' + parseFloat(aAz.toFixed(1)) + ' m\u00b2';
+                ag('Impermeabilizante acr\u00edlico (cubeta 19L)', Math.ceil(Math.ceil((aAz / 1.5) * 2 * FACTOR_IMPER) / 19), PRECIOS_MAT.imper_19L, 'cubetas');
+                ag('Sellador (bote 3.8L)', Math.ceil(Math.ceil(aAz / 8) / 3.8), PRECIOS_MAT.sellador_3p8L, 'botes');
+            } else if (tipo === 'barda') {
+                if (ml <= 0) { alert('Ingresa metros lineales.'); return; }
+                var aBa = ml * altBarda;
+                desc = ml + ' ml \u00d7 ' + altBarda + 'm = ' + parseFloat(aBa.toFixed(1)) + ' m\u00b2';
+                if (tipoMuro === 'block15') {
+                    ag('Block 15\u00d720\u00d740 cm', Math.ceil(aBa * 12.5 * FACTOR_BLOCK), PRECIOS_MAT.block_15_pieza, 'piezas');
+                    ag('Cemento mortero', Math.ceil(aBa * 0.25 * FACTOR_CEMENTO), PRECIOS_MAT.cemento_bolsa, 'bolsas');
+                    ag('Arena (m\u00b3)', parseFloat(((aBa * 0.035) * FACTOR_ARENA).toFixed(2)), PRECIOS_MAT.arena_m3, 'm\u00b3');
+                    ag('Varilla 3/8" castillos', Math.ceil(Math.ceil(ml / 3) * (altBarda / 12) * 4 * FACTOR_VARILLA), PRECIOS_MAT.varilla_38_12m, 'piezas');
+                } else {
+                    ag('Tabique rojo recocido', Math.ceil(aBa * 32 * FACTOR_TABIQUE), PRECIOS_MAT.tabique_pieza, 'piezas');
+                    ag('Cemento mortero', Math.ceil(aBa * 0.45 * FACTOR_CEMENTO), PRECIOS_MAT.cemento_bolsa, 'bolsas');
+                    ag('Arena (m\u00b3)', parseFloat(((aBa * 0.055) * FACTOR_ARENA).toFixed(2)), PRECIOS_MAT.arena_m3, 'm\u00b3');
+                }
+            } else if (tipo === 'cuarto') {
+                if (largo <= 0 || ancho <= 0) { alert('Ingresa largo y ancho.'); return; }
+                var perim = (largo + ancho) * 2;
+                var aCuMuro = perim * altMuro;
+                var aCuPiso = largo * ancho;
+                desc = largo + 'm \u00d7 ' + ancho + 'm, altura ' + altMuro + 'm';
+                if (tipoMuro === 'block15') {
+                    ag('Block 15\u00d720\u00d740 cm (muros)', Math.ceil(aCuMuro * 12.5 * FACTOR_BLOCK), PRECIOS_MAT.block_15_pieza, 'piezas');
+                    ag('Cemento mortero muros', Math.ceil(aCuMuro * 0.25 * FACTOR_CEMENTO), PRECIOS_MAT.cemento_bolsa, 'bolsas');
+                    ag('Arena muros (m\u00b3)', parseFloat(((aCuMuro * 0.035) * FACTOR_ARENA).toFixed(2)), PRECIOS_MAT.arena_m3, 'm\u00b3');
+                    ag('Varilla 3/8" castillos', Math.ceil(Math.ceil(perim / 3) * (altMuro / 12) * 4 * FACTOR_VARILLA), PRECIOS_MAT.varilla_38_12m, 'piezas');
+                } else {
+                    ag('Tabique rojo (muros)', Math.ceil(aCuMuro * 32 * FACTOR_TABIQUE), PRECIOS_MAT.tabique_pieza, 'piezas');
+                    ag('Cemento mortero muros', Math.ceil(aCuMuro * 0.45 * FACTOR_CEMENTO), PRECIOS_MAT.cemento_bolsa, 'bolsas');
+                    ag('Arena muros (m\u00b3)', parseFloat(((aCuMuro * 0.055) * FACTOR_ARENA).toFixed(2)), PRECIOS_MAT.arena_m3, 'm\u00b3');
+                }
+                if (tipoLosa === 'losa_maciza') {
+                    var vCuL = aCuPiso * 0.10;
+                    ag('Cemento losa', Math.ceil((vCuL * 7) * FACTOR_CEMENTO), PRECIOS_MAT.cemento_bolsa, 'bolsas');
+                    ag('Arena losa (m\u00b3)', parseFloat(((vCuL * 0.54) * FACTOR_ARENA).toFixed(2)), PRECIOS_MAT.arena_m3, 'm\u00b3');
+                    ag('Grava losa (m\u00b3)', parseFloat(((vCuL * 0.64) * FACTOR_GRAVA).toFixed(2)), PRECIOS_MAT.grava_m3, 'm\u00b3');
+                    ag('Varilla 3/8" losa', Math.ceil(((aCuPiso * 3.5) / 12) * FACTOR_VARILLA), PRECIOS_MAT.varilla_38_12m, 'piezas');
+                    ag('Alambre recocido', Math.ceil(aCuPiso * 0.3), PRECIOS_MAT.alambre_kg, 'kg');
+                } else {
+                    ag('Vigueta prefabricada 6m', Math.ceil((aCuPiso / 0.60) * 1.05), PRECIOS_MAT.vigueta_6m, 'piezas');
+                    ag('Bovedilla', Math.ceil((aCuPiso / 0.24) * 1.05), PRECIOS_MAT.bovedilla_pieza, 'piezas');
+                    ag('Cemento capa compresi\u00f3n', Math.ceil((aCuPiso * 0.04 * 7) * FACTOR_CEMENTO), PRECIOS_MAT.cemento_bolsa, 'bolsas');
+                    ag('Arena losa (m\u00b3)', parseFloat(((aCuPiso * 0.04 * 0.54) * FACTOR_ARENA).toFixed(2)), PRECIOS_MAT.arena_m3, 'm\u00b3');
+                    ag('Varilla 3/8" losa', Math.ceil(((aCuPiso * 1.2) / 12) * FACTOR_VARILLA), PRECIOS_MAT.varilla_38_12m, 'piezas');
+                }
+                if (tipoPiso === 'ceramica_33') {
+                    ag('Cer\u00e1mica 33\u00d733 cm (cajas)', Math.ceil(Math.ceil(aCuPiso * 9.18 * FACTOR_CER33) / 11), PRECIOS_MAT.ceramica_33_caja, 'cajas');
+                } else if (tipoPiso === 'ceramica_45') {
+                    ag('Cer\u00e1mica 45\u00d745 cm (cajas)', Math.ceil(Math.ceil(aCuPiso * 4.94 * FACTOR_CER45) / 6), PRECIOS_MAT.ceramica_45_caja, 'cajas');
+                } else if (tipoPiso === 'porcelanato_60') {
+                    ag('Porcelanato 60\u00d760 cm (cajas)', Math.ceil(Math.ceil(aCuPiso * 2.78 * FACTOR_POR60) / 4), PRECIOS_MAT.porcelanato_60_caja, 'cajas');
+                } else {
+                    ag('Porcelanato 80\u00d780 cm (cajas)', Math.ceil(Math.ceil(aCuPiso * 1.5625 * FACTOR_POR80) / 3), PRECIOS_MAT.porcelanato_80_caja, 'cajas');
+                }
+                ag('Pegamento piso', Math.ceil(aCuPiso / 6 * FACTOR_CEMENTO), PRECIOS_MAT.pegamento_bolsa, 'bolsas');
+                ag('Lechada / fragua', Math.ceil(aCuPiso / 20), PRECIOS_MAT.lechada_bolsa, 'bolsas');
+                var m2AplCu = perim * altMuro;
+                ag('Cemento aplanado interior', Math.ceil((m2AplCu / 4) * FACTOR_CEMENTO), PRECIOS_MAT.cemento_bolsa, 'bolsas');
+                ag('Arena aplanado (m\u00b3)', parseFloat(((m2AplCu * 0.012) * FACTOR_ARENA).toFixed(2)), PRECIOS_MAT.arena_m3, 'm\u00b3');
+                ag('Pintura interior (cubeta 19L)', Math.ceil(Math.ceil((m2AplCu / 12) * FACTOR_PINTURA) / 19), PRECIOS_MAT.pintura_int_19L, 'cubetas');
+            }
+
+            if (items.length === 0) { alert('No se pudo calcular. Verifica los datos.'); return; }
+
+            matResultadoActual = {
+                tipo: tipo,
+                descripcion: desc,
+                items: items,
+                subMat: subMat,
+                folio: 'MAT-2026-' + matFolioNum
+            };
+            matFolioNum++;
+            _mostrarResultadoMat();
+        }
+
+        function _mostrarResultadoMat() {
+            var res = matResultadoActual;
+            if (!res) { return; }
+            document.getElementById('mat-res-titulo').innerHTML = '&#128203; Lista de compra &mdash; ' + _tipoNombre(res.tipo);
+            document.getElementById('mat-res-sub').textContent = res.descripcion;
+            var tbody = document.getElementById('mat-tabla-body');
+            tbody.innerHTML = '';
+            for (var i = 0; i < res.items.length; i++) {
+                var it = res.items[i];
+                var tr = document.createElement('tr');
+                tr.innerHTML = '<td class="td-material">' + it.nombre + '</td>' +
+                    '<td>' + it.cantidad + ' ' + it.unidad + '</td>' +
+                    '<td>' + _fmxn(it.precioUnit) + '</td>' +
+                    '<td class="td-total">' + _fmxn(it.total) + '</td>';
+                tbody.appendChild(tr);
+            }
+            var mo = Math.round(res.subMat * 0.35);
+            var total = res.subMat + mo;
+            document.getElementById('mat-totales').innerHTML =
+                '<div class="mat-total-row"><span>Subtotal materiales</span><span class="mat-total-val">' + _fmxn(res.subMat) + '</span></div>' +
+                '<div class="mat-total-row"><span>+ Mano de obra estimada (35%)</span><span class="mat-total-val">' + _fmxn(mo) + '</span></div>' +
+                '<div class="mat-total-row grand"><span>TOTAL ESTIMADO DE LA PARTIDA</span><span class="mat-total-val">' + _fmxn(total) + '</span></div>';
+            var divRes = document.getElementById('mat-resultado');
+            divRes.classList.add('visible');
+            setTimeout(function() { divRes.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 150);
+        }
+
+        function resetCalculadoraMat() {
+            var divRes = document.getElementById('mat-resultado');
+            if (divRes) { divRes.classList.remove('visible'); }
+            var campos = ['mat-largo', 'mat-ancho', 'mat-m2', 'mat-ml'];
+            for (var i = 0; i < campos.length; i++) {
+                var el = document.getElementById(campos[i]);
+                if (el) { el.value = ''; }
+            }
+        }
+
+        function generarListaMaterialesPDF() {
+            if (!matResultadoActual) { alert('Primero calcula los materiales.'); return; }
+            var jsPDFLib = null;
+            if (typeof jspdf !== 'undefined' && jspdf.jsPDF) { jsPDFLib = jspdf.jsPDF; }
+            else if (typeof window.jspdf !== 'undefined' && window.jspdf.jsPDF) { jsPDFLib = window.jspdf.jsPDF; }
+            if (!jsPDFLib) { alert('PDF no disponible. Verifica tu conexi\u00f3n a internet.'); return; }
+
+            var doc = new jsPDFLib({ orientation: 'portrait', unit: 'mm', format: 'letter' });
+            var mL = 15;
+            var uW = 182;
+            var y = 0;
+            var res = matResultadoActual;
+            var nombre = _tipoNombre(res.tipo);
+
+            doc.setFillColor(15, 22, 35);
+            doc.rect(0, 0, 216, 32, 'F');
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(15);
+            doc.setTextColor(255, 255, 255);
+            doc.text('ConstruIA', mL, 14);
+            doc.setFont('helvetica', 'normal');
+            doc.setFontSize(9);
+            doc.setTextColor(161, 161, 170);
+            doc.text('Lista de Materiales', mL, 23);
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(9);
+            doc.setTextColor(129, 140, 248);
+            doc.text(res.folio, 168, 14);
+            doc.setFont('helvetica', 'normal');
+            doc.setFontSize(8);
+            doc.setTextColor(161, 161, 170);
+            doc.text('Abril 2026', 168, 23);
+
+            y = 44;
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(13);
+            doc.setTextColor(15, 22, 35);
+            doc.text(nombre, mL, y);
+            y += 6;
+            doc.setFont('helvetica', 'normal');
+            doc.setFontSize(9);
+            doc.setTextColor(74, 85, 104);
+            doc.text(res.descripcion, mL, y);
+            y += 12;
+
+            doc.setFillColor(240, 237, 232);
+            doc.rect(mL, y, uW, 8, 'F');
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(7.5);
+            doc.setTextColor(74, 85, 104);
+            doc.text('MATERIAL', mL + 2, y + 5.5);
+            doc.text('CANTIDAD', mL + 95, y + 5.5);
+            doc.text('P. UNIT.', mL + 130, y + 5.5);
+            doc.text('TOTAL', mL + 162, y + 5.5);
+            y += 10;
+
+            for (var i = 0; i < res.items.length; i++) {
+                if (y > 240) { doc.addPage(); y = 20; }
+                var it = res.items[i];
+                if (i % 2 === 0) { doc.setFillColor(249, 247, 244); doc.rect(mL, y, uW, 8, 'F'); }
+                doc.setFont('helvetica', 'normal');
+                doc.setFontSize(8);
+                doc.setTextColor(15, 22, 35);
+                doc.text(it.nombre, mL + 2, y + 5.5);
+                doc.setTextColor(74, 85, 104);
+                doc.text(String(it.cantidad) + ' ' + it.unidad, mL + 95, y + 5.5);
+                doc.text(_fmxn(it.precioUnit), mL + 130, y + 5.5);
+                doc.setFont('helvetica', 'bold');
+                doc.setTextColor(15, 22, 35);
+                doc.text(_fmxn(it.total), mL + 162, y + 5.5);
+                y += 8;
+            }
+
+            y += 5;
+            if (y > 240) { doc.addPage(); y = 20; }
+            doc.setDrawColor(226, 221, 215);
+            doc.line(mL, y, mL + uW, y);
+            y += 7;
+
+            var mo = Math.round(res.subMat * 0.35);
+            var total = res.subMat + mo;
+
+            doc.setFont('helvetica', 'normal');
+            doc.setFontSize(9);
+            doc.setTextColor(74, 85, 104);
+            doc.text('Subtotal materiales:', mL, y);
+            doc.setFont('helvetica', 'bold');
+            doc.setTextColor(15, 22, 35);
+            doc.text(_fmxn(res.subMat), mL + 142, y);
+            y += 7;
+            doc.setFont('helvetica', 'normal');
+            doc.setTextColor(74, 85, 104);
+            doc.text('+ Mano de obra estimada (35%):', mL, y);
+            doc.setFont('helvetica', 'bold');
+            doc.setTextColor(15, 22, 35);
+            doc.text(_fmxn(mo), mL + 142, y);
+            y += 5;
+
+            doc.setFillColor(79, 70, 229);
+            doc.rect(mL, y, uW, 12, 'F');
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(10);
+            doc.setTextColor(255, 255, 255);
+            doc.text('TOTAL ESTIMADO:', mL + 3, y + 8);
+            doc.text(_fmxn(total), mL + 142, y + 8);
+            y += 18;
+
+            if (y > 248) { doc.addPage(); y = 20; }
+            doc.setFillColor(255, 248, 230);
+            doc.rect(mL, y, uW, 16, 'F');
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(7);
+            doc.setTextColor(120, 90, 20);
+            doc.text('NOTA:', mL + 3, y + 5.5);
+            doc.setFont('helvetica', 'normal');
+            doc.setTextColor(92, 68, 8);
+            doc.text('Precios referenciales zona centro Mexico. Verificar con proveedor local antes de comprar.', mL + 14, y + 5.5);
+            doc.text('Mano de obra es estimacion referencial del 35% del costo de materiales.', mL + 3, y + 11);
+            doc.setFont('helvetica', 'normal');
+            doc.setFontSize(7);
+            doc.setTextColor(161, 161, 170);
+            doc.text('ConstruIA.mx  |  Herramientas digitales para construccion  |  Abril 2026', mL, 255);
+
+            doc.save('lista-materiales-' + res.tipo + '.pdf');
         }
 
     </script>
