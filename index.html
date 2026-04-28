@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ObraDigitalMX &#8212; Calculadora de Presupuesto de Construcci&#243;n</title>
+    <title>ConstruIA.mx &#8212; Presupuestador de Construcci&#243;n</title>
     <meta name="description"
         content="Calculadora profesional de presupuesto de construcci&#243;n para M&#233;xico. Precios por estado basados en normas CMIC, CENAPRED y reglamentos oficiales. Para arquitectos, ingenieros y constructores.">
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%234F46E5'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='central' text-anchor='middle' font-family='sans-serif' font-weight='900' font-size='14' fill='white'%3EOB%3C/text%3E%3C/svg%3E" type="image/svg+xml">
@@ -15,10 +15,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script src="db_conocimiento.js"></script>
     <script src="db_permisos.js"></script>
     <script src="db_insumos.js"></script>
-    <script src="ObraDigitalEngine.js"></script>
     <style>
         :root {
             --primary:       #0F1623;
@@ -3034,6 +3034,61 @@
         }
         .btn-mat-pdf:hover { background: #1A2235; transform: translateY(-1px); }
 
+        /* ── MODAL PERSONALIZACIÓN ── */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(15,22,35,0.85); z-index: 9000;
+            display: flex; align-items: center; justify-content: center;
+            padding: 20px; box-sizing: border-box;
+        }
+        .modal-personaliz {
+            background: var(--bg-card); border-radius: 20px;
+            padding: 32px 28px; max-width: 520px; width: 100%;
+            box-shadow: 0 24px 80px rgba(15,22,35,0.4);
+            max-height: 90vh; overflow-y: auto;
+        }
+        .modal-personaliz h2 {
+            font-size: 1.1rem; font-weight: 800; color: var(--primary);
+            margin-bottom: 6px;
+        }
+        .modal-personaliz p {
+            font-size: 0.8rem; color: var(--text-2); margin-bottom: 22px;
+        }
+        .modal-field-grid {
+            display: grid; grid-template-columns: 1fr 1fr;
+            gap: 14px; margin-bottom: 20px;
+        }
+        @media (max-width: 480px) { .modal-field-grid { grid-template-columns: 1fr; } }
+        .modal-field { display: flex; flex-direction: column; gap: 5px; }
+        .modal-field.full { grid-column: 1 / -1; }
+        .modal-field label { font-size: 0.75rem; font-weight: 600; color: var(--text-1); }
+        .modal-field input, .modal-field select {
+            padding: 9px 12px; border: 1.5px solid var(--border);
+            border-radius: var(--r-sm); background: var(--bg-card);
+            font-size: 0.85rem; font-family: inherit; color: var(--text-1);
+            outline: none; transition: border-color .2s;
+            -webkit-appearance: none; appearance: none;
+        }
+        .modal-field input:focus, .modal-field select:focus {
+            border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft);
+        }
+        .modal-actions { display: flex; gap: 10px; margin-top: 4px; }
+        .btn-modal-cancel {
+            flex: 1; padding: 12px; border: 1px solid var(--border-strong);
+            border-radius: var(--r-md); background: transparent; color: var(--text-2);
+            font-size: 0.82rem; font-weight: 600; cursor: pointer; font-family: inherit;
+        }
+        .btn-modal-pdf {
+            flex: 2; padding: 12px; border: none; border-radius: var(--r-md);
+            background: var(--accent); color: #fff; font-size: 0.85rem; font-weight: 800;
+            cursor: pointer; font-family: inherit; letter-spacing: .3px;
+        }
+        .btn-modal-excel {
+            flex: 2; padding: 12px; border: none; border-radius: var(--r-md);
+            background: #16A34A; color: #fff; font-size: 0.85rem; font-weight: 800;
+            cursor: pointer; font-family: inherit; letter-spacing: .3px;
+        }
+
     </style>
 </head>
 
@@ -3041,10 +3096,10 @@
     <header class="app-header">
         <div class="header-brand">
             <div class="header-logo-mark">
-                <span>OB</span>
+                <span>CI</span>
             </div>
             <div class="header-brand-text">
-                <span class="header-brand-name">ObraDigital</span><span class="header-brand-mx">MX</span>
+                <span class="header-brand-name">ConstruIA</span><span class="header-brand-mx">.mx</span>
             </div>
         </div>
         <div style="display:flex;align-items:center;gap:10px;">
@@ -3124,7 +3179,7 @@
                                     <div class="mockup-card">
                                     <div class="mockup-header">
                                         <div class="mockup-header-title">Presupuesto de construcci&#243;n</div>
-                                        <div class="mockup-header-sub">Reporte t&#233;cnico &bull; ObraDigitalMX 2026</div>
+                                        <div class="mockup-header-sub">Reporte t&#233;cnico &bull; ConstruIA.mx 2026</div>
                                     </div>
                                     <div class="mockup-meta-row">
                                         <div class="mockup-meta-cell">
@@ -3168,7 +3223,7 @@
                                     <div class="mockup-footer">
                                         <div class="mockup-footer-logo">OB</div>
                                         <div class="mockup-footer-text">
-                                            <strong>ObraDigitalMX</strong>
+                                            <strong>ConstruIA.mx</strong>
                                             CMIC 2025 &bull; V&#225;lido 30 d&#237;as
                                         </div>
                                     </div>
@@ -3261,7 +3316,7 @@
                     <hr class="home-divider"/>
 
                     <div class="home-compare">
-                        <div class="home-compare-label" style="color:var(--accent);font-size:0.78rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;margin-bottom:12px">&#9632; Por qu&#233; ObraDigitalMX</div>
+                        <div class="home-compare-label" style="color:var(--accent);font-size:0.78rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;margin-bottom:12px">&#9632; Por qu&#233; ConstruIA.mx</div>
                         <h2 class="home-compare-h2">Presupuestar en M&#233;xico<br/>ya no tiene que ser<br/><span style="color:var(--accent)">a ojo.</span></h2>
                         <p class="home-compare-sub">
                             La mayor&#237;a de los arquitectos y contratistas usan Excel, libretas o
@@ -3352,7 +3407,7 @@
                                         a cualquier propuesta formal.
                                     </p>
                                     <ul class="home-feature-list">
-                                        <li>Membrete y logotipo ObraDigitalMX</li>
+                                        <li>Membrete y logotipo ConstruIA.mx</li>
                                         <li>Tabla de partidas con cantidad y precio unitario</li>
                                         <li>V&#225;lido 30 d&#237;as &#8212; Metodolog&#237;a SICT 2025</li>
                                     </ul>
@@ -3363,7 +3418,7 @@
                                             <div class="feat-pdf-logo">OB</div>
                                             <div>
                                                 <div class="feat-pdf-title">Presupuesto de Obra</div>
-                                                <div class="feat-pdf-sub">ObraDigitalMX &#8212; V&#225;lido 30 d&#237;as</div>
+                                                <div class="feat-pdf-sub">ConstruIA.mx &#8212; V&#225;lido 30 d&#237;as</div>
                                             </div>
                                             <div class="feat-pdf-badge">PDF</div>
                                         </div>
@@ -3515,7 +3570,7 @@
                         <div class="permisos-nota-legal">
                             &#9888;&#65039; <strong>Nota:</strong> Los requisitos mostrados son referenciales y est&#225;n basados en los reglamentos estatales y municipales vigentes.
                             Verificar siempre con la dependencia correspondiente antes de iniciar el tr&#225;mite.
-                            ObraDigitalMX no se hace responsable de cambios en los requisitos oficiales.
+                            ConstruIA.mx no se hace responsable de cambios en los requisitos oficiales.
                         </div>
                     </div>
                 </div>
@@ -4982,7 +5037,7 @@
                             <div id="loading-step-text"
                                 style="font-size:0.95rem;font-weight:600;color:var(--primary-mid);margin-bottom:5px;min-height:22px;">
                                 Inicializando motor de c&#225;lculo...</div>
-                            <div style="font-size:0.75rem;color:var(--text-3);">ObraDigitalMX &#183; Presupuestador
+                            <div style="font-size:0.75rem;color:var(--text-3);">ConstruIA.mx &#183; Presupuestador
                                 Profesional</div>
                         </div>
                     </div>
@@ -5168,7 +5223,7 @@
                                 <div style="background:#fff;border-radius:8px;padding:16px;filter:blur(2px);">
                                     <div style="display:flex;justify-content:space-between;align-items:flex-start;padding-bottom:12px;border-bottom:2px solid #4F46E5;margin-bottom:12px;">
                                         <div>
-                                            <div style="background:#0F1623;color:#fff;font-size:0.8rem;font-weight:800;padding:4px 8px;border-radius:4px;display:inline-block;margin-bottom:4px;">ObraDigitalMX</div>
+                                            <div style="background:#0F1623;color:#fff;font-size:0.8rem;font-weight:800;padding:4px 8px;border-radius:4px;display:inline-block;margin-bottom:4px;">ConstruIA.mx</div>
                                             <div style="color:#1e293b;font-size:0.85rem;font-weight:700;">PRESUPUESTO DE OBRA</div>
                                             <div style="color:#64748b;font-size:0.7rem;">Folio: ConstruIA-2026-0001</div>
                                         </div>
@@ -5284,7 +5339,7 @@
                         </div>
                         </div><!-- /premium-wrapper -->
                     </div><!-- /tabs-container -->
-                    <div class="action-buttons seccion-premium"><button type="button" id="btn-preview-pdf" onclick="mostrarPreviewPDF()" style="background:linear-gradient(135deg,#4F46E5,#7C3AED);color:#fff;border:none;border-radius:12px;padding:16px 32px;font-size:1rem;font-weight:700;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:10px;box-shadow:0 4px 16px rgba(79,70,229,0.4);">&#128196; Ver y Descargar PDF Profesional</button><button id="btn-nueva">&#8617; Nueva Cotizaci&#243;n</button></div>
+                    <div class="action-buttons seccion-premium"><button type="button" id="btn-preview-pdf" onclick="abrirModalPersonalizacion()" style="background:linear-gradient(135deg,#4F46E5,#7C3AED);color:#fff;border:none;border-radius:12px;padding:16px 32px;font-size:1rem;font-weight:700;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:10px;box-shadow:0 4px 16px rgba(79,70,229,0.4);">&#128196; Ver y Descargar PDF Profesional</button><button type="button" id="btn-excel-pro" onclick="abrirModalPersonalizacion('excel')" style="background:#16A34A;color:#fff;border:none;border-radius:12px;padding:16px 24px;font-size:0.92rem;font-weight:700;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:8px;box-shadow:0 4px 16px rgba(22,163,74,0.35);">&#128196; Excel Pro</button><button id="btn-nueva">&#8617; Nueva Cotizaci&#243;n</button></div>
                     <div style="font-size:.72rem;color:#9CA3AF;text-align:center;margin-bottom:12px;" id="print-date">
                     </div>
                 </div>
@@ -5292,15 +5347,15 @@
             <footer class="obra-footer">
                 <div class="obra-footer-inner">
                     <div class="obra-footer-brand">
-                        <div class="obra-footer-logo">OB</div>
-                        <span>ObraDigital<strong>MX</strong></span>
+                        <div class="obra-footer-logo">CI</div>
+                        <span>ConstruIA<strong>.mx</strong></span>
                     </div>
                     <div class="obra-footer-links">
                         <span>Precios sin IVA &#183; Estimaci&#243;n referencial</span>
                         <span class="obra-footer-sep">&#183;</span>
                         <span>Fuentes: CMIC &#183; CENAPRED &#183; SOyS CDMX 2026</span>
                         <span class="obra-footer-sep">&#183;</span>
-                        <span>&#169; 2026 ObraDigitalMX</span>
+                        <span>&#169; 2026 ConstruIA.mx</span>
                     </div>
                 </div>
             </footer>
@@ -5459,9 +5514,8 @@
         };
 
         /* ── AGENTE IA CONSTRUIA ─────────────────────────────────────────── */
-        /* PRODUCCION: agregar API key de Gemini aqui */
-        var GEMINI_KEY = '';
-        /* API key movida a Vercel environment variables por seguridad */
+        /* API key manejada en Vercel env vars - no se usa aqui */
+        var _apiKeyUnused = '';
         var agenteHistorial = [];
         var agentePanelAbierto = false;
         var agenteContextoObra = '';
@@ -6259,7 +6313,7 @@
             doc.setTextColor(255, 255, 255);
             doc.setFontSize(22);
             doc.setFont('helvetica', 'bold');
-            doc.text('ObraDigitalMX', mg, 30);
+            doc.text('ConstruIA.mx', mg, 30);
             doc.setFontSize(14);
             doc.setTextColor(129, 140, 248);
             doc.text('Presupuesto de Obra', mg, 42);
@@ -6320,7 +6374,7 @@
                 doc.setTextColor(255, 255, 255);
                 doc.setFontSize(7);
                 doc.setFont('helvetica', 'normal');
-                doc.text('ObraDigitalMX * Folio: ' + folioActual, mg, 9);
+                doc.text('ConstruIA.mx * Folio: ' + folioActual, mg, 9);
                 doc.text('Pagina ' + pgn, pageW - mg, 9, { align: 'right' });
             };
             dibujarHeaderPagina(pnActual);
@@ -6679,8 +6733,803 @@
             doc.text('Fecha: ' + fechaStr, mg, y + 21);
             doc.text('Fecha: ___________', mg + fw + 20, y + 21);
 
-            var nombreArch = 'ObraDigitalMX-Presupuesto-' + folioActual + '.pdf';
+            var nombreArch = 'ConstruIA-Presupuesto-' + folioActual + '.pdf';
             doc.save(nombreArch);
+        }
+
+        /* ── MODAL PERSONALIZACIÓN ── */
+        var _modalDestino = 'pdf';
+
+        function abrirModalPersonalizacion(destino) {
+            _modalDestino = destino || 'pdf';
+            if (!F.tipoProyecto || !F.acabado) {
+                alert('Debes completar el presupuesto antes de descargar.');
+                return;
+            }
+            var fechaHoy = new Date();
+            var fechaDef = fechaHoy.getDate() + '/' + (fechaHoy.getMonth() + 1) + '/' + fechaHoy.getFullYear();
+            var mpFecha = document.getElementById('mp-fecha');
+            if (mpFecha && !mpFecha.value) { mpFecha.value = fechaDef; }
+            var btnGenerar = document.getElementById('btn-modal-generar');
+            if (btnGenerar) {
+                if (_modalDestino === 'excel') {
+                    btnGenerar.innerHTML = '&#128196; Generar Excel Pro';
+                    btnGenerar.className = 'btn-modal-excel';
+                } else {
+                    btnGenerar.innerHTML = '&#128196; Generar PDF Pro';
+                    btnGenerar.className = 'btn-modal-pdf';
+                }
+            }
+            var overlay = document.getElementById('modal-personaliz-overlay');
+            if (overlay) { overlay.style.display = 'flex'; }
+        }
+
+        function cerrarModalPersonalizacion() {
+            var overlay = document.getElementById('modal-personaliz-overlay');
+            if (overlay) { overlay.style.display = 'none'; }
+        }
+
+        function _getMPVal(id) {
+            var el = document.getElementById(id);
+            return el ? el.value.trim() : '';
+        }
+
+        function confirmarModalYGenerar() {
+            cerrarModalPersonalizacion();
+            if (_modalDestino === 'excel') {
+                generarExcelPro();
+            } else {
+                generarPDFPro();
+            }
+        }
+
+        /* ── PDF PRO ── */
+        function generarPDFPro() {
+            if (typeof window.jspdf === 'undefined' && typeof jspdf === 'undefined') {
+                alert('Libreria PDF no disponible. Verifica tu conexion a internet.'); return;
+            }
+            if (!F.tipoProyecto || !F.acabado) {
+                alert('Debes completar el presupuesto.'); return;
+            }
+            var despacho  = _getMPVal('mp-despacho')  || 'ConstruIA.mx';
+            var cliente   = _getMPVal('mp-cliente')   || 'Por definir';
+            var proyecto  = _getMPVal('mp-proyecto')  || 'Proyecto de construcciÃ³n';
+            var municipio = _getMPVal('mp-municipio') || '';
+            var fechaStr  = _getMPVal('mp-fecha')     || '';
+            var pctHon    = parseFloat(document.getElementById('mp-honorarios').value) || 14;
+            var firma     = _getMPVal('mp-firma')     || despacho;
+            var jsPDFLib  = window.jspdf ? window.jspdf.jsPDF : jspdf.jsPDF;
+            var doc       = new jsPDFLib({ orientation: 'portrait', unit: 'mm', format: 'letter' });
+            /* ── ENCODING FIX: jsPDF helvetica solo soporta ASCII ── */
+            var _t = function(s) {
+                if (!s) { return ‘’; }
+                /* Mapa de secuencias doble-codificadas (2 chars cada una) */
+                var map2 = {
+                    ‘Ã³’:’o’,’Ã¡’:’a’,’Ã©’:’e’,
+                    ‘Ã­’:’i’,’Ãº’:’u’,’Ã±’:’n’,
+                    ‘Ã’:’O’,’Ã’:’A’,’Ã’:’E’,
+                    ‘Ã’:’I’,’Ã’:’U’,’Ã’:’N’,
+                    ‘Ã¼’:’u’,’Ã’:’U’,
+                    ‘Â²’:’2’,’Â°’:’grados’,’Â·’:’.’,
+                    ‘Â¡’:’!’,’Â¿’:’?’,
+                    ‘Ã’:’x’,’Ã·’:’/’,
+                    ‘Ã’:’AE’,’Ã¦’:’ae’
+                };
+                /* Mapa de chars Unicode simples (ya correctamente codificados) */
+                var map1 = {
+                    ‘á’:’a’,’é’:’e’,’í’:’i’,’ó’:’o’,’ú’:’u’,’ñ’:’n’,
+                    ‘Á’:’A’,’É’:’E’,’Í’:’I’,’Ó’:’O’,’Ú’:’U’,’Ñ’:’N’,
+                    ‘ü’:’u’,’Ü’:’U’,’à’:’a’,’è’:’e’,’ì’:’i’,’ò’:’o’,
+                    ‘â’:’a’,’ê’:’e’,’î’:’i’,’ô’:’o’,’û’:’u’,
+                    ‘ä’:’a’,’ë’:’e’,’ï’:’i’,’ö’:’o’,
+                    ‘²’:’2’,’³’:’3’,’°’:’grados’,
+                    ‘×’:’x’,’÷’:’/’,’•’:’-’,’’’:’\’’,’‘’:’\’’,
+                    ‘“’:’”’,’”’:’”’,’–‘:’-’,’—‘:’-’,’·’:’.’,
+                    ‘«’:’<<’,’»’:’>>’,’¡’:’!’,’¿’:’?’,
+                    ‘Ã’:’’,’Â’:’’
+                };
+                var out = ‘’;
+                var i = 0;
+                while (i < s.length) {
+                    /* Intentar par de 2 chars primero */
+                    if (i + 1 < s.length) {
+                        var pair = s[i] + s[i + 1];
+                        if (map2[pair] !== undefined) {
+                            out += map2[pair];
+                            i += 2;
+                            continue;
+                        }
+                    }
+                    /* Char individual */
+                    var c = s[i];
+                    if (map1[c] !== undefined) {
+                        out += map1[c];
+                    } else if (c.charCodeAt(0) > 127) {
+                        out += ‘’;
+                    } else {
+                        out += c;
+                    }
+                    i++;
+                }
+                return out;
+            };
+            /* Interceptar doc.text para aplicar _t() automaticamente */
+            var _origDocText = doc.text.bind(doc);
+            doc.text = function(str, x, y, opts) {
+                var safe = (typeof str === 'string') ? _t(str) : str;
+                return _origDocText(safe, x, y, opts);
+            };
+            var pageW = 216;
+            var pageH = 279;
+            var mg    = 12;
+            var uW    = pageW - mg * 2;
+            var pgn   = 0;
+            var folioActual = presupuestoActual.folio ||
+                ('ConstruIA-' + new Date().getFullYear() + '-' +
+                 Math.floor(1000 + Math.random() * 9000));
+            var estadoData   = ESTADOS[F.estado] || ESTADOS['nacional'];
+            var estadoNombre = estadoData ? (estadoData.nombre || 'Nacional') : 'Nacional';
+            var lugarStr     = municipio ? (municipio + ', ' + estadoNombre) : estadoNombre;
+            var tipoTexto = {
+                vivienda: 'Casa habitaciÃ³n unifamiliar',
+                comercial: 'Local comercial / nave industrial',
+                departamentos: 'Edificio de departamentos'
+            }[F.tipoProyecto] || (F.tipoProyecto || '');
+            var p = presupuestoActual.partidas || {};
+            var totalHojasEst = 12;
+
+            var fmtPeso = function(v) {
+                if (!v || isNaN(v)) { return '$0.00'; }
+                var parts = parseFloat(v).toFixed(2).split('.');
+                parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+                return '$' + parts[0] + '.' + parts[1];
+            };
+
+            function nuevaPagina() {
+                if (pgn > 0) { doc.addPage(); }
+                pgn++;
+                doc.setFillColor(15, 22, 35);
+                doc.rect(0, 0, pageW, 22, 'F');
+                doc.setFillColor(79, 70, 229);
+                doc.rect(0, 22, pageW, 1.2, 'F');
+                doc.setFont('helvetica', 'bold');
+                doc.setFontSize(8);
+                doc.setTextColor(255, 255, 255);
+                doc.text(despacho, mg, 9);
+                doc.setFont('helvetica', 'normal');
+                doc.setFontSize(6.5);
+                doc.setTextColor(180, 180, 190);
+                doc.text('ConstruIA.mx  â€¢  Presupuesto de Obra', mg, 15);
+                doc.setFont('helvetica', 'bold');
+                doc.setFontSize(8);
+                doc.setTextColor(255, 255, 255);
+                var proyTrunc = proyecto.length > 35 ? proyecto.substring(0, 35) + '...' : proyecto;
+                doc.text(proyTrunc, pageW - mg, 9, { align: 'right' });
+                doc.setFont('helvetica', 'normal');
+                doc.setFontSize(6.5);
+                doc.setTextColor(180, 180, 190);
+                doc.text('Prop.: ' + cliente + '  |  ' + lugarStr + '  |  ' + fechaStr,
+                    pageW - mg, 15, { align: 'right' });
+                doc.text('HOJA ' + pgn + ' DE ' + totalHojasEst,
+                    pageW - mg, 20, { align: 'right' });
+                return 27;
+            }
+
+            function dibujarColHeaders(y) {
+                doc.setFillColor(225, 223, 218);
+                doc.rect(mg, y, uW, 6, 'F');
+                doc.setFont('helvetica', 'bold');
+                doc.setFontSize(6);
+                doc.setTextColor(15, 22, 35);
+                doc.text('CÃ“DIGO',      mg + 1,         y + 4.2);
+                doc.text('CONCEPTO',          mg + 17,        y + 4.2);
+                doc.text('UNIDAD',            mg + 108,       y + 4.2, { align: 'center' });
+                doc.text('CANTIDAD',          mg + 130,       y + 4.2, { align: 'right' });
+                doc.text('P.UNITARIO',        mg + 153,       y + 4.2, { align: 'right' });
+                doc.text('IMPORTE',           pageW - mg - 1, y + 4.2, { align: 'right' });
+                return y + 6;
+            }
+
+            function dibujarCapituloHeader(y, codigo, titulo) {
+                doc.setFillColor(15, 22, 35);
+                doc.rect(mg, y, uW, 7, 'F');
+                doc.setFont('helvetica', 'bold');
+                doc.setFontSize(7.5);
+                doc.setTextColor(255, 255, 255);
+                doc.text(codigo + '   ' + titulo, mg + 2, y + 4.8);
+                return y + 7;
+            }
+
+            function dibujarPartida(y, cod, con, uni, qty, pu, imp) {
+                var conceptoLines = doc.splitTextToSize(_t(con), 86);
+                var lineH = 4;
+                var hTotal = Math.max(7, conceptoLines.length * lineH + 2);
+                doc.setFont('helvetica', 'bold');
+                doc.setFontSize(6.5);
+                doc.setTextColor(60, 80, 120);
+                doc.text(cod, mg + 1, y + 4.2);
+                doc.setFont('helvetica', 'normal');
+                doc.setTextColor(15, 22, 35);
+                for (var li = 0; li < conceptoLines.length; li++) {
+                    doc.text(conceptoLines[li], mg + 17, y + 4.2 + li * lineH);
+                }
+                doc.text(uni,  mg + 108, y + 4.2, { align: 'center' });
+                doc.text(qty,  mg + 130, y + 4.2, { align: 'right' });
+                doc.text(pu,   mg + 153, y + 4.2, { align: 'right' });
+                doc.setFont('helvetica', 'bold');
+                doc.text(imp, pageW - mg - 1, y + 4.2, { align: 'right' });
+                doc.setDrawColor(210, 208, 204);
+                doc.setLineWidth(0.15);
+                doc.line(mg, y + hTotal, pageW - mg, y + hTotal);
+                return y + hTotal;
+            }
+
+            function dibujarSubtotal(y, label, valor) {
+                doc.setFillColor(235, 232, 226);
+                doc.rect(mg, y, uW, 7, 'F');
+                doc.setFont('helvetica', 'bold');
+                doc.setFontSize(7.5);
+                doc.setTextColor(15, 22, 35);
+                doc.text(label, mg + 2, y + 4.8);
+                doc.text(fmtPeso(valor), pageW - mg - 1, y + 4.8, { align: 'right' });
+                return y + 7;
+            }
+
+            function checkY(y, needed) {
+                if (y + needed > pageH - 20) {
+                    var yNew = nuevaPagina();
+                    yNew = dibujarColHeaders(yNew);
+                    return yNew;
+                }
+                return y;
+            }
+
+            var muroDes = {
+                block:   'block de concreto 15Ã—20Ã—40 cm',
+                tabique: 'tabique rojo recocido',
+                mixto:   'sistema mixto block y tablaroca'
+            }[F.muros] || 'block de concreto';
+
+            var pisoDes = {
+                cemento:        'cemento pulido',
+                ceramica_33:    'cerÃ¡mico 33Ã—33 cm',
+                ceramica_45:    'cerÃ¡mico 45Ã—45 cm',
+                porcelanato:    'porcelanato 60Ã—60 cm',
+                madera_laminada:'madera laminada',
+                marmol:         'mÃ¡rmol / gran formato'
+            }[F.tipoPiso] || 'cerÃ¡mico';
+
+            var sup  = parseFloat(F.superficie || 0);
+            var niv  = parseFloat(F.nivelesDepto || F.niveles || 1);
+
+            var capitulos = [
+                {
+                    codigo: 'PRE', titulo: 'TRABAJOS PRELIMINARES',
+                    total: p.p01 || 0,
+                    partidas: [
+                        { cod: 'PRE-01', con: 'Trazo y nivelaciÃ³n de terreno natural por medios manuales para desplante de estructuras, estableciendo ejes y referencias. Incluye: mano de obra, equipo y herramienta.', uni: 'mÂ²', qty: sup.toFixed(2), imp: (p.p01 || 0) * 0.30 },
+                        { cod: 'PRE-02', con: 'Renta de oficina y bodega de obra. Incluye: instalaciÃ³n, mantenimiento y retiro al tÃ©rmino de la obra.', uni: 'lote', qty: '1.00', imp: (p.p01 || 0) * 0.25 },
+                        { cod: 'PRE-03', con: 'Suministro de agua potable para la obra mediante pipas de 10,000 litros. Incluye: viajes, maniobras y distribuciÃ³n.', uni: 'viajes', qty: Math.ceil(sup / 120).toFixed(0), imp: (p.p01 || 0) * 0.20 },
+                        { cod: 'PRE-04', con: 'Renta de equipo menor: generador de luz, compactador y herramienta especializada puesta en obra durante el periodo de construcciÃ³n.', uni: 'semanas', qty: Math.ceil(sup / 50).toFixed(0), imp: (p.p01 || 0) * 0.15 },
+                        { cod: 'PRE-05', con: 'Estudio de mecÃ¡nica de suelos. Incluye: sondeos, laboratorio, memoria de cÃ¡lculo y recomendaciones de cimentaciÃ³n.', uni: 'lote', qty: '1.00', imp: (p.p01 || 0) * 0.10 }
+                    ]
+                },
+                {
+                    codigo: 'CIM', titulo: 'CIMENTACIÃ“N',
+                    total: p.p02 || 0,
+                    partidas: [
+                        { cod: 'CIM-01', con: 'ExcavaciÃ³n en cepas para zapatas aisladas y contratrabes con maquinaria mayor, de 0.00 a 2.15 mts de profundidad. Incluye: carga, acarreo y tiro autorizado por el municipio.', uni: 'mÂ³', qty: (sup * 0.28).toFixed(2), imp: (p.p02 || 0) * 0.18 },
+                        { cod: 'CIM-02', con: 'Plantilla de concreto pobre fc=100 kg/cmÂ², agregado mÃ¡ximo 3/4", espesor 5 cm. Incluye: material, mano de obra, herramienta y equipo menor.', uni: 'mÂ²', qty: (sup * 0.85).toFixed(2), imp: (p.p02 || 0) * 0.08 },
+                        { cod: 'CIM-03', con: 'Zapatas aisladas de concreto fc=250 kg/cmÂ², refuerzo var. 3/8" y 1/2" a cada 15-25 cm ambos sentidos, agregado 3/4". Incluye: cimbra, descimbra, habilitado de acero, colado y curado.', uni: 'pzas', qty: Math.ceil(sup / 18).toFixed(0), imp: (p.p02 || 0) * 0.32 },
+                        { cod: 'CIM-04', con: 'Contratrabes CT de concreto fc=250 kg/cmÂ², secciones 0.20Ã—0.40 y 0.20Ã—0.60 m, con 4-6 var del #4-#5 y estribos #2 @20 cm. Incluye: cimbra, descimbra y mano de obra.', uni: 'ml', qty: (sup * 0.9).toFixed(2), imp: (p.p02 || 0) * 0.27 },
+                        { cod: 'CIM-05', con: 'Firme de concreto fc=250 kg/cmÂ², espesor 15 cm, armado con malla 6-6/8-8 y grava 3/4". Incluye: cimbrado, descimbrado, en acabado cerrado.', uni: 'mÂ²', qty: sup.toFixed(2), imp: (p.p02 || 0) * 0.15 }
+                    ]
+                },
+                {
+                    codigo: 'EST', titulo: 'ESTRUCTURA',
+                    total: p.p03 || 0,
+                    partidas: [
+                        { cod: 'EST-01', con: 'Castillos y columnas de concreto fc=250 kg/cmÂ², secciones 15Ã—15 a 30Ã—30 cm, con armado ARMEX o varilla #3-#4 y estribos #2 @20 cm. Incluye: cimbra, descimbra, mano de obra y equipo.', uni: 'ml', qty: (sup * 0.85).toFixed(2), imp: (p.p03 || 0) * 0.35 },
+                        { cod: 'EST-02', con: 'Trabes principales y secundarias de concreto fc=250 kg/cmÂ², secciones 15Ã—30 a 30Ã—40 cm, con 4-6 varillas del #3-#5 y estribos #2 @20 cm con bastones de refuerzo. Incluye: cimbra y descimbra.', uni: 'ml', qty: (sup * 0.55).toFixed(2), imp: (p.p03 || 0) * 0.25 },
+                        { cod: 'EST-03', con: 'Losa de entrepiso y azotea sistema vigueta y bovedilla con capa de compresiÃ³n de 5 cm de concreto fc=250 kg/cmÂ². Incluye: suministro, acarreos, colado, curado, mano de obra, equipo y herramienta.', uni: 'mÂ²', qty: (sup * niv).toFixed(2), imp: (p.p03 || 0) * 0.40 }
+                    ]
+                },
+                {
+                    codigo: 'ALB', titulo: 'ALBAÃ‘ILERÃA',
+                    total: p.p04 || 0,
+                    partidas: [
+                        { cod: 'ALB-01', con: 'Muro de ' + muroDes + ' asentado con mortero cemento-cal-arena proporciÃ³n 1:1:6 a nivel y plomo. Incluye: castillos hundidos var. #4 @60 cm con concreto fc=150 kg/cmÂ², escalerilla @2 hiladas, mano de obra, equipo y herramienta.', uni: 'mÂ²', qty: (sup * 1.8 * niv).toFixed(2), imp: (p.p04 || 0) * 0.55 },
+                        { cod: 'ALB-02', con: 'Aplanado de mezcla cemento-cal-arena 1:1:5 en muros interiores y exteriores, acabado fino con esponja. Incluye: material, mano de obra, equipo y herramienta menor.', uni: 'mÂ²', qty: (sup * 3.2 * niv).toFixed(2), imp: (p.p04 || 0) * 0.28 },
+                        { cod: 'ALB-03', con: 'Planilla de mezcla cemento-arena 1:7 para recibir piso cerÃ¡mico. Incluye: material, mano de obra, equipo y herramienta menor.', uni: 'mÂ²', qty: (sup * niv).toFixed(2), imp: (p.p04 || 0) * 0.10 },
+                        { cod: 'ALB-04', con: 'ElaboraciÃ³n de escaleras de concreto armado fc=250 kg/cmÂ² con varilla 3/8". Incluye: cimbra, descimbra, habilitado, colado, mano de obra y equipo.', uni: 'pza', qty: Math.max(1, niv - 1).toFixed(0), imp: (p.p04 || 0) * 0.07 }
+                    ]
+                },
+                {
+                    codigo: 'ACB', titulo: 'ACABADOS',
+                    total: p.p05 || 0,
+                    partidas: [
+                        { cod: 'ACB-01', con: 'Suministro y colocacion de piso ' + pisoDes + '. ' + (F.tipoPiso === 'madera_laminada' ? 'Incluye: adhesivo especial para madera, instalacion flotante o clavada, zoclo de madera, remates, mano de obra, equipo y herramienta.' : F.tipoPiso === 'cemento' ? 'Incluye: esmerilado, pulido, endurecedor, sellador, mano de obra, equipo y herramienta.' : 'Incluye: pegamento, emboquillado, lechada, desperdicios, mano de obra, equipo y herramienta.'), uni: 'm2', qty: (sup * niv).toFixed(2), imp: (p.p05 || 0) * 0.45 },
+                        { cod: 'ACB-02', con: 'Suministro y colocaciÃ³n de zÃ³calo de piso de 10 cm de altura a juego con el piso. Incluye: emboquillado, material, mano de obra, equipo y herramienta.', uni: 'ml', qty: (sup * 0.9 * niv).toFixed(2), imp: (p.p05 || 0) * 0.12 },
+                        { cod: 'ACB-03', con: 'AplicaciÃ³n de pintura vinilica sat. marca COMEX VINIMEX a dos manos sobre muros y plafones. Incluye: resane, preparaciÃ³n, sellado de superficie, andamios, mano de obra, equipo y herramienta.', uni: 'mÂ²', qty: (sup * 3.5 * niv).toFixed(2), imp: (p.p05 || 0) * 0.28 },
+                        { cod: 'ACB-04', con: 'PlafÃ³n de panel de yeso estÃ¡ndar 13 mm con bast. galvanizado cal. 26 en Ã¡reas interiores. Incluye: material, acarreos, desperdicios, mano de obra, equipo y herramienta.', uni: 'mÂ²', qty: (sup * niv).toFixed(2), imp: (p.p05 || 0) * 0.15 }
+                    ]
+                },
+                {
+                    codigo: 'HID', titulo: 'INSTALACIÃ“N HIDRÃULICA Y SANITARIA',
+                    total: p.p06 || 0,
+                    partidas: [
+                        { cod: 'HID-01', con: 'Red hidrÃ¡ulica con tuberÃ­a PVC y cobre, salidas de agua frÃ­a y caliente para todos los muebles sanitarios. Incluye: material, accesorios, mano de obra y prueba hidrostÃ¡tica.', uni: 'lote', qty: '1.00', imp: (p.p06 || 0) * 0.35 },
+                        { cod: 'HID-02', con: 'Red sanitaria con tuberÃ­a PVC hidrÃ¡ulico. Bajadas, registros 40Ã—60Ã—100 cm de tabique rojo, trampas, cuellos de cisne y conexiÃ³n a red municipal. Incluye: material y mano de obra.', uni: 'lote', qty: '1.00', imp: (p.p06 || 0) * 0.35 },
+                        { cod: 'HID-03', con: 'Muebles sanitarios: WC, lavabo, regadera y accesorios de baÃ±o. Suministro y colocaciÃ³n completa. Incluye: material, selladores, mano de obra y pruebas.', uni: 'pza', qty: Math.max(1, Math.ceil(sup / 60)).toFixed(0), imp: (p.p06 || 0) * 0.30 }
+                    ]
+                },
+                {
+                    codigo: 'ELE', titulo: 'INSTALACIÃ“N ELÃ‰CTRICA',
+                    total: p.p07 || 0,
+                    partidas: [
+                        { cod: 'ELE-01', con: 'InstalaciÃ³n elÃ©ctrica en tubo conduit PVC con cable THW. Circuitos de iluminaciÃ³n y fuerza. Incluye: canaletas, cajas, tuberÃ­a, alambrado, mano de obra y pruebas.', uni: 'lote', qty: '1.00', imp: (p.p07 || 0) * 0.50 },
+                        { cod: 'ELE-02', con: 'Tablero general de distribuciÃ³n con interruptores termomagnÃ©ticos. Incluye: tablero, interruptores, cometida interior, mano de obra y pruebas.', uni: 'pza', qty: '1.00', imp: (p.p07 || 0) * 0.20 },
+                        { cod: 'ELE-03', con: 'Luminarias, contactos y apagadores. Suministro y colocaciÃ³n de salidas de iluminaciÃ³n LED y contactos polarizados en todos los locales. Incluye: material, mano de obra y pruebas.', uni: 'lote', qty: '1.00', imp: (p.p07 || 0) * 0.30 }
+                    ]
+                }
+            ];
+
+            if (p.p08 && p.p08 > 0) {
+                capitulos.push({
+                    codigo: 'ESP', titulo: 'ESPACIOS ESPECIALES',
+                    total: p.p08,
+                    partidas: [
+                        { cod: 'ESP-01', con: 'Espacios especiales segÃºn proyecto: cochera, local comercial, Ã¡rea de servicio, barda perimetral u otros espacios indicados en el programa arquitectÃ³nico.', uni: 'lote', qty: '1.00', imp: p.p08 * 0.60 },
+                        { cod: 'ESP-02', con: 'Instalaciones especiales: gas natural, impermeabilizaciÃ³n de azotea, jardinerÃ­a y acabados exteriores. Incluye: material, mano de obra, equipo y herramienta.', uni: 'lote', qty: '1.00', imp: p.p08 * 0.40 }
+                    ]
+                });
+            }
+
+            for (var ci = 0; ci < capitulos.length; ci++) {
+                var capX = capitulos[ci];
+                for (var pi = 0; pi < capX.partidas.length; pi++) {
+                    var paX = capX.partidas[pi];
+                    var qX = parseFloat(paX.qty) || 1;
+                    paX.pu = qX > 0 ? (paX.imp / qX) : 0;
+                }
+            }
+
+            /* PORTADA */
+            var y = nuevaPagina();
+            doc.setFillColor(15, 22, 35);
+            doc.rect(0, y, pageW, pageH - y, 'F');
+
+            y += 24;
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(30);
+            doc.setTextColor(255, 255, 255);
+            doc.text('PRESUPUESTO', pageW / 2, y, { align: 'center' });
+            y += 13;
+            doc.text('DE OBRA', pageW / 2, y, { align: 'center' });
+            y += 8;
+            doc.setFillColor(79, 70, 229);
+            doc.rect(mg + 20, y, uW - 40, 1, 'F');
+            y += 10;
+            doc.setFontSize(12);
+            doc.setTextColor(180, 180, 200);
+            doc.text(tipoTexto, pageW / 2, y, { align: 'center' });
+            y += 8;
+            doc.setFontSize(10);
+            doc.text(lugarStr, pageW / 2, y, { align: 'center' });
+            y += 22;
+            doc.setFontSize(9);
+            var datosPortada = [
+                ['Proyecto',     proyecto],
+                ['Propietario',  cliente],
+                ['ElaborÃ³', despacho],
+                ['Folio',        folioActual],
+                ['Fecha',        fechaStr],
+                ['Superficie',   sup.toFixed(0) + ' mÂ²']
+            ];
+            for (var di = 0; di < datosPortada.length; di++) {
+                doc.setFont('helvetica', 'normal');
+                doc.setTextColor(160, 160, 180);
+                doc.text(datosPortada[di][0] + ':', mg + 22, y);
+                doc.setFont('helvetica', 'bold');
+                doc.setTextColor(255, 255, 255);
+                doc.text(datosPortada[di][1], mg + 68, y);
+                y += 10;
+            }
+            y = pageH - 28;
+            doc.setFontSize(6.5);
+            doc.setFont('helvetica', 'italic');
+            doc.setTextColor(120, 120, 140);
+            doc.text('Presupuesto paramÃ©trico de estimaciÃ³n. Fuentes: Ãndice FIC SICT 2025 | CMIC | CENAPRED | DOF 2026.',
+                pageW / 2, y, { align: 'center' });
+            y += 5;
+            doc.text('Para licitaciÃ³n formal se recomienda desarrollar catÃ¡logo de conceptos con memorias de cÃ¡lculo detalladas.',
+                pageW / 2, y, { align: 'center' });
+
+            /* PARTIDAS flujo continuo */
+            y = nuevaPagina();
+            y = dibujarColHeaders(y);
+
+            for (var capIdx = 0; capIdx < capitulos.length; capIdx++) {
+                var cap = capitulos[capIdx];
+                y = checkY(y, 14);
+                y = dibujarCapituloHeader(y, cap.codigo, cap.titulo);
+                for (var pIdx = 0; pIdx < cap.partidas.length; pIdx++) {
+                    var pa = cap.partidas[pIdx];
+                    var conceptoLinesTmp = doc.splitTextToSize(_t(pa.con), 86);
+                    var lineHTmp = 4;
+                    var hTmp = Math.max(7, conceptoLinesTmp.length * lineHTmp + 2);
+                    y = checkY(y, hTmp + 2);
+                    y = dibujarPartida(y,
+                        pa.cod,
+                        pa.con,
+                        pa.uni,
+                        parseFloat(pa.qty).toFixed(2),
+                        fmtPeso(pa.pu),
+                        fmtPeso(pa.imp)
+                    );
+                }
+                y = checkY(y, 10);
+                y = dibujarSubtotal(y, 'TOTAL ' + cap.titulo, cap.total);
+                y += 4;
+            }
+
+            /* RESUMEN FINANCIERO */
+            y = checkY(y, 80);
+            doc.setFillColor(15, 22, 35);
+            doc.rect(mg, y, uW, 9, 'F');
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(9);
+            doc.setTextColor(255, 255, 255);
+            doc.text('RESUMEN FINANCIERO', mg + 3, y + 6);
+            y += 9;
+            y += 4;
+
+            var sumCap = 0;
+            for (var ri = 0; ri < capitulos.length; ri++) {
+                sumCap += capitulos[ri].total;
+                doc.setFont('helvetica', 'normal');
+                doc.setFontSize(8);
+                doc.setTextColor(71, 85, 105);
+                doc.text(capitulos[ri].codigo + '   ' + capitulos[ri].titulo, mg + 3, y);
+                doc.setFont('helvetica', 'bold');
+                doc.setTextColor(15, 22, 35);
+                doc.text(fmtPeso(capitulos[ri].total), pageW - mg - 2, y, { align: 'right' });
+                y += 6.5;
+            }
+
+            y += 2;
+            doc.setDrawColor(79, 70, 229);
+            doc.setLineWidth(0.6);
+            doc.line(mg, y, pageW - mg, y);
+            y += 2;
+            doc.setLineWidth(0.3);
+            doc.line(mg, y, pageW - mg, y);
+            y += 7;
+
+            var _honVal   = sumCap * (pctHon / 100);
+            var _subHon   = sumCap + _honVal;
+            var _ivaVal   = _subHon * 0.16;
+            var _gran     = _subHon + _ivaVal;
+
+            var resFilas = [
+                { lbl: 'COSTO DIRECTO DE OBRA',                    val: sumCap,  bold: true,  grande: false },
+                { lbl: 'HONORARIOS PROFESIONALES (' + pctHon + '%)', val: _honVal, bold: false, grande: false },
+                { lbl: 'SUBTOTAL',                                 val: _subHon, bold: true,  grande: false },
+                { lbl: 'IVA 16%',                                  val: _ivaVal, bold: false, grande: false },
+                { lbl: 'GRAN TOTAL',                               val: _gran,   bold: true,  grande: true  }
+            ];
+
+            for (var rfi = 0; rfi < resFilas.length; rfi++) {
+                var rf = resFilas[rfi];
+                if (rf.grande) {
+                    y += 2;
+                    doc.setFillColor(15, 22, 35);
+                    doc.rect(mg, y - 3, uW, 11, 'F');
+                    doc.setFont('helvetica', 'bold');
+                    doc.setFontSize(10);
+                    doc.setTextColor(79, 70, 229);
+                    doc.text(rf.lbl, mg + 4, y + 4.5);
+                    doc.text(fmtPeso(rf.val), pageW - mg - 3, y + 4.5, { align: 'right' });
+                    y += 14;
+                } else {
+                    doc.setFont('helvetica', rf.bold ? 'bold' : 'normal');
+                    doc.setFontSize(9);
+                    doc.setTextColor(rf.bold ? 15 : 71, rf.bold ? 22 : 85, rf.bold ? 35 : 105);
+                    doc.text(rf.lbl, mg + 4, y);
+                    doc.text(fmtPeso(rf.val), pageW - mg - 3, y, { align: 'right' });
+                    y += 7;
+                }
+            }
+
+            y += 8;
+            doc.setFontSize(7);
+            doc.setFont('helvetica', 'italic');
+            doc.setTextColor(120, 120, 140);
+            doc.text('* Estos precios NO incluyen I.V.A. (mostrado Ãºnicamente por referencia).',
+                mg + 3, y);
+            y += 5;
+            doc.text('* Precios zona ' + estadoNombre + '. Fuentes: CMIC / CENAPRED / DOF 2026. Vigencia 30 dÃ­as.',
+                mg + 3, y);
+            y += 5;
+            doc.text('* Los precios unitarios incluyen material, mano de obra, equipo y herramienta menor, salvo indicaciÃ³n expresa.',
+                mg + 3, y);
+
+            y += 16;
+            if (y > pageH - 30) { y = nuevaPagina(); y += 10; }
+            var fw = (uW - 24) / 2;
+            doc.setDrawColor(160, 160, 170);
+            doc.setLineWidth(0.3);
+            doc.line(mg + 4, y + 12, mg + 4 + fw, y + 12);
+            doc.line(mg + 4 + fw + 24, y + 12, pageW - mg - 4, y + 12);
+            doc.setFont('helvetica', 'normal');
+            doc.setFontSize(7);
+            doc.setTextColor(100, 100, 120);
+            doc.text('ElaborÃ³:', mg + 4, y + 6);
+            doc.text('Acepta:', mg + 4 + fw + 24, y + 6);
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(8);
+            doc.setTextColor(15, 22, 35);
+            doc.text(firma, mg + 4, y + 17);
+            doc.text(cliente, mg + 4 + fw + 24, y + 17);
+            doc.setFont('helvetica', 'normal');
+            doc.setFontSize(7);
+            doc.setTextColor(100, 100, 120);
+            doc.text('Fecha: ' + fechaStr, mg + 4, y + 22);
+            doc.text('Fecha: _______________', mg + 4 + fw + 24, y + 22);
+
+            totalHojasEst = pgn;
+            doc.save('ConstruIA-Presupuesto-Pro-' + folioActual + '.pdf');
+        }
+
+        /* ── EXCEL PRO ── */
+        function generarExcelPro() {
+            if (typeof XLSX === 'undefined') {
+                alert('LibrerÃ­a Excel no disponible. Verifica tu conexiÃ³n a internet.'); return;
+            }
+            if (!F.tipoProyecto || !F.acabado) {
+                alert('Debes completar el presupuesto.'); return;
+            }
+            var despacho  = _getMPVal('mp-despacho')  || 'ConstruIA.mx';
+            var cliente   = _getMPVal('mp-cliente')   || 'Por definir';
+            var proyecto  = _getMPVal('mp-proyecto')  || 'Proyecto';
+            var municipio = _getMPVal('mp-municipio') || '';
+            var fechaStr  = _getMPVal('mp-fecha')     || '';
+            var pctHon    = parseFloat(document.getElementById('mp-honorarios').value) || 14;
+            var firma     = _getMPVal('mp-firma')     || despacho;
+            var p         = presupuestoActual.partidas || {};
+            var sup       = parseFloat(F.superficie || 0);
+            var niv       = parseFloat(F.nivelesDepto || F.niveles || 1);
+            var estadoData   = ESTADOS[F.estado] || ESTADOS['nacional'];
+            var estadoNombre = estadoData ? (estadoData.nombre || 'Nacional') : 'Nacional';
+            var lugarStr     = municipio ? (municipio + ', ' + estadoNombre) : estadoNombre;
+            var folioActual  = presupuestoActual.folio || ('ConstruIA-' + new Date().getFullYear() + '-' + Math.floor(1000 + Math.random() * 9000));
+
+            var muroDes = {
+                block:   'block de concreto 15x20x40 cm',
+                tabique: 'tabique rojo recocido',
+                mixto:   'sistema mixto block y tablaroca'
+            }[F.muros] || 'block de concreto';
+
+            var pisoDes = {
+                cemento:        'cemento pulido',
+                ceramica_33:    'ceramico 33x33 cm',
+                ceramica_45:    'ceramico 45x45 cm',
+                porcelanato:    'porcelanato 60x60 cm',
+                madera_laminada:'madera laminada',
+                marmol:         'marmol / gran formato'
+            }[F.tipoPiso] || 'ceramico';
+
+            var wb = XLSX.utils.book_new();
+
+            function crearHojaCatalogo(nombreHoja, factorPrecio) {
+                var rows = [];
+                rows.push([despacho, '', '', '', '', '']);
+                rows.push(['PRESUPUESTO DE OBRA', '', '', '', '', '']);
+                rows.push(['Proyecto:', proyecto, '', 'Estado:', estadoNombre, '']);
+                rows.push(['Propietario:', cliente, '', 'Folio:', folioActual, '']);
+                rows.push(['Elaboro:', firma, '', 'Fecha:', fechaStr, '']);
+                rows.push(['', '', '', '', '', '']);
+                rows.push(['CODIGO', 'CONCEPTO', 'UNIDAD', 'CANTIDAD', 'P.UNITARIO', 'IMPORTE']);
+
+                var partCaps = [
+                    {
+                        codigo: 'PRE', titulo: 'TRABAJOS PRELIMINARES', total: p.p01 || 0,
+                        partidas: [
+                            { cod:'PRE-01', con:'Trazo y nivelacion de terreno natural por medios manuales para desplante de estructuras, estableciendo ejes y referencias.', uni:'m2', qty: sup },
+                            { cod:'PRE-02', con:'Renta de oficina y bodega de obra. Incluye instalacion, mantenimiento y retiro.', uni:'lote', qty: 1 },
+                            { cod:'PRE-03', con:'Suministro de agua potable mediante pipas de 10,000 litros. Incluye viajes y maniobras.', uni:'viajes', qty: Math.ceil(sup / 120) },
+                            { cod:'PRE-04', con:'Renta de equipo menor: generador de luz, compactador y herramienta especializada durante la obra.', uni:'semanas', qty: Math.ceil(sup / 50) },
+                            { cod:'PRE-05', con:'Estudio de mecanica de suelos. Incluye sondeos, laboratorio y recomendaciones de cimentacion.', uni:'lote', qty: 1 }
+                        ],
+                        impDist: [0.30, 0.25, 0.20, 0.15, 0.10]
+                    },
+                    {
+                        codigo: 'CIM', titulo: 'CIMENTACION', total: p.p02 || 0,
+                        partidas: [
+                            { cod:'CIM-01', con:'Excavacion en cepas para zapatas y contratrabes con maquinaria mayor. Incluye carga, acarreo y tiro autorizado.', uni:'m3', qty: parseFloat((sup * 0.28).toFixed(2)) },
+                            { cod:'CIM-02', con:'Plantilla de concreto pobre fc=100 kg/cm2, espesor 5 cm. Incluye material, mano de obra y equipo.', uni:'m2', qty: parseFloat((sup * 0.85).toFixed(2)) },
+                            { cod:'CIM-03', con:'Zapatas aisladas de concreto fc=250 kg/cm2 con refuerzo var. 3/8 y 1/2. Incluye cimbra, descimbra y colado.', uni:'pzas', qty: Math.ceil(sup / 18) },
+                            { cod:'CIM-04', con:'Contratrabes CT de concreto fc=250 kg/cm2, secciones 0.20x0.40 y 0.20x0.60 m con var. y estribos. Incluye cimbra.', uni:'ml', qty: parseFloat((sup * 0.9).toFixed(2)) },
+                            { cod:'CIM-05', con:'Firme de concreto fc=250 kg/cm2, espesor 15 cm, armado con malla 6-6/8-8. En acabado cerrado.', uni:'m2', qty: sup }
+                        ],
+                        impDist: [0.18, 0.08, 0.32, 0.27, 0.15]
+                    },
+                    {
+                        codigo: 'EST', titulo: 'ESTRUCTURA', total: p.p03 || 0,
+                        partidas: [
+                            { cod:'EST-01', con:'Castillos y columnas de concreto fc=250 kg/cm2 con armado ARMEX o varilla y estribos. Incluye cimbra, descimbra y equipo.', uni:'ml', qty: parseFloat((sup * 0.85).toFixed(2)) },
+                            { cod:'EST-02', con:'Trabes de concreto fc=250 kg/cm2 con varillas del #3 al #5 y estribos con bastones de refuerzo. Incluye cimbra.', uni:'ml', qty: parseFloat((sup * 0.55).toFixed(2)) },
+                            { cod:'EST-03', con:'Losa de entrepiso y azotea sistema vigueta y bovedilla, capa de compresion 5 cm fc=250 kg/cm2. Incluye suministro y mano de obra.', uni:'m2', qty: parseFloat((sup * niv).toFixed(2)) }
+                        ],
+                        impDist: [0.35, 0.25, 0.40]
+                    },
+                    {
+                        codigo: 'ALB', titulo: 'ALBANILERIA', total: p.p04 || 0,
+                        partidas: [
+                            { cod:'ALB-01', con:'Muro de ' + muroDes + ' con mortero cemento-cal-arena 1:1:6. Castillos var. #4 @60 cm con fc=150 kg/cm2 y escalerilla.', uni:'m2', qty: parseFloat((sup * 1.8 * niv).toFixed(2)) },
+                            { cod:'ALB-02', con:'Aplanado de mezcla cemento-cal-arena 1:1:5, acabado fino con esponja, en muros interiores y exteriores.', uni:'m2', qty: parseFloat((sup * 3.2 * niv).toFixed(2)) },
+                            { cod:'ALB-03', con:'Planilla de mezcla cemento-arena 1:7 para recibir piso ceramico. Incluye material y mano de obra.', uni:'m2', qty: parseFloat((sup * niv).toFixed(2)) },
+                            { cod:'ALB-04', con:'Escaleras de concreto armado fc=250 kg/cm2 con varilla 3/8. Incluye cimbra, descimbra y mano de obra.', uni:'pza', qty: Math.max(1, niv - 1) }
+                        ],
+                        impDist: [0.55, 0.28, 0.10, 0.07]
+                    },
+                    {
+                        codigo: 'ACB', titulo: 'ACABADOS', total: p.p05 || 0,
+                        partidas: [
+                            { cod:'ACB-01', con:'Suministro y colocacion de piso ' + pisoDes + '. ' + (F.tipoPiso === 'madera_laminada' ? 'Incluye adhesivo especial, instalacion flotante o clavada, zoclo de madera, remates y mano de obra.' : F.tipoPiso === 'cemento' ? 'Incluye esmerilado, pulido, endurecedor, sellador y mano de obra.' : 'Incluye pegamento, emboquillado, lechada, desperdicios y mano de obra.'), uni:'m2', qty: parseFloat((sup * niv).toFixed(2)) },
+                            { cod:'ACB-02', con:'Zoclo de piso de 10 cm de altura. Incluye emboquillado, material y mano de obra.', uni:'ml', qty: parseFloat((sup * 0.9 * niv).toFixed(2)) },
+                            { cod:'ACB-03', con:'Pintura vinilica satinada COMEX VINIMEX a dos manos. Incluye resane, preparacion y sellado de superficie.', uni:'m2', qty: parseFloat((sup * 3.5 * niv).toFixed(2)) },
+                            { cod:'ACB-04', con:'Plafon de panel de yeso 13 mm con bastidor galvanizado cal. 26 en areas interiores.', uni:'m2', qty: parseFloat((sup * niv).toFixed(2)) }
+                        ],
+                        impDist: [0.45, 0.12, 0.28, 0.15]
+                    },
+                    {
+                        codigo: 'HID', titulo: 'INSTALACION HIDRAULICA Y SANITARIA', total: p.p06 || 0,
+                        partidas: [
+                            { cod:'HID-01', con:'Red hidraulica con tuberia PVC y cobre. Salidas agua fria y caliente. Incluye material, accesorios y prueba hidrostatica.', uni:'lote', qty: 1 },
+                            { cod:'HID-02', con:'Red sanitaria PVC hidraulico. Bajadas, registros, trampas y conexion a red municipal.', uni:'lote', qty: 1 },
+                            { cod:'HID-03', con:'Muebles sanitarios: WC, lavabo, regadera y accesorios. Suministro y colocacion completa.', uni:'pza', qty: Math.max(1, Math.ceil(sup / 60)) }
+                        ],
+                        impDist: [0.35, 0.35, 0.30]
+                    },
+                    {
+                        codigo: 'ELE', titulo: 'INSTALACION ELECTRICA', total: p.p07 || 0,
+                        partidas: [
+                            { cod:'ELE-01', con:'Instalacion electrica en tubo conduit PVC con cable THW. Circuitos de iluminacion y fuerza.', uni:'lote', qty: 1 },
+                            { cod:'ELE-02', con:'Tablero general de distribucion con interruptores termomagneticos. Incluye cometida interior.', uni:'pza', qty: 1 },
+                            { cod:'ELE-03', con:'Luminarias, contactos y apagadores. Salidas LED y contactos polarizados en todos los locales.', uni:'lote', qty: 1 }
+                        ],
+                        impDist: [0.50, 0.20, 0.30]
+                    }
+                ];
+                if (p.p08 && p.p08 > 0) {
+                    partCaps.push({
+                        codigo: 'ESP', titulo: 'ESPACIOS ESPECIALES', total: p.p08,
+                        partidas: [
+                            { cod:'ESP-01', con:'Espacios especiales: cochera, local comercial, area de servicio o barda perimetral.', uni:'lote', qty: 1 },
+                            { cod:'ESP-02', con:'Instalaciones especiales: gas, impermeabilizacion de azotea y acabados exteriores.', uni:'lote', qty: 1 }
+                        ],
+                        impDist: [0.60, 0.40]
+                    });
+                }
+
+                var sumaTotal = 0;
+
+                for (var ci2 = 0; ci2 < partCaps.length; ci2++) {
+                    var cap2 = partCaps[ci2];
+                    sumaTotal += cap2.total;
+                    rows.push([cap2.codigo, cap2.titulo, '', '', '', '']);
+                    var filaInicioPartidas = rows.length + 1;
+                    for (var pi2 = 0; pi2 < cap2.partidas.length; pi2++) {
+                        var pa2   = cap2.partidas[pi2];
+                        var imp2  = Math.round((cap2.total * cap2.impDist[pi2]) * factorPrecio * 100) / 100;
+                        var qty2  = Math.round((parseFloat(pa2.qty) || 1) * 1000) / 1000;
+                        var pu2   = qty2 > 0 ? Math.round((imp2 / qty2) * 100) / 100 : 0;
+                        rows.push([pa2.cod, pa2.con, pa2.uni, qty2, pu2, imp2]);
+                    }
+                    var filaFinPartidas = rows.length;
+                    var colF_inicio = 'F' + filaInicioPartidas;
+                    var colF_fin    = 'F' + filaFinPartidas;
+                    rows.push(['', 'TOTAL ' + cap2.titulo, '', '', '', { f: 'SUM(' + colF_inicio + ':' + colF_fin + ')' }]);
+                    rows.push(['', '', '', '', '', '']);
+                }
+
+                rows.push(['', '', '', '', '', '']);
+                var _costoDir = Math.round(sumaTotal * factorPrecio * 100) / 100;
+                var _honRound = Math.round(_costoDir * (pctHon / 100) * 100) / 100;
+                var _subRound = Math.round((_costoDir + _honRound) * 100) / 100;
+                var _ivaRound = Math.round(_subRound * 0.16 * 100) / 100;
+                var _granRound = Math.round((_subRound + _ivaRound) * 100) / 100;
+                rows.push(['', 'COSTO DIRECTO DE OBRA', '', '', '', _costoDir]);
+                rows.push(['', 'HONORARIOS PROFESIONALES (' + pctHon + '%)', '', '', '', _honRound]);
+                rows.push(['', 'SUBTOTAL', '', '', '', _subRound]);
+                rows.push(['', 'IVA 16%', '', '', '', _ivaRound]);
+                rows.push(['', 'GRAN TOTAL', '', '', '', _granRound]);
+                rows.push(['', '', '', '', '', '']);
+                rows.push(['Estos precios NO incluyen I.V.A.', '', '', '', '', '']);
+                rows.push(['Elaboro: ' + firma, '', '', 'Zona: ' + estadoNombre, '', '']);
+
+                var ws = XLSX.utils.aoa_to_sheet(rows);
+                ws['!cols'] = [
+                    { wch: 10 },
+                    { wch: 72 },
+                    { wch: 10 },
+                    { wch: 12 },
+                    { wch: 16 },
+                    { wch: 18 }
+                ];
+                var rango = XLSX.utils.decode_range(ws['!ref'] || 'A1:F1');
+                for (var R = rango.s.r; R <= rango.e.r; R++) {
+                    for (var C = 3; C <= 5; C++) {
+                        var cellAddr = XLSX.utils.encode_cell({ r: R, c: C });
+                        if (ws[cellAddr] && ws[cellAddr].t === 'n') {
+                            ws[cellAddr].z = '"$"#,##0.00';
+                        }
+                    }
+                }
+                XLSX.utils.book_append_sheet(wb, ws, nombreHoja);
+            }
+
+            crearHojaCatalogo('Catalogo Estandar', 1.0);
+            crearHojaCatalogo('Catalogo Economico', 0.82);
+            crearHojaCatalogo('Catalogo Premium',   1.22);
+
+            var capNombres = [
+                ['PRE', 'TRABAJOS PRELIMINARES',   p.p01 || 0],
+                ['CIM', 'CIMENTACION',              p.p02 || 0],
+                ['EST', 'ESTRUCTURA',               p.p03 || 0],
+                ['ALB', 'ALBANILERIA',              p.p04 || 0],
+                ['ACB', 'ACABADOS',                 p.p05 || 0],
+                ['HID', 'HIDRAULICA Y SANITARIA',   p.p06 || 0],
+                ['ELE', 'ELECTRICA',                p.p07 || 0]
+            ];
+            if (p.p08 && p.p08 > 0) {
+                capNombres.push(['ESP', 'ESPACIOS ESPECIALES', p.p08]);
+            }
+            var resRows2 = [];
+            resRows2.push([despacho, '', '', '']);
+            resRows2.push(['PRESUPUESTO DE OBRA - RESUMEN COMPARATIVO', '', '', '']);
+            resRows2.push(['Proyecto:', proyecto, 'Fecha:', fechaStr]);
+            resRows2.push(['Propietario:', cliente, 'Zona:', estadoNombre]);
+            resRows2.push(['', '', '', '']);
+            resRows2.push(['CAPITULO', 'ECONOMICO', 'ESTANDAR', 'PREMIUM']);
+            var sumEco = 0; var sumEst = 0; var sumPre = 0;
+            for (var rci = 0; rci < capNombres.length; rci++) {
+                var cn = capNombres[rci];
+                var eco = Math.round(cn[2] * 0.82 * 100) / 100;
+                var est = Math.round(cn[2] * 100) / 100;
+                var pre = Math.round(cn[2] * 1.22 * 100) / 100;
+                sumEco += eco; sumEst += est; sumPre += pre;
+                resRows2.push([cn[0] + ' - ' + cn[1], eco, est, pre]);
+            }
+            resRows2.push(['', '', '', '']);
+            var _rnd = function(v) { return Math.round(v * 100) / 100; };
+            var honEco = _rnd(sumEco * pctHon / 100); var honEst = _rnd(sumEst * pctHon / 100); var honPre = _rnd(sumPre * pctHon / 100);
+            var subEco = _rnd(sumEco + honEco); var subEst = _rnd(sumEst + honEst); var subPre = _rnd(sumPre + honPre);
+            var ivaEco = _rnd(subEco * 0.16); var ivaEst = _rnd(subEst * 0.16); var ivaPre = _rnd(subPre * 0.16);
+            var gtEco  = _rnd(subEco + ivaEco); var gtEst  = _rnd(subEst + ivaEst); var gtPre  = _rnd(subPre + ivaPre);
+            resRows2.push(['COSTO DIRECTO',                     sumEco, sumEst, sumPre]);
+            resRows2.push(['HONORARIOS ' + pctHon + '%',        honEco, honEst, honPre]);
+            resRows2.push(['SUBTOTAL',                          subEco, subEst, subPre]);
+            resRows2.push(['IVA 16%',                           ivaEco, ivaEst, ivaPre]);
+            resRows2.push(['GRAN TOTAL',                        gtEco,  gtEst,  gtPre]);
+            resRows2.push(['', '', '', '']);
+            resRows2.push(['Honorarios % editable en las filas de la tabla anterior.', '', '', '']);
+            resRows2.push(['Estos precios NO incluyen I.V.A.', '', '', '']);
+            var wsRes2 = XLSX.utils.aoa_to_sheet(resRows2);
+            wsRes2['!cols'] = [{ wch: 42 }, { wch: 18 }, { wch: 18 }, { wch: 18 }];
+            var rango2 = XLSX.utils.decode_range(wsRes2['!ref'] || 'A1:D1');
+            for (var R2 = rango2.s.r; R2 <= rango2.e.r; R2++) {
+                for (var C2 = 1; C2 <= 3; C2++) {
+                    var ca2 = XLSX.utils.encode_cell({ r: R2, c: C2 });
+                    if (wsRes2[ca2] && wsRes2[ca2].t === 'n') {
+                        wsRes2[ca2].z = '"$"#,##0.00';
+                    }
+                }
+            }
+            XLSX.utils.book_append_sheet(wb, wsRes2, 'Resumen 3 Escenarios');
+
+            XLSX.writeFile(wb, 'ConstruIA-Excel-Pro-' + folioActual + '.xlsx');
         }
 
         function mostrarPreviewPDF() {
@@ -7971,7 +8820,7 @@
             if (!texto) { return; }
             campo.value = '';
             agenteAgregarMensaje('usuario', texto);
-            agenteHistorial.push({ role: 'user', parts: [{ text: texto }] });
+            agenteHistorial.push({ role: 'user', content: texto });
 
             var contenedor = document.getElementById('agente-mensajes');
             var typing = document.createElement('div');
@@ -7993,8 +8842,8 @@
 
             var endpoint = '/api/agente';
             var cuerpo = JSON.stringify({
-                system_instruction: { parts: [{ text: systemFinal }] },
-                contents: agenteHistorial
+                system: systemFinal,
+                messages: agenteHistorial
             });
 
             var xhr = new XMLHttpRequest();
@@ -8007,9 +8856,9 @@
                 if (xhr.status === 200) {
                     try {
                         var resp = JSON.parse(xhr.responseText);
-                        var respTexto = resp.candidates[0].content.parts[0].text;
+                        var respTexto = resp.content[0].text;
                         agenteAgregarMensaje('agente', respTexto);
-                        agenteHistorial.push({ role: 'model', parts: [{ text: respTexto }] });
+                        agenteHistorial.push({ role: 'assistant', content: respTexto });
                         if (agenteHistorial.length > 20) {
                             agenteHistorial = agenteHistorial.slice(agenteHistorial.length - 20);
                         }
@@ -8020,9 +8869,7 @@
                     }
                 } else if (xhr.status === 429) {
                     agenteAgregarMensaje('agente',
-                        'El agente est\u00e1 procesando muchas solicitudes. ' +
-                        'Espera 30 segundos e int\u00e9ntalo de nuevo. ' +
-                        '(L\u00edmite del servicio gratuito de IA)'
+                        'El agente est\u00e1 ocupado. Espera unos segundos e int\u00e9ntalo de nuevo.'
                     );
                     var btnEnviar = document.querySelector('#agente-panel button[onclick="agenteEnviarMensaje()"]');
                     if (btnEnviar) {
@@ -8375,7 +9222,7 @@
             doc.setFont('helvetica', 'bold');
             doc.setFontSize(18);
             doc.setTextColor(255, 255, 255);
-            doc.text('ObraDigitalMX', marginL, 16);
+            doc.text('ConstruIA.mx', marginL, 16);
 
             doc.setFont('helvetica', 'normal');
             doc.setFontSize(9);
@@ -8490,7 +9337,7 @@
             doc.text('NOTA LEGAL:', marginL + 4, y + 7);
             doc.setFont('helvetica', 'normal');
             doc.setTextColor(80, 60, 0);
-            var notaLines = doc.splitTextToSize('Requisitos referenciales basados en reglamentos municipales vigentes. Verificar con la dependencia correspondiente antes de iniciar el tramite. ObraDigitalMX no se hace responsable de cambios en los requisitos oficiales.', usableW - 30);
+            var notaLines = doc.splitTextToSize('Requisitos referenciales basados en reglamentos municipales vigentes. Verificar con la dependencia correspondiente antes de iniciar el tramite. ConstruIA.mx no se hace responsable de cambios en los requisitos oficiales.', usableW - 30);
             doc.text(notaLines, marginL + 24, y + 7);
 
             var nombreArchivo = 'ChecklistPermisos_' + estado + '_' + tipo + '_' + anio + '.pdf';
@@ -8737,7 +9584,7 @@
                 var aAz = largo * ancho;
                 desc = largo + 'm \u00d7 ' + ancho + 'm = ' + parseFloat(aAz.toFixed(1)) + ' m\u00b2';
                 ag('Impermeabilizante acr\u00edlico (cubeta 19L)', Math.ceil(Math.ceil((aAz / 1.5) * 2 * FACTOR_IMPER) / 19), PRECIOS_MAT.imper_19L, 'cubetas');
-                ag('Sellador (bote 3.8L)', Math.ceil(Math.ceil(aAz / 8) / 3.8), PRECIOS_MAT.sellador_3p8L, 'botes');
+                ag('Sellador (bote 3.8L)', Math.ceil(aAz * FACTOR_IMPER / 8), PRECIOS_MAT.sellador_3p8L, 'botes');
             } else if (tipo === 'barda') {
                 if (ml <= 0) { alert('Ingresa metros lineales.'); return; }
                 var aBa = ml * altBarda;
@@ -8828,11 +9675,13 @@
                     '<td class="td-total">' + _fmxn(it.total) + '</td>';
                 tbody.appendChild(tr);
             }
-            var mo = Math.round(res.subMat * 0.35);
+            var FACTORES_MO = { losa: 0.45, muros: 0.40, piso: 0.38, cimentacion: 0.50, aplanado: 0.30, impermeabilizacion: 0.20, barda: 0.38, cuarto: 0.42 };
+            var _factorMO = FACTORES_MO[res.tipo] !== undefined ? FACTORES_MO[res.tipo] : 0.35;
+            var mo = Math.round(res.subMat * _factorMO);
             var total = res.subMat + mo;
             document.getElementById('mat-totales').innerHTML =
                 '<div class="mat-total-row"><span>Subtotal materiales</span><span class="mat-total-val">' + _fmxn(res.subMat) + '</span></div>' +
-                '<div class="mat-total-row"><span>+ Mano de obra estimada (35%)</span><span class="mat-total-val">' + _fmxn(mo) + '</span></div>' +
+                '<div class="mat-total-row"><span>+ Mano de obra estimada (' + Math.round(_factorMO * 100) + '%)</span><span class="mat-total-val">' + _fmxn(mo) + '</span></div>' +
                 '<div class="mat-total-row grand"><span>TOTAL ESTIMADO DE LA PARTIDA</span><span class="mat-total-val">' + _fmxn(total) + '</span></div>';
             var divRes = document.getElementById('mat-resultado');
             divRes.classList.add('visible');
@@ -8840,8 +9689,19 @@
         }
 
         function resetCalculadoraMat() {
+            matTipoSeleccionado = '';
             var divRes = document.getElementById('mat-resultado');
             if (divRes) { divRes.classList.remove('visible'); }
+            var panel = document.getElementById('mat-inputs-panel');
+            if (panel) { panel.classList.remove('visible'); }
+            var tarjetas = document.querySelectorAll('.mat-tipo-card');
+            for (var ti = 0; ti < tarjetas.length; ti++) {
+                tarjetas[ti].classList.remove('selected');
+            }
+            for (var j = 0; j < MAT_TODOS_LOS_CAMPOS.length; j++) {
+                var grpEl = document.getElementById(MAT_GRP_MAP[MAT_TODOS_LOS_CAMPOS[j]]);
+                if (grpEl) { grpEl.style.display = 'none'; }
+            }
             var campos = ['mat-largo', 'mat-ancho', 'mat-m2', 'mat-ml'];
             for (var i = 0; i < campos.length; i++) {
                 var el = document.getElementById(campos[i]);
@@ -8880,7 +9740,10 @@
             doc.setFont('helvetica', 'normal');
             doc.setFontSize(8);
             doc.setTextColor(161, 161, 170);
-            doc.text('Abril 2026', 168, 23);
+            var _mesesMat = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+            var _fechaMatHoy = new Date();
+            var _fechaMatStr = _mesesMat[_fechaMatHoy.getMonth()] + ' ' + _fechaMatHoy.getFullYear();
+            doc.text(_fechaMatStr, 168, 23);
 
             y = 44;
             doc.setFont('helvetica', 'bold');
@@ -9024,6 +9887,59 @@
     </div>
 
     <button type="button" id="btn-ir-calculadora" style="display:none!important;position:absolute;left:-9999px;" aria-hidden="true">hidden</button>
+
+    <div id="modal-personaliz-overlay" class="modal-overlay" style="display:none;">
+      <div class="modal-personaliz">
+        <h2>&#9998; Personalizar documento</h2>
+        <p>Estos datos aparecer&#225;n en el encabezado del PDF y Excel profesional.</p>
+        <div class="modal-field-grid">
+          <div class="modal-field full">
+            <label>Nombre del despacho / profesional</label>
+            <input type="text" id="mp-despacho" placeholder="Ej: Arq. Juan P&#233;rez / Despacho XYZ">
+          </div>
+          <div class="modal-field">
+            <label>Nombre del cliente / propietario</label>
+            <input type="text" id="mp-cliente" placeholder="Ej: Fam. Garc&#237;a">
+          </div>
+          <div class="modal-field">
+            <label>Nombre del proyecto</label>
+            <input type="text" id="mp-proyecto" placeholder="Ej: Casa habitaci&#243;n Tlaxcala">
+          </div>
+          <div class="modal-field">
+            <label>Municipio</label>
+            <input type="text" id="mp-municipio" placeholder="Ej: Chiautempan">
+          </div>
+          <div class="modal-field">
+            <label>Fecha de emisi&#243;n</label>
+            <input type="text" id="mp-fecha" placeholder="Ej: 22/04/2026">
+          </div>
+          <div class="modal-field">
+            <label>Honorarios profesionales (%)</label>
+            <select id="mp-honorarios">
+              <option value="0">0% (sin honorarios)</option>
+              <option value="8">8%</option>
+              <option value="10">10%</option>
+              <option value="12">12%</option>
+              <option value="14" selected>14% (recomendado)</option>
+              <option value="16">16%</option>
+              <option value="18">18%</option>
+              <option value="20">20%</option>
+            </select>
+          </div>
+          <div class="modal-field full">
+            <label>Nombre para firma del responsable</label>
+            <input type="text" id="mp-firma" placeholder="Ej: Arq. Juan P&#233;rez">
+          </div>
+        </div>
+        <div class="modal-actions" id="modal-actions-pdf">
+          <button type="button" class="btn-modal-cancel" onclick="cerrarModalPersonalizacion()">Cancelar</button>
+          <button type="button" class="btn-modal-pdf" id="btn-modal-generar"
+            onclick="confirmarModalYGenerar()">
+            &#128196; Generar PDF Pro
+          </button>
+        </div>
+      </div>
+    </div>
 </body>
 
 </html>
