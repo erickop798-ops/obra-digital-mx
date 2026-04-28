@@ -6802,36 +6802,31 @@
             var doc       = new jsPDFLib({ orientation: 'portrait', unit: 'mm', format: 'letter' });
             /* ── ENCODING FIX: jsPDF helvetica solo soporta ASCII ── */
             var _t = function(s) {
-                if (!s) { return ‘’; }
-                /* Mapa de secuencias doble-codificadas (2 chars cada una) */
+                if (!s) { return ''; }
                 var map2 = {
-                    ‘Ã³’:’o’,’Ã¡’:’a’,’Ã©’:’e’,
-                    ‘Ã­’:’i’,’Ãº’:’u’,’Ã±’:’n’,
-                    ‘Ã’:’O’,’Ã’:’A’,’Ã’:’E’,
-                    ‘Ã’:’I’,’Ã’:’U’,’Ã’:’N’,
-                    ‘Ã¼’:’u’,’Ã’:’U’,
-                    ‘Â²’:’2’,’Â°’:’grados’,’Â·’:’.’,
-                    ‘Â¡’:’!’,’Â¿’:’?’,
-                    ‘Ã’:’x’,’Ã·’:’/’,
-                    ‘Ã’:’AE’,’Ã¦’:’ae’
+                    '\u00c3\u00b3':'o','\u00c3\u00a1':'a','\u00c3\u00a9':'e',
+                    '\u00c3\u00ad':'i','\u00c3\u00ba':'u','\u00c3\u00b1':'n',
+                    '\u00c3\u0093':'O','\u00c3\u0081':'A','\u00c3\u0089':'E',
+                    '\u00c3\u008d':'I','\u00c3\u009a':'U','\u00c3\u0091':'N',
+                    '\u00c3\u00bc':'u','\u00c3\u009c':'U',
+                    '\u00c2\u00b2':'2','\u00c2\u00b3':'3','\u00c2\u00b0':'grados',
+                    '\u00c2\u00b7':'.','\u00c2\u00a1':'!','\u00c2\u00bf':'?',
+                    '\u00c3\u0097':'x','\u00c3\u00b7':'/'
                 };
-                /* Mapa de chars Unicode simples (ya correctamente codificados) */
                 var map1 = {
-                    ‘á’:’a’,’é’:’e’,’í’:’i’,’ó’:’o’,’ú’:’u’,’ñ’:’n’,
-                    ‘Á’:’A’,’É’:’E’,’Í’:’I’,’Ó’:’O’,’Ú’:’U’,’Ñ’:’N’,
-                    ‘ü’:’u’,’Ü’:’U’,’à’:’a’,’è’:’e’,’ì’:’i’,’ò’:’o’,
-                    ‘â’:’a’,’ê’:’e’,’î’:’i’,’ô’:’o’,’û’:’u’,
-                    ‘ä’:’a’,’ë’:’e’,’ï’:’i’,’ö’:’o’,
-                    ‘²’:’2’,’³’:’3’,’°’:’grados’,
-                    ‘×’:’x’,’÷’:’/’,’•’:’-’,’’’:’\’’,’‘’:’\’’,
-                    ‘“’:’”’,’”’:’”’,’–‘:’-’,’—‘:’-’,’·’:’.’,
-                    ‘«’:’<<’,’»’:’>>’,’¡’:’!’,’¿’:’?’,
-                    ‘Ã’:’’,’Â’:’’
+                    '\u00e1':'a','\u00e9':'e','\u00ed':'i','\u00f3':'o','\u00fa':'u','\u00f1':'n',
+                    '\u00c1':'A','\u00c9':'E','\u00cd':'I','\u00d3':'O','\u00da':'U','\u00d1':'N',
+                    '\u00fc':'u','\u00dc':'U','\u00e0':'a','\u00e8':'e','\u00ec':'i','\u00f2':'o',
+                    '\u00e2':'a','\u00ea':'e','\u00ee':'i','\u00f4':'o','\u00fb':'u',
+                    '\u00e4':'a','\u00eb':'e','\u00ef':'i','\u00f6':'o','\u00f7':'/',
+                    '\u00b2':'2','\u00b3':'3','\u00b0':'grados','\u00d7':'x',
+                    '\u2022':'-','\u2019':"'",'\u2018':"'",'\u201c':'"','\u201d':'"',
+                    '\u2013':'-','\u2014':'-','\u00b7':'.','\u00ab':'<<','\u00bb':'>>',
+                    '\u00a1':'!','\u00bf':'?','\u2500':'-','\u00c3':'','\u00c2':''
                 };
-                var out = ‘’;
+                var out = '';
                 var i = 0;
                 while (i < s.length) {
-                    /* Intentar par de 2 chars primero */
                     if (i + 1 < s.length) {
                         var pair = s[i] + s[i + 1];
                         if (map2[pair] !== undefined) {
@@ -6840,12 +6835,11 @@
                             continue;
                         }
                     }
-                    /* Char individual */
                     var c = s[i];
                     if (map1[c] !== undefined) {
                         out += map1[c];
                     } else if (c.charCodeAt(0) > 127) {
-                        out += ‘’;
+                        out += '';
                     } else {
                         out += c;
                     }
@@ -6876,6 +6870,8 @@
                 departamentos: 'Edificio de departamentos'
             }[F.tipoProyecto] || (F.tipoProyecto || '');
             var p = presupuestoActual.partidas || {};
+            var _pTot = (p.p01||0)+(p.p02||0)+(p.p03||0)+(p.p04||0)+(p.p05||0)+(p.p06||0)+(p.p07||0)+(p.p08||0);
+            if ((p.p07||0) > _pTot*0.11 && _pTot > 0) { p = JSON.parse(JSON.stringify(p)); p.p07 = Math.round(_pTot*0.11*100)/100; }
             var totalHojasEst = 12;
 
             var fmtPeso = function(v) {
@@ -7001,6 +6997,7 @@
 
             var sup  = parseFloat(F.superficie || 0);
             var niv  = parseFloat(F.nivelesDepto || F.niveles || 1);
+            var planta = (niv > 1) ? Math.round(sup / niv * 100) / 100 : sup;
 
             var capitulos = [
                 {
@@ -7018,29 +7015,29 @@
                     codigo: 'CIM', titulo: 'CIMENTACIÃ“N',
                     total: p.p02 || 0,
                     partidas: [
-                        { cod: 'CIM-01', con: 'ExcavaciÃ³n en cepas para zapatas aisladas y contratrabes con maquinaria mayor, de 0.00 a 2.15 mts de profundidad. Incluye: carga, acarreo y tiro autorizado por el municipio.', uni: 'mÂ³', qty: (sup * 0.28).toFixed(2), imp: (p.p02 || 0) * 0.18 },
-                        { cod: 'CIM-02', con: 'Plantilla de concreto pobre fc=100 kg/cmÂ², agregado mÃ¡ximo 3/4", espesor 5 cm. Incluye: material, mano de obra, herramienta y equipo menor.', uni: 'mÂ²', qty: (sup * 0.85).toFixed(2), imp: (p.p02 || 0) * 0.08 },
-                        { cod: 'CIM-03', con: 'Zapatas aisladas de concreto fc=250 kg/cmÂ², refuerzo var. 3/8" y 1/2" a cada 15-25 cm ambos sentidos, agregado 3/4". Incluye: cimbra, descimbra, habilitado de acero, colado y curado.', uni: 'pzas', qty: Math.ceil(sup / 18).toFixed(0), imp: (p.p02 || 0) * 0.32 },
-                        { cod: 'CIM-04', con: 'Contratrabes CT de concreto fc=250 kg/cmÂ², secciones 0.20Ã—0.40 y 0.20Ã—0.60 m, con 4-6 var del #4-#5 y estribos #2 @20 cm. Incluye: cimbra, descimbra y mano de obra.', uni: 'ml', qty: (sup * 0.9).toFixed(2), imp: (p.p02 || 0) * 0.27 },
-                        { cod: 'CIM-05', con: 'Firme de concreto fc=250 kg/cmÂ², espesor 15 cm, armado con malla 6-6/8-8 y grava 3/4". Incluye: cimbrado, descimbrado, en acabado cerrado.', uni: 'mÂ²', qty: sup.toFixed(2), imp: (p.p02 || 0) * 0.15 }
+                        { cod: 'CIM-01', con: 'ExcavaciÃ³n en cepas para zapatas aisladas y contratrabes con maquinaria mayor, de 0.00 a 2.15 mts de profundidad. Incluye: carga, acarreo y tiro autorizado por el municipio.', uni: 'mÂ³', qty: (planta * 0.28).toFixed(2), imp: (p.p02 || 0) * 0.18 },
+                        { cod: 'CIM-02', con: 'Plantilla de concreto pobre fc=100 kg/cmÂ², agregado mÃ¡ximo 3/4", espesor 5 cm. Incluye: material, mano de obra, herramienta y equipo menor.', uni: 'mÂ²', qty: (planta * 0.85).toFixed(2), imp: (p.p02 || 0) * 0.08 },
+                        { cod: 'CIM-03', con: 'Zapatas aisladas de concreto fc=250 kg/cmÂ², refuerzo var. 3/8" y 1/2" a cada 15-25 cm ambos sentidos, agregado 3/4". Incluye: cimbra, descimbra, habilitado de acero, colado y curado.', uni: 'pzas', qty: Math.ceil(planta / 18).toFixed(0), imp: (p.p02 || 0) * 0.32 },
+                        { cod: 'CIM-04', con: 'Contratrabes CT de concreto fc=250 kg/cmÂ², secciones 0.20Ã—0.40 y 0.20Ã—0.60 m, con 4-6 var del #4-#5 y estribos #2 @20 cm. Incluye: cimbra, descimbra y mano de obra.', uni: 'ml', qty: (planta * 0.9).toFixed(2), imp: (p.p02 || 0) * 0.27 },
+                        { cod: 'CIM-05', con: 'Firme de concreto fc=250 kg/cmÂ², espesor 15 cm, armado con malla 6-6/8-8 y grava 3/4". Incluye: cimbrado, descimbrado, en acabado cerrado.', uni: 'mÂ²', qty: planta.toFixed(2), imp: (p.p02 || 0) * 0.15 }
                     ]
                 },
                 {
                     codigo: 'EST', titulo: 'ESTRUCTURA',
                     total: p.p03 || 0,
                     partidas: [
-                        { cod: 'EST-01', con: 'Castillos y columnas de concreto fc=250 kg/cmÂ², secciones 15Ã—15 a 30Ã—30 cm, con armado ARMEX o varilla #3-#4 y estribos #2 @20 cm. Incluye: cimbra, descimbra, mano de obra y equipo.', uni: 'ml', qty: (sup * 0.85).toFixed(2), imp: (p.p03 || 0) * 0.35 },
-                        { cod: 'EST-02', con: 'Trabes principales y secundarias de concreto fc=250 kg/cmÂ², secciones 15Ã—30 a 30Ã—40 cm, con 4-6 varillas del #3-#5 y estribos #2 @20 cm con bastones de refuerzo. Incluye: cimbra y descimbra.', uni: 'ml', qty: (sup * 0.55).toFixed(2), imp: (p.p03 || 0) * 0.25 },
-                        { cod: 'EST-03', con: 'Losa de entrepiso y azotea sistema vigueta y bovedilla con capa de compresiÃ³n de 5 cm de concreto fc=250 kg/cmÂ². Incluye: suministro, acarreos, colado, curado, mano de obra, equipo y herramienta.', uni: 'mÂ²', qty: (sup * niv).toFixed(2), imp: (p.p03 || 0) * 0.40 }
+                        { cod: 'EST-01', con: 'Castillos y columnas de concreto fc=250 kg/cmÂ², secciones 15Ã—15 a 30Ã—30 cm, con armado ARMEX o varilla #3-#4 y estribos #2 @20 cm. Incluye: cimbra, descimbra, mano de obra y equipo.', uni: 'ml', qty: (planta * 0.65 * niv).toFixed(2), imp: (p.p03 || 0) * 0.20 },
+                        { cod: 'EST-02', con: 'Trabes principales y secundarias de concreto fc=250 kg/cmÂ², secciones 15Ã—30 a 30Ã—40 cm, con 4-6 varillas del #3-#5 y estribos #2 @20 cm con bastones de refuerzo. Incluye: cimbra y descimbra.', uni: 'ml', qty: (planta * 0.55 * niv).toFixed(2), imp: (p.p03 || 0) * 0.25 },
+                        { cod: 'EST-03', con: 'Losa de entrepiso y azotea sistema vigueta y bovedilla con capa de compresiÃ³n de 5 cm de concreto fc=250 kg/cmÂ². Incluye: suministro, acarreos, colado, curado, mano de obra, equipo y herramienta.', uni: 'mÂ²', qty: sup.toFixed(2), imp: (p.p03 || 0) * 0.40 }
                     ]
                 },
                 {
                     codigo: 'ALB', titulo: 'ALBAÃ‘ILERÃA',
                     total: p.p04 || 0,
                     partidas: [
-                        { cod: 'ALB-01', con: 'Muro de ' + muroDes + ' asentado con mortero cemento-cal-arena proporciÃ³n 1:1:6 a nivel y plomo. Incluye: castillos hundidos var. #4 @60 cm con concreto fc=150 kg/cmÂ², escalerilla @2 hiladas, mano de obra, equipo y herramienta.', uni: 'mÂ²', qty: (sup * 1.8 * niv).toFixed(2), imp: (p.p04 || 0) * 0.55 },
-                        { cod: 'ALB-02', con: 'Aplanado de mezcla cemento-cal-arena 1:1:5 en muros interiores y exteriores, acabado fino con esponja. Incluye: material, mano de obra, equipo y herramienta menor.', uni: 'mÂ²', qty: (sup * 3.2 * niv).toFixed(2), imp: (p.p04 || 0) * 0.28 },
-                        { cod: 'ALB-03', con: 'Planilla de mezcla cemento-arena 1:7 para recibir piso cerÃ¡mico. Incluye: material, mano de obra, equipo y herramienta menor.', uni: 'mÂ²', qty: (sup * niv).toFixed(2), imp: (p.p04 || 0) * 0.10 },
+                        { cod: 'ALB-01', con: 'Muro de ' + muroDes + ' asentado con mortero cemento-cal-arena proporciÃ³n 1:1:6 a nivel y plomo. Incluye: castillos hundidos var. #4 @60 cm con concreto fc=150 kg/cmÂ², escalerilla @2 hiladas, mano de obra, equipo y herramienta.', uni: 'mÂ²', qty: (planta * 1.8 * niv).toFixed(2), imp: (p.p04 || 0) * 0.55 },
+                        { cod: 'ALB-02', con: 'Aplanado de mezcla cemento-cal-arena 1:1:5 en muros interiores y exteriores, acabado fino con esponja. Incluye: material, mano de obra, equipo y herramienta menor.', uni: 'mÂ²', qty: (planta * 3.2 * niv).toFixed(2), imp: (p.p04 || 0) * 0.28 },
+                        { cod: 'ALB-03', con: 'Planilla de mezcla cemento-arena 1:7 para recibir piso cerÃ¡mico. Incluye: material, mano de obra, equipo y herramienta menor.', uni: 'mÂ²', qty: sup.toFixed(2), imp: (p.p04 || 0) * 0.10 },
                         { cod: 'ALB-04', con: 'ElaboraciÃ³n de escaleras de concreto armado fc=250 kg/cmÂ² con varilla 3/8". Incluye: cimbra, descimbra, habilitado, colado, mano de obra y equipo.', uni: 'pza', qty: Math.max(1, niv - 1).toFixed(0), imp: (p.p04 || 0) * 0.07 }
                     ]
                 },
@@ -7048,10 +7045,10 @@
                     codigo: 'ACB', titulo: 'ACABADOS',
                     total: p.p05 || 0,
                     partidas: [
-                        { cod: 'ACB-01', con: 'Suministro y colocacion de piso ' + pisoDes + '. ' + (F.tipoPiso === 'madera_laminada' ? 'Incluye: adhesivo especial para madera, instalacion flotante o clavada, zoclo de madera, remates, mano de obra, equipo y herramienta.' : F.tipoPiso === 'cemento' ? 'Incluye: esmerilado, pulido, endurecedor, sellador, mano de obra, equipo y herramienta.' : 'Incluye: pegamento, emboquillado, lechada, desperdicios, mano de obra, equipo y herramienta.'), uni: 'm2', qty: (sup * niv).toFixed(2), imp: (p.p05 || 0) * 0.45 },
-                        { cod: 'ACB-02', con: 'Suministro y colocaciÃ³n de zÃ³calo de piso de 10 cm de altura a juego con el piso. Incluye: emboquillado, material, mano de obra, equipo y herramienta.', uni: 'ml', qty: (sup * 0.9 * niv).toFixed(2), imp: (p.p05 || 0) * 0.12 },
-                        { cod: 'ACB-03', con: 'AplicaciÃ³n de pintura vinilica sat. marca COMEX VINIMEX a dos manos sobre muros y plafones. Incluye: resane, preparaciÃ³n, sellado de superficie, andamios, mano de obra, equipo y herramienta.', uni: 'mÂ²', qty: (sup * 3.5 * niv).toFixed(2), imp: (p.p05 || 0) * 0.28 },
-                        { cod: 'ACB-04', con: 'PlafÃ³n de panel de yeso estÃ¡ndar 13 mm con bast. galvanizado cal. 26 en Ã¡reas interiores. Incluye: material, acarreos, desperdicios, mano de obra, equipo y herramienta.', uni: 'mÂ²', qty: (sup * niv).toFixed(2), imp: (p.p05 || 0) * 0.15 }
+                        { cod: 'ACB-01', con: 'Suministro y colocacion de piso ' + pisoDes + '. ' + (F.tipoPiso === 'madera_laminada' ? 'Incluye: adhesivo especial para madera, instalacion flotante o clavada, zoclo de madera, remates, mano de obra, equipo y herramienta.' : F.tipoPiso === 'cemento' ? 'Incluye: esmerilado, pulido, endurecedor, sellador, mano de obra, equipo y herramienta.' : 'Incluye: pegamento, emboquillado, lechada, desperdicios, mano de obra, equipo y herramienta.'), uni: 'm2', qty: sup.toFixed(2), imp: (p.p05 || 0) * 0.45 },
+                        { cod: 'ACB-02', con: 'Suministro y colocaciÃ³n de zÃ³calo de piso de 10 cm de altura a juego con el piso. Incluye: emboquillado, material, mano de obra, equipo y herramienta.', uni: 'ml', qty: (planta * 0.9 * niv).toFixed(2), imp: (p.p05 || 0) * 0.12 },
+                        { cod: 'ACB-03', con: 'AplicaciÃ³n de pintura vinilica sat. marca COMEX VINIMEX a dos manos sobre muros y plafones. Incluye: resane, preparaciÃ³n, sellado de superficie, andamios, mano de obra, equipo y herramienta.', uni: 'mÂ²', qty: (sup * 3.5).toFixed(2), imp: (p.p05 || 0) * 0.28 },
+                        { cod: 'ACB-04', con: 'PlafÃ³n de panel de yeso estÃ¡ndar 13 mm con bast. galvanizado cal. 26 en Ã¡reas interiores. Incluye: material, acarreos, desperdicios, mano de obra, equipo y herramienta.', uni: 'mÂ²', qty: sup.toFixed(2), imp: (p.p05 || 0) * 0.15 }
                     ]
                 },
                 {
@@ -7091,6 +7088,13 @@
                     var paX = capX.partidas[pi];
                     var qX = parseFloat(paX.qty) || 1;
                     paX.pu = qX > 0 ? (paX.imp / qX) : 0;
+                    var _puMin = { 'PRE-01':8,'PRE-03':900,'CIM-01':120,'CIM-02':85,'CIM-03':1800,'CIM-04':800,'CIM-05':420,'EST-01':350,'EST-01B':550,'EST-02':480,'EST-03':900,'ALB-01':420,'ALB-02':75,'ALB-03':90,'ALB-04':25000,'ACB-02':55,'ACB-03':32,'ACB-04':380,'HID-01':35000,'HID-02':35000,'HID-03':3500,'ELE-01':45000,'ELE-02':8000,'ELE-03':30000 };
+                    var _acbMin = { 'ceramica_33':380,'ceramica_45':480,'porcelanato':650,'marmol':950,'madera_laminada':420,'cemento':280 };
+                    var _keyMin = paX.cod;
+                    if (paX.cod === 'ACB-01') { _keyMin = 'ACB-01-' + (F.tipoPiso || ''); }
+                    if (_puMin[_keyMin] && paX.pu < _puMin[_keyMin]) { paX.pu = _puMin[_keyMin]; paX.imp = Math.round(paX.pu * qX * 100) / 100; }
+                    if (paX.cod === 'ACB-01' && _acbMin[F.tipoPiso] && paX.pu < _acbMin[F.tipoPiso]) { paX.pu = _acbMin[F.tipoPiso]; paX.imp = Math.round(paX.pu * qX * 100) / 100; }
+                    if (paX.cod === 'CIM-01' && paX.pu > 380) { paX.pu = 380; paX.imp = Math.round(380 * qX * 100) / 100; }
                 }
             }
 
@@ -7299,6 +7303,7 @@
             var p         = presupuestoActual.partidas || {};
             var sup       = parseFloat(F.superficie || 0);
             var niv       = parseFloat(F.nivelesDepto || F.niveles || 1);
+            var planta = (niv > 1) ? Math.round(sup / niv * 100) / 100 : sup;
             var estadoData   = ESTADOS[F.estado] || ESTADOS['nacional'];
             var estadoNombre = estadoData ? (estadoData.nombre || 'Nacional') : 'Nacional';
             var lugarStr     = municipio ? (municipio + ', ' + estadoNombre) : estadoNombre;
@@ -7335,7 +7340,7 @@
                     {
                         codigo: 'PRE', titulo: 'TRABAJOS PRELIMINARES', total: p.p01 || 0,
                         partidas: [
-                            { cod:'PRE-01', con:'Trazo y nivelacion de terreno natural por medios manuales para desplante de estructuras, estableciendo ejes y referencias.', uni:'m2', qty: sup },
+                            { cod:'PRE-01', con:'Trazo y nivelacion de terreno natural por medios manuales para desplante de estructuras, estableciendo ejes y referencias.', uni:'m2', qty: planta },
                             { cod:'PRE-02', con:'Renta de oficina y bodega de obra. Incluye instalacion, mantenimiento y retiro.', uni:'lote', qty: 1 },
                             { cod:'PRE-03', con:'Suministro de agua potable mediante pipas de 10,000 litros. Incluye viajes y maniobras.', uni:'viajes', qty: Math.ceil(sup / 120) },
                             { cod:'PRE-04', con:'Renta de equipo menor: generador de luz, compactador y herramienta especializada durante la obra.', uni:'semanas', qty: Math.ceil(sup / 50) },
@@ -7346,11 +7351,11 @@
                     {
                         codigo: 'CIM', titulo: 'CIMENTACION', total: p.p02 || 0,
                         partidas: [
-                            { cod:'CIM-01', con:'Excavacion en cepas para zapatas y contratrabes con maquinaria mayor. Incluye carga, acarreo y tiro autorizado.', uni:'m3', qty: parseFloat((sup * 0.28).toFixed(2)) },
-                            { cod:'CIM-02', con:'Plantilla de concreto pobre fc=100 kg/cm2, espesor 5 cm. Incluye material, mano de obra y equipo.', uni:'m2', qty: parseFloat((sup * 0.85).toFixed(2)) },
-                            { cod:'CIM-03', con:'Zapatas aisladas de concreto fc=250 kg/cm2 con refuerzo var. 3/8 y 1/2. Incluye cimbra, descimbra y colado.', uni:'pzas', qty: Math.ceil(sup / 18) },
-                            { cod:'CIM-04', con:'Contratrabes CT de concreto fc=250 kg/cm2, secciones 0.20x0.40 y 0.20x0.60 m con var. y estribos. Incluye cimbra.', uni:'ml', qty: parseFloat((sup * 0.9).toFixed(2)) },
-                            { cod:'CIM-05', con:'Firme de concreto fc=250 kg/cm2, espesor 15 cm, armado con malla 6-6/8-8. En acabado cerrado.', uni:'m2', qty: sup }
+                            { cod:'CIM-01', con:'Excavacion en cepas para zapatas y contratrabes con maquinaria mayor. Incluye carga, acarreo y tiro autorizado.', uni:'m3', qty: parseFloat((planta * 0.28).toFixed(2)) },
+                            { cod:'CIM-02', con:'Plantilla de concreto pobre fc=100 kg/cm2, espesor 5 cm. Incluye material, mano de obra y equipo.', uni:'m2', qty: parseFloat((planta * 0.85).toFixed(2)) },
+                            { cod:'CIM-03', con:'Zapatas aisladas de concreto fc=250 kg/cm2 con refuerzo var. 3/8 y 1/2. Incluye cimbra, descimbra y colado.', uni:'pzas', qty: Math.ceil(planta / 18) },
+                            { cod:'CIM-04', con:'Contratrabes CT de concreto fc=250 kg/cm2, secciones 0.20x0.40 y 0.20x0.60 m con var. y estribos. Incluye cimbra.', uni:'ml', qty: parseFloat((planta * 0.9).toFixed(2)) },
+                            { cod:'CIM-05', con:'Firme de concreto fc=250 kg/cm2, espesor 15 cm, armado con malla 6-6/8-8. En acabado cerrado.', uni:'m2', qty: planta }
                         ],
                         impDist: [0.18, 0.08, 0.32, 0.27, 0.15]
                     },
@@ -7359,16 +7364,16 @@
                         partidas: [
                             { cod:'EST-01', con:'Castillos y columnas de concreto fc=250 kg/cm2 con armado ARMEX o varilla y estribos. Incluye cimbra, descimbra y equipo.', uni:'ml', qty: parseFloat((sup * 0.85).toFixed(2)) },
                             { cod:'EST-02', con:'Trabes de concreto fc=250 kg/cm2 con varillas del #3 al #5 y estribos con bastones de refuerzo. Incluye cimbra.', uni:'ml', qty: parseFloat((sup * 0.55).toFixed(2)) },
-                            { cod:'EST-03', con:'Losa de entrepiso y azotea sistema vigueta y bovedilla, capa de compresion 5 cm fc=250 kg/cm2. Incluye suministro y mano de obra.', uni:'m2', qty: parseFloat((sup * niv).toFixed(2)) }
+                            { cod:'EST-03', con:'Losa de entrepiso y azotea sistema vigueta y bovedilla, capa de compresion 5 cm fc=250 kg/cm2. Incluye suministro y mano de obra.', uni:'m2', qty: parseFloat(sup.toFixed(2)) }
                         ],
                         impDist: [0.35, 0.25, 0.40]
                     },
                     {
                         codigo: 'ALB', titulo: 'ALBANILERIA', total: p.p04 || 0,
                         partidas: [
-                            { cod:'ALB-01', con:'Muro de ' + muroDes + ' con mortero cemento-cal-arena 1:1:6. Castillos var. #4 @60 cm con fc=150 kg/cm2 y escalerilla.', uni:'m2', qty: parseFloat((sup * 1.8 * niv).toFixed(2)) },
-                            { cod:'ALB-02', con:'Aplanado de mezcla cemento-cal-arena 1:1:5, acabado fino con esponja, en muros interiores y exteriores.', uni:'m2', qty: parseFloat((sup * 3.2 * niv).toFixed(2)) },
-                            { cod:'ALB-03', con:'Planilla de mezcla cemento-arena 1:7 para recibir piso ceramico. Incluye material y mano de obra.', uni:'m2', qty: parseFloat((sup * niv).toFixed(2)) },
+                            { cod:'ALB-01', con:'Muro de ' + muroDes + ' con mortero cemento-cal-arena 1:1:6. Castillos var. #4 @60 cm con fc=150 kg/cm2 y escalerilla.', uni:'m2', qty: parseFloat((planta * 1.8 * niv).toFixed(2)) },
+                            { cod:'ALB-02', con:'Aplanado de mezcla cemento-cal-arena 1:1:5, acabado fino con esponja, en muros interiores y exteriores.', uni:'m2', qty: parseFloat((planta * 3.2 * niv).toFixed(2)) },
+                            { cod:'ALB-03', con:'Planilla de mezcla cemento-arena 1:7 para recibir piso ceramico. Incluye material y mano de obra.', uni:'m2', qty: parseFloat(sup.toFixed(2)) },
                             { cod:'ALB-04', con:'Escaleras de concreto armado fc=250 kg/cm2 con varilla 3/8. Incluye cimbra, descimbra y mano de obra.', uni:'pza', qty: Math.max(1, niv - 1) }
                         ],
                         impDist: [0.55, 0.28, 0.10, 0.07]
@@ -7376,10 +7381,10 @@
                     {
                         codigo: 'ACB', titulo: 'ACABADOS', total: p.p05 || 0,
                         partidas: [
-                            { cod:'ACB-01', con:'Suministro y colocacion de piso ' + pisoDes + '. ' + (F.tipoPiso === 'madera_laminada' ? 'Incluye adhesivo especial, instalacion flotante o clavada, zoclo de madera, remates y mano de obra.' : F.tipoPiso === 'cemento' ? 'Incluye esmerilado, pulido, endurecedor, sellador y mano de obra.' : 'Incluye pegamento, emboquillado, lechada, desperdicios y mano de obra.'), uni:'m2', qty: parseFloat((sup * niv).toFixed(2)) },
+                            { cod:'ACB-01', con:'Suministro y colocacion de piso ' + pisoDes + '. ' + (F.tipoPiso === 'madera_laminada' ? 'Incluye adhesivo especial, instalacion flotante o clavada, zoclo de madera, remates y mano de obra.' : F.tipoPiso === 'cemento' ? 'Incluye esmerilado, pulido, endurecedor, sellador y mano de obra.' : 'Incluye pegamento, emboquillado, lechada, desperdicios y mano de obra.'), uni:'m2', qty: parseFloat(sup.toFixed(2)) },
                             { cod:'ACB-02', con:'Zoclo de piso de 10 cm de altura. Incluye emboquillado, material y mano de obra.', uni:'ml', qty: parseFloat((sup * 0.9 * niv).toFixed(2)) },
                             { cod:'ACB-03', con:'Pintura vinilica satinada COMEX VINIMEX a dos manos. Incluye resane, preparacion y sellado de superficie.', uni:'m2', qty: parseFloat((sup * 3.5 * niv).toFixed(2)) },
-                            { cod:'ACB-04', con:'Plafon de panel de yeso 13 mm con bastidor galvanizado cal. 26 en areas interiores.', uni:'m2', qty: parseFloat((sup * niv).toFixed(2)) }
+                            { cod:'ACB-04', con:'Plafon de panel de yeso 13 mm con bastidor galvanizado cal. 26 en areas interiores.', uni:'m2', qty: parseFloat(sup.toFixed(2)) }
                         ],
                         impDist: [0.45, 0.12, 0.28, 0.15]
                     },
@@ -8083,7 +8088,7 @@
         }
 
         /* ========================================
-           PAYWALL &#8212; ObraDigitalMX v1.0
+           PAYWALL &#8212; ConstruIA.mx v1.0
            Funciones de estado y desbloqueo
         ======================================== */
         /* ================================================
@@ -8543,7 +8548,7 @@
             }
 
             /* ========================================
-               GSAP ANIMATIONS â€” ObraDigitalMX
+               GSAP ANIMATIONS â€” ConstruIA.mx
                Solo se ejecutan si GSAP est&#225; disponible
             ======================================== */
             if (typeof gsap !== 'undefined') {
