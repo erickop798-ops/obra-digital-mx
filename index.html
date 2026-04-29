@@ -3125,7 +3125,8 @@
         .remol-btn-nueva { margin-top:12px; padding:10px 20px; background:transparent; border:1.5px solid var(--accent); color:var(--accent); border-radius:12px; font-weight:700; cursor:pointer; font-family:inherit; font-size:0.82rem; }
 
         /* ── FUNCI&#211;N B: PANTALLA AGENTE IA ── */
-        #screen-agente-full { padding: 0; display: flex; flex-direction: column; height: 100vh; max-height: 100vh; overflow: hidden; }
+        #screen-agente-full { padding: 0; }
+        #screen-agente-full.screen.active { display: flex; flex-direction: column; height: 100vh; max-height: 100vh; overflow: hidden; }
         .agf-layout { display: grid; grid-template-columns: 300px 1fr; height: 100%; overflow: hidden; }
         @media (max-width: 768px) { .agf-layout { grid-template-columns: 1fr; } }
         .agf-sidebar { background: #0F1623; border-right: 1px solid #2D3A52; display: flex; flex-direction: column; overflow-y: auto; }
@@ -10682,7 +10683,7 @@
             var contenedor = document.getElementById('agf-mensajes');
             if (!contenedor) { return; }
             contenedor.innerHTML =
-                '<div class="agf-empty-state" id="agf-empty">' +
+                '<div class="agf-empty-state" id="agf-empty-reset">' +
                 '<div class="agf-empty-icon">🤖</div>' +
                 '<div class="agf-empty-title">Chat limpiado</div>' +
                 '<div class="agf-empty-sub">Escribe tu primera pregunta para comenzar una nueva conversación.</div>' +
