@@ -3089,6 +3089,41 @@
             cursor: pointer; font-family: inherit; letter-spacing: .3px;
         }
 
+        /* ── T-3 SIMULADOR DE REMODELACI&#211;N ── */
+        #screen-remodelacion { padding: 24px 0 80px; }
+        .remol-hero { text-align:center; padding:32px 20px 24px; }
+        .remol-hero h1 { font-size:clamp(1.4rem,4vw,2rem); font-weight:900; color:var(--primary); margin-bottom:8px; }
+        .remol-hero p { font-size:0.9rem; color:var(--text-2); max-width:520px; margin:0 auto; }
+        .remol-tipos { display:grid; grid-template-columns:repeat(auto-fill,minmax(140px,1fr)); gap:12px; padding:0 20px 24px; max-width:700px; margin:0 auto; }
+        .remol-tipo-card { background:var(--bg-card); border:2px solid var(--border); border-radius:16px; padding:18px 12px; text-align:center; cursor:pointer; transition:all .2s; }
+        .remol-tipo-card:hover { border-color:var(--accent); transform:translateY(-2px); }
+        .remol-tipo-card.selected { border-color:var(--accent); background:var(--accent-soft); }
+        .remol-tipo-card .remol-tipo-icon { font-size:1.8rem; margin-bottom:8px; }
+        .remol-tipo-card .remol-tipo-name { font-size:0.78rem; font-weight:700; color:var(--text-1); }
+        .remol-chat-wrap { max-width:680px; margin:0 auto; padding:0 20px 32px; display:none; }
+        .remol-chat-wrap.visible { display:block; }
+        .remol-chat-box { background:var(--bg-card); border-radius:20px; border:1px solid var(--border); overflow:hidden; }
+        .remol-chat-header { background:var(--primary); color:#fff; padding:14px 20px; display:flex; align-items:center; gap:10px; }
+        .remol-chat-header span { font-size:0.9rem; font-weight:700; }
+        .remol-mensajes { height:320px; overflow-y:auto; padding:16px; display:flex; flex-direction:column; gap:10px; }
+        .remol-msg { max-width:85%; padding:10px 14px; border-radius:16px; font-size:0.85rem; line-height:1.5; }
+        .remol-msg.agente { background:var(--bg-hover,#1e2a3a); color:var(--text-1); border-radius:16px 16px 16px 4px; align-self:flex-start; }
+        .remol-msg.usuario { background:var(--accent); color:#fff; border-radius:16px 16px 4px 16px; align-self:flex-end; }
+        .remol-input-row { display:flex; gap:8px; padding:12px 16px; border-top:1px solid var(--border); }
+        .remol-input { flex:1; background:var(--bg-input,#1a2332); border:1px solid var(--border); border-radius:12px; padding:10px 14px; font-size:0.85rem; color:var(--text-1); font-family:inherit; outline:none; resize:none; }
+        .remol-input:focus { border-color:var(--accent); }
+        .remol-btn-send { background:var(--accent); color:#fff; border:none; border-radius:12px; padding:10px 18px; font-weight:700; cursor:pointer; font-family:inherit; font-size:0.85rem; white-space:nowrap; }
+        .remol-resultado { background:var(--bg-card); border-radius:20px; border:1px solid var(--border); padding:24px; margin-top:16px; display:none; }
+        .remol-resultado.visible { display:block; }
+        .remol-result-title { font-size:1rem; font-weight:800; color:var(--primary); margin-bottom:16px; display:flex; align-items:center; gap:8px; }
+        .remol-result-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:16px; }
+        @media(max-width:480px) { .remol-result-grid { grid-template-columns:1fr; } }
+        .remol-result-item { background:var(--bg-hover,#1e2a3a); border-radius:12px; padding:14px; }
+        .remol-result-item label { font-size:0.72rem; font-weight:600; color:var(--text-2); display:block; margin-bottom:4px; text-transform:uppercase; letter-spacing:.5px; }
+        .remol-result-item .valor { font-size:1.1rem; font-weight:800; color:var(--accent); }
+        .remol-result-nota { font-size:0.78rem; color:var(--text-2); line-height:1.6; border-top:1px solid var(--border); padding-top:12px; }
+        .remol-btn-nueva { margin-top:12px; padding:10px 20px; background:transparent; border:1.5px solid var(--accent); color:var(--accent); border-radius:12px; font-weight:700; cursor:pointer; font-family:inherit; font-size:0.82rem; }
+
     </style>
 </head>
 
@@ -3460,11 +3495,9 @@
                                 <div class="home-tool-name">Calculadora de Materiales</div>
                                 <div class="home-tool-desc">Calcula exactamente cu&#225;nto material comprar con precios reales 2026. Sin desperdiciar ni quedarte corto.</div>
                             </div>
-                            <div class="home-tool-card coming-soon">
-                                <span class="home-tool-badge soon">Pr&#243;ximamente</span>
-                                <div class="home-tool-icon">&#127968;</div>
+                            <div class="home-tool-card active-tool" id="home-card-remodelacion" onclick="mostrarScreen('screen-remodelacion')">
+                                <div class="home-tool-icon">&#128296;</div>
                                 <div class="home-tool-name">Simulador de Remodelaci&#243;n</div>
-                                <div class="home-tool-desc">Estima costos de remodelaci&#243;n por cuarto o zona, con acabados y mano de obra.</div>
                             </div>
                             <div class="home-tool-card coming-soon">
                                 <span class="home-tool-badge soon">Pr&#243;ximamente</span>
@@ -3756,6 +3789,88 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- SCREEN T-3: SIMULADOR DE REMODELACION -->
+                <div id="screen-remodelacion" class="screen">
+                  <div class="remol-hero">
+                    <h1>&#128296; Simulador de Remodelaci&#243;n</h1>
+                    <p>Describe tu proyecto en lenguaje natural. Nuestro agente te hace m&#225;ximo 3 preguntas y te da el costo estimado con desglose y tiempo de obra.</p>
+                  </div>
+
+                  <!-- PASO 1: ELEGIR TIPO -->
+                  <div id="remol-paso1">
+                    <p style="text-align:center;font-size:0.82rem;font-weight:600;color:var(--text-2);margin-bottom:12px;">&#10102; Selecciona el tipo de remodelaci&#243;n</p>
+                    <div class="remol-tipos">
+                      <div class="remol-tipo-card" onclick="remolSelTipo('cocina')">
+                        <div class="remol-tipo-icon">&#127859;</div>
+                        <div class="remol-tipo-name">Cocina</div>
+                      </div>
+                      <div class="remol-tipo-card" onclick="remolSelTipo('bano')">
+                        <div class="remol-tipo-icon">&#128704;</div>
+                        <div class="remol-tipo-name">Ba&#241;o</div>
+                      </div>
+                      <div class="remol-tipo-card" onclick="remolSelTipo('cuarto')">
+                        <div class="remol-tipo-icon">&#127968;</div>
+                        <div class="remol-tipo-name">Cuarto adicional</div>
+                      </div>
+                      <div class="remol-tipo-card" onclick="remolSelTipo('cochera')">
+                        <div class="remol-tipo-icon">&#128663;</div>
+                        <div class="remol-tipo-name">Cochera</div>
+                      </div>
+                      <div class="remol-tipo-card" onclick="remolSelTipo('piso')">
+                        <div class="remol-tipo-icon">&#9724;</div>
+                        <div class="remol-tipo-name">Cambio de piso</div>
+                      </div>
+                      <div class="remol-tipo-card" onclick="remolSelTipo('fachada')">
+                        <div class="remol-tipo-icon">&#127963;</div>
+                        <div class="remol-tipo-name">Fachada</div>
+                      </div>
+                      <div class="remol-tipo-card" onclick="remolSelTipo('impermeabilizacion')">
+                        <div class="remol-tipo-icon">&#9730;</div>
+                        <div class="remol-tipo-name">Impermeabilizaci&#243;n</div>
+                      </div>
+                      <div class="remol-tipo-card" onclick="remolSelTipo('ampliacion')">
+                        <div class="remol-tipo-icon">&#128227;</div>
+                        <div class="remol-tipo-name">Ampliaci&#243;n de losa</div>
+                      </div>
+                      <div class="remol-tipo-card" onclick="remolSelTipo('pintura')">
+                        <div class="remol-tipo-icon">&#127912;</div>
+                        <div class="remol-tipo-name">Pintura interior</div>
+                      </div>
+                      <div class="remol-tipo-card" onclick="remolSelTipo('escalera')">
+                        <div class="remol-tipo-icon">&#128203;</div>
+                        <div class="remol-tipo-name">Escalera</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- PASO 2: CHAT -->
+                  <div id="remol-chat-wrap" class="remol-chat-wrap">
+                    <div class="remol-chat-box">
+                      <div class="remol-chat-header">
+                        <span>&#129302;</span>
+                        <span id="remol-chat-titulo">Simulador de Remodelaci&#243;n</span>
+                      </div>
+                      <div class="remol-mensajes" id="remol-mensajes"></div>
+                      <div class="remol-input-row">
+                        <textarea class="remol-input" id="remol-input"
+                          placeholder="Describe tu proyecto o responde la pregunta..."
+                          rows="2"
+                          onkeydown="if(event.key==='Enter'&amp;&amp;!event.shiftKey){event.preventDefault();remolEnviar();}"></textarea>
+                        <button class="remol-btn-send" id="remol-btn-send" onclick="remolEnviar()">Enviar</button>
+                      </div>
+                    </div>
+
+                    <!-- RESULTADO -->
+                    <div class="remol-resultado" id="remol-resultado">
+                      <div class="remol-result-title">&#9989; Estimado de Remodelaci&#243;n</div>
+                      <div class="remol-result-grid" id="remol-result-grid"></div>
+                      <div class="remol-result-nota" id="remol-result-nota"></div>
+                      <button class="remol-btn-nueva" onclick="remolReset()">&#8617; Nueva consulta</button>
+                    </div>
+                  </div>
+                </div>
+                <!-- FIN SCREEN T-3 -->
 
                 <form id="budgetForm" onsubmit="return false;">
                     <!-- SCREEN 0 -->
@@ -9905,6 +10020,278 @@
             doc.text('ConstruIA.mx  |  Herramientas digitales para construccion  |  Abril 2026', mL, 255);
 
             doc.save('lista-materiales-' + res.tipo + '.pdf');
+        }
+
+        /* ════════════════════════════════════════════════════
+           T-3 — SIMULADOR DE REMODELACION
+        ═════════════════════════════════════════════════════ */
+        var remolTipoActual = '';
+        var remolHistorial = [];
+        var remolPreguntasHechas = 0;
+        var remolEsperandoRespuesta = false;
+        var remolResultadoMostrado = false;
+
+        var REMOL_SYSTEM = 'Eres un experto en costos de remodelación de vivienda en Mexico. ' +
+            'Tu objetivo es dar un estimado de costo y tiempo de obra REAL y CONGRUENTE. ' +
+            'REGLAS ESTRICTAS: ' +
+            '1. Debes hacer MAXIMO 3 preguntas en total antes de dar el resultado. ' +
+            '2. Las preguntas deben ser MUY CONCRETAS: una sola pregunta por mensaje, ' +
+            'la mas importante que te falta saber. Ejemplos: cuantos metros cuadrados, ' +
+            'que acabado quieres (economico/estandar/premium), en que estado de Mexico esta. ' +
+            '3. Cuando ya tengas suficiente info O cuando hayas hecho 3 preguntas, ' +
+            'debes dar el resultado en formato JSON EXACTO asi (sin markdown, sin texto extra): ' +
+            '{"costo_min":50000,"costo_max":85000,"tiempo_dias":12,"materiales_principales":' +
+            '"azulejo, cemento, tablaroca","mano_obra_dias":10,"notas":"Precio zona ' +
+            'centro. Incluye demolicion, materiales y mano de obra. No incluye muebles."} ' +
+            '4. Los precios deben ser REALES del mercado mexicano 2025-2026 en pesos MXN. ' +
+            '5. Si el usuario da informacion voluntaria sin preguntarla, usala y no la preguntes. ' +
+            '6. Siempre responde en espanol mexicano informal pero profesional.';
+
+        var REMOL_TIPO_NOMBRES = {
+            cocina: 'Remodelación de cocina',
+            bano: 'Remodelación de baño',
+            cuarto: 'Cuarto adicional',
+            cochera: 'Cochera',
+            piso: 'Cambio de piso',
+            fachada: 'Remodelación de fachada',
+            impermeabilizacion: 'Impermeabilización de azotea',
+            ampliacion: 'Ampliación de losa',
+            pintura: 'Pintura interior',
+            escalera: 'Escalera'
+        };
+
+        var REMOL_PRIMER_MENSAJE = {
+            cocina: 'Hola! Voy a ayudarte a estimar el costo de tu remodelación de cocina. ' +
+                '¿Cuántos metros cuadrados tiene la cocina aproximadamente?',
+            bano: 'Hola! Para estimar el costo de remodelación de baño necesito saber: ' +
+                '¿Cuántos metros cuadrados tiene el baño?',
+            cuarto: 'Hola! Para el cuarto adicional necesito saber: ' +
+                '¿Cuántos metros cuadrados quieres construir?',
+            cochera: 'Hola! Para la cochera: ¿Es para 1 o 2 autos? ' +
+                '(una cochera estándar para 1 auto es aprox. 3x5 metros)',
+            piso: 'Hola! Para el cambio de piso: ' +
+                '¿Cuántos metros cuadrados de piso quieres cambiar?',
+            fachada: 'Hola! Para remodelar la fachada: ' +
+                '¿Cuántos metros cuadrados de frente tiene la fachada?',
+            impermeabilizacion: 'Hola! Para impermeabilizar la azotea: ' +
+                '¿Cuántos metros cuadrados tiene la azotea a impermeabilizar?',
+            ampliacion: 'Hola! Para la ampliación de losa: ' +
+                '¿Cuántos metros cuadrados quieres ampliar?',
+            pintura: 'Hola! Para la pintura interior: ' +
+                '¿Cuántos metros cuadrados de área a pintar (paredes + plafón)?',
+            escalera: 'Hola! Para la escalera: ' +
+                '¿Cuántos escalones necesitas y de qué material la quieres?'
+        };
+
+        function remolSelTipo(tipo) {
+            remolTipoActual = tipo;
+            remolHistorial = [];
+            remolPreguntasHechas = 0;
+            remolEsperandoRespuesta = false;
+            remolResultadoMostrado = false;
+
+            var cards = document.querySelectorAll('.remol-tipo-card');
+            for (var i = 0; i < cards.length; i++) {
+                cards[i].classList.remove('selected');
+            }
+
+            var titulo = document.getElementById('remol-chat-titulo');
+            if (titulo) { titulo.textContent = REMOL_TIPO_NOMBRES[tipo] || tipo; }
+
+            var mensajes = document.getElementById('remol-mensajes');
+            if (mensajes) { mensajes.innerHTML = ''; }
+
+            var res = document.getElementById('remol-resultado');
+            if (res) { res.classList.remove('visible'); }
+
+            var wrap = document.getElementById('remol-chat-wrap');
+            if (wrap) {
+                wrap.classList.add('visible');
+                wrap.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+
+            var primerMsg = REMOL_PRIMER_MENSAJE[tipo] ||
+                ('Hola! Cuéntame sobre tu proyecto de ' +
+                (REMOL_TIPO_NOMBRES[tipo] || tipo) + '. ¿Cómo lo describes?');
+
+            remolAgregarMensaje('agente', primerMsg);
+            remolHistorial.push({ role: 'assistant', content: primerMsg });
+        }
+
+        function remolAgregarMensaje(tipo, texto) {
+            var contenedor = document.getElementById('remol-mensajes');
+            if (!contenedor) { return; }
+            var div = document.createElement('div');
+            div.className = 'remol-msg ' + tipo;
+            div.innerHTML = texto.replace(/\n/g, '<br>');
+            contenedor.appendChild(div);
+            contenedor.scrollTop = contenedor.scrollHeight;
+        }
+
+        function remolEnviar() {
+            if (remolEsperandoRespuesta || remolResultadoMostrado) { return; }
+            var campo = document.getElementById('remol-input');
+            if (!campo) { return; }
+            var texto = campo.value.trim();
+            if (!texto) { return; }
+            campo.value = '';
+
+            remolAgregarMensaje('usuario', texto);
+            remolHistorial.push({ role: 'user', content: texto });
+            remolPreguntasHechas++;
+
+            var contenedor = document.getElementById('remol-mensajes');
+            var typing = document.createElement('div');
+            typing.id = 'remol-typing';
+            typing.className = 'remol-msg agente';
+            typing.textContent = 'Analizando...';
+            if (contenedor) {
+                contenedor.appendChild(typing);
+                contenedor.scrollTop = contenedor.scrollHeight;
+            }
+
+            remolEsperandoRespuesta = true;
+            var btn = document.getElementById('remol-btn-send');
+            if (btn) { btn.disabled = true; btn.style.opacity = '0.5'; }
+
+            var systemFinal = REMOL_SYSTEM +
+                ' TIPO DE REMODELACION: ' + (REMOL_TIPO_NOMBRES[remolTipoActual] || remolTipoActual) +
+                '. PREGUNTAS YA HECHAS: ' + (remolPreguntasHechas - 1) +
+                '. MAX PREGUNTAS RESTANTES: ' + Math.max(0, 3 - (remolPreguntasHechas - 1)) +
+                (remolPreguntasHechas >= 3 ? '. OBLIGATORIO: Da el resultado JSON ahora, no hagas mas preguntas.' : '');
+
+            var cuerpo = JSON.stringify({
+                system: systemFinal,
+                messages: remolHistorial
+            });
+
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '/api/agente', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState !== 4) { return; }
+                var typingEl = document.getElementById('remol-typing');
+                if (typingEl) { typingEl.parentNode.removeChild(typingEl); }
+
+                remolEsperandoRespuesta = false;
+                if (btn) { btn.disabled = false; btn.style.opacity = '1'; }
+
+                if (xhr.status === 200) {
+                    try {
+                        var resp = JSON.parse(xhr.responseText);
+                        var respTexto = resp.content[0].text;
+                        remolHistorial.push({ role: 'assistant', content: respTexto });
+
+                        var jsonMatch = respTexto.match(/\{[\s\S]*\}/);
+                        if (jsonMatch) {
+                            try {
+                                var datos = JSON.parse(jsonMatch[0]);
+                                if (datos.costo_min !== undefined) {
+                                    remolResultadoMostrado = true;
+                                    remolMostrarResultado(datos);
+                                    return;
+                                }
+                            } catch (e) { /* no era JSON de resultado */ }
+                        }
+
+                        remolAgregarMensaje('agente', respTexto);
+
+                    } catch (e) {
+                        remolAgregarMensaje('agente',
+                            'Hubo un error al procesar la respuesta. Inténtalo de nuevo.');
+                    }
+                } else if (xhr.status === 429) {
+                    remolAgregarMensaje('agente',
+                        'El simulador está ocupado. Espera unos segundos e inténtalo de nuevo.');
+                } else {
+                    remolAgregarMensaje('agente',
+                        'Error de conexión. Verifica tu internet e inténtalo de nuevo.');
+                }
+            };
+            xhr.send(cuerpo);
+        }
+
+        function remolMostrarResultado(datos) {
+            var fmtPeso = function(v) {
+                if (!v || isNaN(v)) { return '$0'; }
+                return '$' + Math.round(v).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+            };
+
+            var grid = document.getElementById('remol-result-grid');
+            if (grid) {
+                grid.innerHTML =
+                    '<div class="remol-result-item"><label>Costo estimado</label>' +
+                    '<div class="valor">' + fmtPeso(datos.costo_min) +
+                    ' &mdash; ' + fmtPeso(datos.costo_max) + '</div></div>' +
+                    '<div class="remol-result-item"><label>Tiempo de obra</label>' +
+                    '<div class="valor">' + (datos.tiempo_dias || '?') + ' días</div></div>' +
+                    (datos.materiales_principales ?
+                    '<div class="remol-result-item"><label>Materiales principales</label>' +
+                    '<div style="font-size:0.85rem;color:var(--text-1);">' +
+                    datos.materiales_principales + '</div></div>' : '') +
+                    (datos.mano_obra_dias ?
+                    '<div class="remol-result-item"><label>Mano de obra</label>' +
+                    '<div style="font-size:0.85rem;color:var(--text-1);">' +
+                    datos.mano_obra_dias + ' días-hombre</div></div>' : '');
+            }
+
+            var nota = document.getElementById('remol-result-nota');
+            if (nota) {
+                nota.textContent = datos.notas ||
+                    'Estimado paramétrico orientativo. Precios mercado mexicano 2025-2026. ' +
+                    'Se recomienda solicitar al menos 2 cotizaciones a contratistas locales.';
+            }
+
+            var res = document.getElementById('remol-resultado');
+            if (res) {
+                res.classList.add('visible');
+                res.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+
+            remolAgregarMensaje('agente',
+                '✅ Listo! Aquí tienes el estimado. Revisa el panel de abajo para ver el desglose completo.');
+
+            var campo = document.getElementById('remol-input');
+            if (campo) {
+                campo.disabled = true;
+                campo.placeholder = 'Consulta completada. Usa "Nueva consulta" para empezar otra.';
+            }
+            var btn = document.getElementById('remol-btn-send');
+            if (btn) { btn.disabled = true; btn.style.opacity = '0.4'; }
+        }
+
+        function remolReset() {
+            remolTipoActual = '';
+            remolHistorial = [];
+            remolPreguntasHechas = 0;
+            remolEsperandoRespuesta = false;
+            remolResultadoMostrado = false;
+
+            var wrap = document.getElementById('remol-chat-wrap');
+            if (wrap) { wrap.classList.remove('visible'); }
+
+            var res = document.getElementById('remol-resultado');
+            if (res) { res.classList.remove('visible'); }
+
+            var mensajes = document.getElementById('remol-mensajes');
+            if (mensajes) { mensajes.innerHTML = ''; }
+
+            var campo = document.getElementById('remol-input');
+            if (campo) {
+                campo.disabled = false;
+                campo.placeholder = 'Describe tu proyecto o responde la pregunta...';
+                campo.value = '';
+            }
+            var btn = document.getElementById('remol-btn-send');
+            if (btn) { btn.disabled = false; btn.style.opacity = '1'; }
+
+            var cards = document.querySelectorAll('.remol-tipo-card');
+            for (var i = 0; i < cards.length; i++) {
+                cards[i].classList.remove('selected');
+            }
+
+            var paso1 = document.getElementById('remol-paso1');
+            if (paso1) { paso1.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
         }
 
     </script>
