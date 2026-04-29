@@ -3124,6 +3124,65 @@
         .remol-result-nota { font-size:0.78rem; color:var(--text-2); line-height:1.6; border-top:1px solid var(--border); padding-top:12px; }
         .remol-btn-nueva { margin-top:12px; padding:10px 20px; background:transparent; border:1.5px solid var(--accent); color:var(--accent); border-radius:12px; font-weight:700; cursor:pointer; font-family:inherit; font-size:0.82rem; }
 
+        /* ── FUNCI&#211;N B: PANTALLA AGENTE IA ── */
+        #screen-agente-full { padding: 0; display: flex; flex-direction: column; height: 100vh; max-height: 100vh; overflow: hidden; }
+        .agf-layout { display: grid; grid-template-columns: 300px 1fr; height: 100%; overflow: hidden; }
+        @media (max-width: 768px) { .agf-layout { grid-template-columns: 1fr; } }
+        .agf-sidebar { background: #0F1623; border-right: 1px solid #2D3A52; display: flex; flex-direction: column; overflow-y: auto; }
+        @media (max-width: 768px) { .agf-sidebar { display: none; } }
+        .agf-sidebar-header { padding: 20px; border-bottom: 1px solid #2D3A52; }
+        .agf-sidebar-header h3 { color: #fff; font-size: 0.85rem; font-weight: 700; margin-bottom: 4px; }
+        .agf-sidebar-header p { color: #64748b; font-size: 0.75rem; }
+        .agf-contexto-card { margin: 16px; background: #1A1F35; border: 1px solid #2D3A52; border-radius: 14px; padding: 16px; }
+        .agf-ctx-titulo { color: #818cf8; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 10px; }
+        .agf-ctx-row { display: flex; justify-content: space-between; align-items: flex-start; padding: 5px 0; border-bottom: 1px solid #2D3A52; }
+        .agf-ctx-row:last-child { border-bottom: none; }
+        .agf-ctx-label { color: #64748b; font-size: 0.73rem; }
+        .agf-ctx-val { color: #e2e8f0; font-size: 0.78rem; font-weight: 600; text-align: right; max-width: 160px; }
+        .agf-ctx-total { background: linear-gradient(135deg,#4F46E5,#7C3AED); border-radius: 10px; padding: 12px; margin-top: 10px; text-align: center; }
+        .agf-ctx-total-label { color: #c4b5fd; font-size: 0.72rem; font-weight: 600; }
+        .agf-ctx-total-val { color: #fff; font-size: 1.2rem; font-weight: 900; }
+        .agf-sugerencias { padding: 16px; }
+        .agf-sugerencias h4 { color: #64748b; font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 10px; }
+        .agf-sug-btn { display: block; width: 100%; text-align: left; background: #1A1F35; border: 1px solid #2D3A52; border-radius: 10px; padding: 9px 12px; color: #94a3b8; font-size: 0.78rem; cursor: pointer; font-family: inherit; margin-bottom: 6px; transition: all .2s; line-height: 1.4; }
+        .agf-sug-btn:hover { border-color: #4F46E5; color: #e2e8f0; background: #232B42; }
+        .agf-main { display: flex; flex-direction: column; background: #131823; overflow: hidden; }
+        .agf-topbar { background: #0F1623; border-bottom: 1px solid #2D3A52; padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
+        .agf-topbar-left { display: flex; align-items: center; gap: 12px; }
+        .agf-topbar-icon { width: 38px; height: 38px; background: linear-gradient(135deg,#4F46E5,#7C3AED); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; flex-shrink: 0; }
+        .agf-topbar-name { color: #fff; font-weight: 700; font-size: 0.95rem; }
+        .agf-topbar-status { color: #10B981; font-size: 0.73rem; display: flex; align-items: center; gap: 4px; }
+        .agf-topbar-status::before { content: ''; width: 6px; height: 6px; background: #10B981; border-radius: 50%; display: inline-block; }
+        .agf-topbar-actions { display: flex; gap: 8px; }
+        .agf-btn-volver { background: #1A1F35; border: 1px solid #2D3A52; color: #94a3b8; border-radius: 8px; padding: 7px 14px; font-size: 0.78rem; font-weight: 600; cursor: pointer; font-family: inherit; transition: all .2s; }
+        .agf-btn-volver:hover { border-color: #4F46E5; color: #fff; }
+        .agf-btn-limpiar { background: transparent; border: none; color: #64748b; border-radius: 8px; padding: 7px 10px; font-size: 0.78rem; cursor: pointer; font-family: inherit; transition: color .2s; }
+        .agf-btn-limpiar:hover { color: #e2e8f0; }
+        .agf-mensajes { flex: 1; overflow-y: auto; padding: 24px 20px; display: flex; flex-direction: column; gap: 16px; scrollbar-width: thin; scrollbar-color: #2D3A52 #131823; }
+        .agf-msg { display: flex; gap: 10px; align-items: flex-start; max-width: 760px; }
+        .agf-msg.usuario { flex-direction: row-reverse; align-self: flex-end; }
+        .agf-msg-avatar { width: 32px; height: 32px; border-radius: 8px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; }
+        .agf-msg.agente .agf-msg-avatar { background: linear-gradient(135deg,#4F46E5,#7C3AED); }
+        .agf-msg.usuario .agf-msg-avatar { background: #2D3A52; }
+        .agf-msg-burbuja { background: #1A1F35; border: 1px solid #2D3A52; border-radius: 4px 16px 16px 16px; padding: 12px 16px; color: #e2e8f0; font-size: 0.875rem; line-height: 1.6; max-width: 600px; }
+        .agf-msg.usuario .agf-msg-burbuja { background: #4F46E5; border-color: #4F46E5; border-radius: 16px 4px 16px 16px; color: #fff; }
+        .agf-input-area { padding: 16px 20px; border-top: 1px solid #2D3A52; background: #0F1623; flex-shrink: 0; }
+        .agf-input-box { display: flex; gap: 10px; align-items: flex-end; background: #1A1F35; border: 1px solid #2D3A52; border-radius: 14px; padding: 10px 14px; transition: border-color .2s; }
+        .agf-input-box:focus-within { border-color: #4F46E5; }
+        .agf-textarea { flex: 1; background: none; border: none; outline: none; color: #fff; font-size: 0.875rem; font-family: inherit; resize: none; max-height: 120px; min-height: 24px; line-height: 1.5; overflow-y: auto; }
+        .agf-textarea::placeholder { color: #475569; }
+        .agf-btn-enviar { background: #4F46E5; border: none; border-radius: 10px; width: 38px; height: 38px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 1rem; transition: background .2s; color: #fff; }
+        .agf-btn-enviar:hover { background: #3D35C7; }
+        .agf-btn-enviar:disabled { opacity: 0.4; cursor: not-allowed; }
+        .agf-footer-note { color: #334155; font-size: 0.68rem; text-align: center; margin-top: 8px; }
+        .agf-empty-state { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 20px; text-align: center; }
+        .agf-empty-icon { font-size: 3rem; margin-bottom: 16px; opacity: .6; }
+        .agf-empty-title { color: #94a3b8; font-size: 1rem; font-weight: 700; margin-bottom: 8px; }
+        .agf-empty-sub { color: #475569; font-size: 0.82rem; max-width: 360px; line-height: 1.6; }
+        .agf-ctx-sin-presupuesto { margin: 16px; background: #1A1F35; border: 1px dashed #2D3A52; border-radius: 14px; padding: 16px; text-align: center; }
+        .agf-ctx-sin-presupuesto p { color: #64748b; font-size: 0.78rem; line-height: 1.5; }
+        .agf-ctx-sin-presupuesto a { color: #4F46E5; cursor: pointer; text-decoration: underline; }
+
     </style>
 </head>
 
@@ -3499,6 +3558,10 @@
                                 <div class="home-tool-icon">&#128296;</div>
                                 <div class="home-tool-name">Simulador de Remodelaci&#243;n</div>
                             </div>
+                            <div class="home-tool-card active-tool" id="home-card-agente" onclick="agfAbrir()">
+                                <div class="home-tool-icon">&#129302;</div>
+                                <div class="home-tool-name">Agente IA</div>
+                            </div>
                             <div class="home-tool-card coming-soon">
                                 <span class="home-tool-badge soon">Pr&#243;ximamente</span>
                                 <div class="home-tool-icon">&#127891;</div>
@@ -3871,6 +3934,145 @@
                   </div>
                 </div>
                 <!-- FIN SCREEN T-3 -->
+
+                <!-- FUNCI&#211;N B: AGENTE IA PANTALLA COMPLETA -->
+                <div id="screen-agente-full" class="screen">
+                  <div class="agf-layout">
+
+                    <!-- SIDEBAR: Contexto del presupuesto + sugerencias -->
+                    <aside class="agf-sidebar">
+                      <div class="agf-sidebar-header">
+                        <h3>&#129302; Agente ConstruIA</h3>
+                        <p>Tu copiloto de IA para construcci&#243;n en M&#233;xico</p>
+                      </div>
+
+                      <!-- Contexto del presupuesto activo -->
+                      <div id="agf-ctx-con-presupuesto" style="display:none;">
+                        <div class="agf-contexto-card">
+                          <div class="agf-ctx-titulo">&#128196; Presupuesto activo</div>
+                          <div class="agf-ctx-row">
+                            <span class="agf-ctx-label">Tipo de obra</span>
+                            <span class="agf-ctx-val" id="agf-ctx-tipo">-</span>
+                          </div>
+                          <div class="agf-ctx-row">
+                            <span class="agf-ctx-label">Superficie</span>
+                            <span class="agf-ctx-val" id="agf-ctx-m2">-</span>
+                          </div>
+                          <div class="agf-ctx-row">
+                            <span class="agf-ctx-label">Estado</span>
+                            <span class="agf-ctx-val" id="agf-ctx-estado">-</span>
+                          </div>
+                          <div class="agf-ctx-row">
+                            <span class="agf-ctx-label">Acabados</span>
+                            <span class="agf-ctx-val" id="agf-ctx-acabado">-</span>
+                          </div>
+                          <div class="agf-ctx-row">
+                            <span class="agf-ctx-label">Materiales</span>
+                            <span class="agf-ctx-val" id="agf-ctx-mat">-</span>
+                          </div>
+                          <div class="agf-ctx-row">
+                            <span class="agf-ctx-label">Mano de obra</span>
+                            <span class="agf-ctx-val" id="agf-ctx-mo">-</span>
+                          </div>
+                          <div class="agf-ctx-total">
+                            <div class="agf-ctx-total-label">TOTAL GENERAL</div>
+                            <div class="agf-ctx-total-val" id="agf-ctx-total">$0</div>
+                          </div>
+                        </div>
+                        <div class="agf-sugerencias" id="agf-sugerencias-presup">
+                          <h4>Preguntas sobre tu presupuesto</h4>
+                          <button class="agf-sug-btn" onclick="agfUsarSugerencia(this)">
+                            &#128200; &iquest;C&oacute;mo puedo reducir el costo total?
+                          </button>
+                          <button class="agf-sug-btn" onclick="agfUsarSugerencia(this)">
+                            &#128295; &iquest;Es posible cambiar el tipo de cimentaci&oacute;n?
+                          </button>
+                          <button class="agf-sug-btn" onclick="agfUsarSugerencia(this)">
+                            &#128373; &iquest;Cu&aacute;nto me ahorro si simplifico los acabados?
+                          </button>
+                          <button class="agf-sug-btn" onclick="agfUsarSugerencia(this)">
+                            &#9201; &iquest;Cu&aacute;nto tiempo tarda esta obra?
+                          </button>
+                          <button class="agf-sug-btn" onclick="agfUsarSugerencia(this)">
+                            &#128273; &iquest;Qu&eacute; permisos necesito para este proyecto?
+                          </button>
+                        </div>
+                      </div>
+
+                      <!-- Sin presupuesto activo -->
+                      <div id="agf-ctx-sin-presupuesto" class="agf-ctx-sin-presupuesto" style="display:none;">
+                        <p>No hay presupuesto activo.<br>
+                        <a onclick="mostrarScreen('screen0')">Genera un presupuesto</a>
+                        para que el agente tenga contexto de tu obra espec&iacute;fica.</p>
+                      </div>
+
+                      <div class="agf-sugerencias">
+                        <h4>Preguntas generales</h4>
+                        <button class="agf-sug-btn" onclick="agfUsarSugerencia(this)">
+                          &#128176; &iquest;Cu&aacute;nto cuesta el cemento Cruz Azul en 2026?
+                        </button>
+                        <button class="agf-sug-btn" onclick="agfUsarSugerencia(this)">
+                          &#128218; Requisitos m&iacute;nimos de losa seg&uacute;n NTC 2023
+                        </button>
+                        <button class="agf-sug-btn" onclick="agfUsarSugerencia(this)">
+                          &#128119; &iquest;Cu&aacute;nto cobra un alba&ntilde;il por d&iacute;a en 2026?
+                        </button>
+                        <button class="agf-sug-btn" onclick="agfUsarSugerencia(this)">
+                          &#9889; &iquest;Qu&eacute; calibre de cable para instalaci&oacute;n el&eacute;ctrica?
+                        </button>
+                      </div>
+                    </aside>
+
+                    <!-- &#193;REA PRINCIPAL DE CHAT -->
+                    <div class="agf-main">
+                      <div class="agf-topbar">
+                        <div class="agf-topbar-left">
+                          <div class="agf-topbar-icon">&#129302;</div>
+                          <div>
+                            <div class="agf-topbar-name">Agente ConstruIA</div>
+                            <div class="agf-topbar-status">En l&#237;nea</div>
+                          </div>
+                        </div>
+                        <div class="agf-topbar-actions">
+                          <button class="agf-btn-limpiar" onclick="agfLimpiarChat()" title="Limpiar conversaci&#243;n">
+                            &#128465; Limpiar
+                          </button>
+                          <button class="agf-btn-volver" onclick="mostrarScreen('screen-home')">
+                            &#8592; Volver al inicio
+                          </button>
+                        </div>
+                      </div>
+
+                      <!-- Mensajes o empty state -->
+                      <div id="agf-mensajes" class="agf-mensajes">
+                        <div class="agf-empty-state" id="agf-empty">
+                          <div class="agf-empty-icon">&#129302;</div>
+                          <div class="agf-empty-title">Copiloto de construcci&#243;n</div>
+                          <div class="agf-empty-sub">
+                            Pregunta sobre precios, normas, materiales o cualquier duda de tu obra.
+                            Si tienes un presupuesto activo, puedo analizarlo y darte recomendaciones espec&#237;ficas.
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Input -->
+                      <div class="agf-input-area">
+                        <div class="agf-input-box">
+                          <textarea class="agf-textarea" id="agf-input"
+                            placeholder="Pregunta sobre materiales, costos, normas o tu presupuesto..."
+                            rows="1"
+                            onkeydown="if(event.key==='Enter'&amp;&amp;!event.shiftKey){event.preventDefault();agfEnviar();}"></textarea>
+                          <button class="agf-btn-enviar" id="agf-btn-send" onclick="agfEnviar()" title="Enviar">
+                            &#10148;
+                          </button>
+                        </div>
+                        <p class="agf-footer-note">ConstruIA &#183; Datos CMIC &#183; LOPSRM DOF 2025 &#183; INEGI 2026</p>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+                <!-- FIN FUNCI&#211;N B -->
 
                 <form id="budgetForm" onsubmit="return false;">
                     <!-- SCREEN 0 -->
@@ -10294,6 +10496,199 @@
             if (paso1) { paso1.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
         }
 
+        /* ════════════════════════════════════════════════════
+           FUNCIÓN B — AGENTE IA PANTALLA COMPLETA
+           Comparte AGENTE_SYSTEM_PROMPT y agenteContextoObra
+           con el panel flotante para continuidad de sesión.
+        ═════════════════════════════════════════════════════ */
+
+        var agfHistorial = [];
+        var agfEsperando = false;
+
+        function agfAbrir() {
+            agfActualizarContexto();
+            mostrarScreen('screen-agente-full');
+            var msgs = document.getElementById('agf-mensajes');
+            if (msgs) { msgs.scrollTop = msgs.scrollHeight; }
+            var input = document.getElementById('agf-input');
+            if (input) { input.focus(); }
+        }
+
+        function agfActualizarContexto() {
+            var tienePresupuesto = presupuestoActual.totalGeneral > 0;
+            var conDiv = document.getElementById('agf-ctx-con-presupuesto');
+            var sinDiv = document.getElementById('agf-ctx-sin-presupuesto');
+            if (conDiv) { conDiv.style.display = tienePresupuesto ? 'block' : 'none'; }
+            if (sinDiv) { sinDiv.style.display = tienePresupuesto ? 'none' : 'block'; }
+
+            if (!tienePresupuesto) { return; }
+
+            var fmtPeso = function(v) {
+                if (!v || isNaN(v)) { return '$0'; }
+                return '$' + Math.round(v).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+            };
+
+            var tipoMap = {
+                vivienda: 'Casa habitación',
+                comercial: 'Local comercial',
+                departamentos: 'Edificio de deptos.'
+            };
+            var acabadoMap = {
+                economico: 'Económico',
+                estandar: 'Estándar',
+                premium: 'Premium'
+            };
+
+            var setVal = function(id, val) {
+                var el = document.getElementById(id);
+                if (el) { el.textContent = val; }
+            };
+
+            setVal('agf-ctx-tipo',    tipoMap[presupuestoActual.tipoProyecto] || (presupuestoActual.tipoProyecto || '-'));
+            setVal('agf-ctx-m2',      (presupuestoActual.m2 || 0) + ' m²');
+            setVal('agf-ctx-estado',  presupuestoActual.estado || '-');
+            setVal('agf-ctx-acabado', acabadoMap[presupuestoActual.acabado] || (presupuestoActual.acabado || '-'));
+            setVal('agf-ctx-mat',     fmtPeso(presupuestoActual.totalMateriales));
+            setVal('agf-ctx-mo',      fmtPeso(presupuestoActual.totalManoObra));
+            setVal('agf-ctx-total',   fmtPeso(presupuestoActual.totalGeneral));
+        }
+
+        function agfUsarSugerencia(boton) {
+            var texto = boton.textContent.trim();
+            texto = texto.replace(/^[ -/ -￿\s]+/, '').trim();
+            var input = document.getElementById('agf-input');
+            if (input) {
+                input.value = texto;
+                input.focus();
+            }
+        }
+
+        function agfAgregarMensaje(tipo, texto) {
+            var contenedor = document.getElementById('agf-mensajes');
+            if (!contenedor) { return; }
+
+            var empty = document.getElementById('agf-empty');
+            if (empty) { empty.style.display = 'none'; }
+
+            var wrap = document.createElement('div');
+            wrap.className = 'agf-msg ' + tipo;
+
+            var avatar = document.createElement('div');
+            avatar.className = 'agf-msg-avatar';
+            avatar.textContent = tipo === 'agente' ? '🤖' : '👤';
+
+            var burbuja = document.createElement('div');
+            burbuja.className = 'agf-msg-burbuja';
+            burbuja.innerHTML = texto.replace(/\n/g, '<br>');
+
+            wrap.appendChild(avatar);
+            wrap.appendChild(burbuja);
+            contenedor.appendChild(wrap);
+            contenedor.scrollTop = contenedor.scrollHeight;
+        }
+
+        function agfEnviar() {
+            if (agfEsperando) { return; }
+            var campo = document.getElementById('agf-input');
+            if (!campo) { return; }
+            var texto = campo.value.trim();
+            if (!texto) { return; }
+            campo.value = '';
+
+            agfAgregarMensaje('usuario', texto);
+            agfHistorial.push({ role: 'user', content: texto });
+
+            var contenedor = document.getElementById('agf-mensajes');
+            var emptyEl = document.getElementById('agf-empty');
+            if (emptyEl) { emptyEl.style.display = 'none'; }
+            var typing = document.createElement('div');
+            typing.id = 'agf-typing';
+            typing.className = 'agf-msg agente';
+            typing.innerHTML =
+                '<div class="agf-msg-avatar">🤖</div>' +
+                '<div class="agf-msg-burbuja" style="color:#64748b;">Analizando...</div>';
+            if (contenedor) {
+                contenedor.appendChild(typing);
+                contenedor.scrollTop = contenedor.scrollHeight;
+            }
+
+            agfEsperando = true;
+            var btnSend = document.getElementById('agf-btn-send');
+            if (btnSend) { btnSend.disabled = true; }
+
+            var systemFinal = AGENTE_SYSTEM_PROMPT;
+            if (agenteContextoObra && agenteContextoObra.length > 0) {
+                systemFinal = systemFinal + ' CONTEXTO DE OBRA ACTIVA DEL USUARIO: ' + agenteContextoObra;
+            }
+            if (presupuestoActual.partidas && presupuestoActual.totalGeneral > 0) {
+                var p = presupuestoActual.partidas;
+                systemFinal = systemFinal +
+                    ' DESGLOSE POR PARTIDAS: P01(Prelim):$' + Math.round(p.p01||0) +
+                    ' P02(Cimentacion):$' + Math.round(p.p02||0) +
+                    ' P03(Estructura):$' + Math.round(p.p03||0) +
+                    ' P04(Albanileria):$' + Math.round(p.p04||0) +
+                    ' P05(Acabados):$' + Math.round(p.p05||0) +
+                    ' P06(Hidraulica):$' + Math.round(p.p06||0) +
+                    ' P07(Electrica):$' + Math.round(p.p07||0) +
+                    ' P08(Especiales):$' + Math.round(p.p08||0) + ' MXN.';
+            }
+
+            var cuerpo = JSON.stringify({
+                system: systemFinal,
+                messages: agfHistorial
+            });
+
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '/api/agente', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState !== 4) { return; }
+
+                var typingEl = document.getElementById('agf-typing');
+                if (typingEl) { typingEl.parentNode.removeChild(typingEl); }
+
+                agfEsperando = false;
+                if (btnSend) { btnSend.disabled = false; }
+
+                if (xhr.status === 200) {
+                    try {
+                        var resp = JSON.parse(xhr.responseText);
+                        var respTexto = resp.content[0].text;
+                        agfAgregarMensaje('agente', respTexto);
+                        agfHistorial.push({ role: 'assistant', content: respTexto });
+                        if (agfHistorial.length > 30) {
+                            agfHistorial = agfHistorial.slice(agfHistorial.length - 30);
+                        }
+                    } catch (e) {
+                        agfAgregarMensaje('agente',
+                            'Hubo un error al procesar la respuesta. Inténtalo de nuevo.');
+                    }
+                } else if (xhr.status === 429) {
+                    agfAgregarMensaje('agente',
+                        'El agente está ocupado. Espera unos segundos e inténtalo de nuevo.');
+                } else if (xhr.status === 500) {
+                    agfAgregarMensaje('agente',
+                        'Error interno del servidor. Intenta de nuevo en unos momentos.');
+                } else {
+                    agfAgregarMensaje('agente',
+                        'Error de conexión. Verifica tu internet e inténtalo de nuevo.');
+                }
+            };
+            xhr.send(cuerpo);
+        }
+
+        function agfLimpiarChat() {
+            agfHistorial = [];
+            var contenedor = document.getElementById('agf-mensajes');
+            if (!contenedor) { return; }
+            contenedor.innerHTML =
+                '<div class="agf-empty-state" id="agf-empty">' +
+                '<div class="agf-empty-icon">🤖</div>' +
+                '<div class="agf-empty-title">Chat limpiado</div>' +
+                '<div class="agf-empty-sub">Escribe tu primera pregunta para comenzar una nueva conversación.</div>' +
+                '</div>';
+        }
+
     </script>
 
     <!-- OVERLAY AGENTE -->
@@ -10312,6 +10707,7 @@
                     </div>
                 </div>
             </div>
+            <button onclick="agfAbrir();cerrarPanelAgente();" style="background:#1A1F35;border:1px solid #2D3A52;color:#94a3b8;cursor:pointer;font-size:0.72rem;padding:5px 10px;border-radius:6px;font-family:inherit;transition:all 0.2s;margin-right:6px;" onmouseover="this.style.borderColor='#4F46E5';this.style.color='#fff'" onmouseout="this.style.borderColor='#2D3A52';this.style.color='#94a3b8'" title="Abrir pantalla completa">&#9974; Pantalla completa</button>
             <button onclick="cerrarPanelAgente()" style="background:none;border:none;color:#64748b;cursor:pointer;font-size:1.3rem;padding:4px;border-radius:6px;transition:color 0.2s;" onmouseover="this.style.color='#ffffff'" onmouseout="this.style.color='#64748b'">&#10005;</button>
         </div>
         <div id="agente-mensajes" style="flex:1;overflow-y:auto;padding:20px;display:flex;flex-direction:column;scrollbar-width:thin;scrollbar-color:#2D3A52 #1A1F35;"></div>
