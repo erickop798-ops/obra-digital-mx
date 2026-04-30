@@ -7,7 +7,7 @@
     <title>ConstruIA.mx &#8212; Presupuestador de Construcci&#243;n</title>
     <meta name="description"
         content="Calculadora profesional de presupuesto de construcci&#243;n para M&#233;xico. Precios por estado basados en normas CMIC, CENAPRED y reglamentos oficiales. Para arquitectos, ingenieros y constructores.">
-    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%234F46E5'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='central' text-anchor='middle' font-family='sans-serif' font-weight='900' font-size='14' fill='white'%3EOB%3C/text%3E%3C/svg%3E" type="image/svg+xml">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%234F46E5'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='central' text-anchor='middle' font-family='sans-serif' font-weight='900' font-size='14' fill='white'%3ECI%3C/text%3E%3C/svg%3E" type="image/svg+xml">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Outfit:wght@700;800;900&display=swap" rel="stylesheet">
@@ -6383,31 +6383,45 @@
             var screenDestino = document.getElementById(idDestino);
             if (!screenDestino) { return; }
             if (screenActual === screenDestino) { return; }
-            if (!screenActual) {
+
+            function _ejecutarNav() {
+                if (screenActual) {
+                    screenActual.classList.remove('active');
+                    screenActual.style.opacity = '';
+                    screenActual.style.transform = '';
+                    screenActual.style.removeProperty('opacity');
+                    screenActual.style.removeProperty('transform');
+                }
                 showScreen(idDestino);
                 window.scrollTo({ top: 0, behavior: 'smooth' });
-                return;
             }
-            if (typeof gsap !== 'undefined') {
+
+            if (typeof gsap !== 'undefined' && screenActual) {
+                var _hecho = false;
+                var _timer = setTimeout(function() {
+                    if (!_hecho) { _hecho = true; _ejecutarNav(); }
+                }, 350);
                 gsap.killTweensOf(screenActual);
                 gsap.killTweensOf(screenDestino);
                 gsap.to(screenActual, {
-                    duration: 0.25, opacity: 0, x: -20, ease: 'power2.in',
+                    duration: 0.2,
+                    opacity: 0,
+                    ease: 'power2.in',
                     onComplete: function() {
-                        screenActual.classList.remove('active');
-                        screenActual.style.opacity = '';
-                        screenActual.style.transform = '';
-                        showScreen(idDestino);
-                        gsap.fromTo(screenDestino,
-                            { opacity: 0, x: 20 },
-                            { duration: 0.3, opacity: 1, x: 0, ease: 'power2.out' }
-                        );
-                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                        if (_hecho) { return; }
+                        _hecho = true;
+                        clearTimeout(_timer);
+                        _ejecutarNav();
+                        if (screenDestino) {
+                            gsap.fromTo(screenDestino,
+                                { opacity: 0 },
+                                { duration: 0.25, opacity: 1, ease: 'power2.out', clearProps: 'all' }
+                            );
+                        }
                     }
                 });
             } else {
-                showScreen(idDestino);
-                window.scrollTo({ top: 0, behavior: 'smooth' });
+                _ejecutarNav();
             }
         }
         function updateProgressBar() { var active = document.querySelector('.screen.active'); if (!active) return; var id = active.id; if (id === 'screen0') { document.getElementById('progress-container').style.display = 'none'; return; } else { document.getElementById('progress-container').style.display = ''; } var stepMap = { screen1: 1, screen2: 2, screen3: 3, screen4: 4, screen5: 5 }; var step = stepMap[id]; if (!step) return; var indicators = document.querySelectorAll('.step-indicator'); for (var i = 0; i < indicators.length; i++) { indicators[i].classList.remove('active', 'completed'); if (i + 1 < step) indicators[i].classList.add('completed'); if (i + 1 === step) indicators[i].classList.add('active'); } document.getElementById('progress-fill').style.width = ((step - 1) / 4 * 100) + '%'; if (id === 'screen5') { var esc = document.getElementById('escaleras-container'); if (esc) esc.style.display = F.niveles >= 2 ? 'block' : 'none'; } }
@@ -8941,7 +8955,7 @@
                Solo se ejecutan si GSAP est&#225; disponible
             ======================================== */
             if (typeof gsap !== 'undefined') {
-                gsap.registerPlugin(ScrollTrigger);
+                try { gsap.registerPlugin(ScrollTrigger); } catch(e) {}
 
                 /* --- HERO ENTRANCE ANIMATION --- */
                 var heroTl = gsap.timeline({ delay: 0.2 });
