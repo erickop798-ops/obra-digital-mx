@@ -1458,7 +1458,6 @@
             text-align: center;
         }
         #screen-home {
-            display: none;
             min-height: calc(100vh - 58px);
             padding: 0;
         }
@@ -1577,7 +1576,8 @@
 
         .home-tool-card.coming-soon {
             opacity: 0.45;
-            cursor: default;
+            cursor: not-allowed;
+            pointer-events: none;
         }
 
         .home-tool-card.coming-soon:hover {
@@ -6383,7 +6383,14 @@
             var screenDestino = document.getElementById(idDestino);
             if (!screenDestino) { return; }
             if (screenActual === screenDestino) { return; }
+            if (!screenActual) {
+                showScreen(idDestino);
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                return;
+            }
             if (typeof gsap !== 'undefined') {
+                gsap.killTweensOf(screenActual);
+                gsap.killTweensOf(screenDestino);
                 gsap.to(screenActual, {
                     duration: 0.25, opacity: 0, x: -20, ease: 'power2.in',
                     onComplete: function() {
@@ -8944,7 +8951,8 @@
                     duration: 0.9,
                     opacity: 0,
                     y: 50,
-                    ease: 'power3.out'
+                    ease: 'power3.out',
+                    clearProps: 'all'
                 });
 
                 /* Descripci&#243;n */
@@ -8952,7 +8960,8 @@
                     duration: 0.7,
                     opacity: 0,
                     y: 30,
-                    ease: 'power2.out'
+                    ease: 'power2.out',
+                    clearProps: 'all'
                 }, '-=0.5');
 
                 /* Trust badges row */
@@ -8960,7 +8969,8 @@
                     duration: 0.6,
                     opacity: 0,
                     y: 20,
-                    ease: 'power2.out'
+                    ease: 'power2.out',
+                    clearProps: 'all'
                 }, '-=0.4');
 
                 /* Mockup card entra desde la derecha con bounce */
@@ -8969,7 +8979,8 @@
                     opacity: 0,
                     x: 80,
                     rotation: 8,
-                    ease: 'back.out(1.4)'
+                    ease: 'back.out(1.4)',
+                    clearProps: 'all'
                 }, '-=0.7');
 
                 /* --- STATS COUNTER ANIMATION --- */
