@@ -8550,6 +8550,63 @@
             alert('Procesador de pago pr\u00f3ximamente. Por ahora usa desbloquearDemo() en consola para pruebas.');
         }
 
+        /* \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
+           RATE LIMITING \u2014 10 consultas IA gratuitas por mes
+           Clave localStorage: construia_ia_uso
+           Estructura: { mes: "YYYY-MM", count: N }
+           Se resetea automaticamente cada mes calendario.
+        \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 */
+        var IA_LIMITE_FREE = 10;
+        var IA_STORAGE_KEY = 'construia_ia_uso';
+
+        function iaObtenerUso() {
+            var hoy = new Date();
+            var mesActual = hoy.getFullYear() + '-' + ('0' + (hoy.getMonth() + 1)).slice(-2);
+            try {
+                var raw = localStorage.getItem(IA_STORAGE_KEY);
+                if (raw) {
+                    var datos = JSON.parse(raw);
+                    if (datos && datos.mes === mesActual) {
+                        return { mes: mesActual, count: datos.count || 0 };
+                    }
+                }
+            } catch (e) { /* localStorage no disponible */ }
+            return { mes: mesActual, count: 0 };
+        }
+
+        function iaConsultaDisponible() {
+            if (estaDesbloqueado()) { return true; }
+            var uso = iaObtenerUso();
+            return uso.count < IA_LIMITE_FREE;
+        }
+
+        function iaConsultasRestantes() {
+            if (estaDesbloqueado()) { return 999; }
+            var uso = iaObtenerUso();
+            return Math.max(0, IA_LIMITE_FREE - uso.count);
+        }
+
+        function iaRegistrarConsulta() {
+            if (estaDesbloqueado()) { return; }
+            var uso = iaObtenerUso();
+            uso.count = (uso.count || 0) + 1;
+            try {
+                localStorage.setItem(IA_STORAGE_KEY, JSON.stringify(uso));
+            } catch (e) { /* localStorage no disponible */ }
+        }
+
+        function iaMostrarLimiteAlcanzado(contenedorId, fnAgregarMensaje) {
+            var msg = '\u26a0\ufe0f Has usado tus 10 consultas gratuitas de este mes. ' +
+                'Actualiza a ConstruIA Pro ($299 MXN/mes) para consultas ilimitadas. ' +
+                'Escribe desbloquearDemo() en consola para una prueba gratuita.';
+            if (typeof fnAgregarMensaje === 'function') {
+                fnAgregarMensaje('agente', msg);
+            } else {
+                var el = document.getElementById(contenedorId);
+                if (el) { el.textContent = msg; }
+            }
+        }
+
         window.onload = function () {
             setupPillGroup('niveles-group', 'niveles'); setupPillGroup('recamaras-group', 'recamaras'); setupPillGroup('banos-group', 'banos'); setupPillGroup('mediosbanos-group', 'mediosBanos');
             setupPillGroup('aforo-group', 'aforoEstimado');
@@ -9153,6 +9210,15 @@
             } /* fin if gsap */
             /* Aplicar estado paywall al cargar (respeta localStorage previo) */
             aplicarEstadoPaywall();
+            /* Mostrar contador de consultas IA disponibles */
+            var _ctrEl = document.getElementById('agente-contador-ia');
+            if (_ctrEl) {
+                var _restantes = iaConsultasRestantes();
+                if (!estaDesbloqueado()) {
+                    _ctrEl.textContent = _restantes + '/10 consultas';
+                    _ctrEl.style.color = _restantes <= 2 ? '#EF4444' : '#64748b';
+                }
+            }
         };
 
         /* ═══════════════════════════════════════════════════════════════
@@ -9235,6 +9301,10 @@
             if (!campo) { return; }
             var texto = campo.value.trim();
             if (!texto) { return; }
+            if (!iaConsultaDisponible()) {
+                iaMostrarLimiteAlcanzado(null, agenteAgregarMensaje);
+                return;
+            }
             campo.value = '';
             agenteAgregarMensaje('usuario', texto);
             agenteHistorial.push({ role: 'user', content: texto });
@@ -9274,6 +9344,7 @@
                     try {
                         var resp = JSON.parse(xhr.responseText);
                         var respTexto = resp.content[0].text;
+                        iaRegistrarConsulta();
                         agenteAgregarMensaje('agente', respTexto);
                         agenteHistorial.push({ role: 'assistant', content: respTexto });
                         if (agenteHistorial.length > 20) {
@@ -10367,6 +10438,10 @@
             if (!campo) { return; }
             var texto = campo.value.trim();
             if (!texto) { return; }
+            if (!iaConsultaDisponible()) {
+                iaMostrarLimiteAlcanzado(null, remolAgregarMensaje);
+                return;
+            }
             campo.value = '';
 
             remolAgregarMensaje('usuario', texto);
@@ -10413,6 +10488,7 @@
                     try {
                         var resp = JSON.parse(xhr.responseText);
                         var respTexto = resp.content[0].text;
+                        iaRegistrarConsulta();
                         remolHistorial.push({ role: 'assistant', content: respTexto });
 
                         var jsonMatch = respTexto.match(/\{[\s\S]*\}/);
@@ -10629,6 +10705,10 @@
             if (!campo) { return; }
             var texto = campo.value.trim();
             if (!texto) { return; }
+            if (!iaConsultaDisponible()) {
+                iaMostrarLimiteAlcanzado(null, agfAgregarMensaje);
+                return;
+            }
             campo.value = '';
 
             agfAgregarMensaje('usuario', texto);
@@ -10690,6 +10770,7 @@
                     try {
                         var resp = JSON.parse(xhr.responseText);
                         var respTexto = resp.content[0].text;
+                        iaRegistrarConsulta();
                         agfAgregarMensaje('agente', respTexto);
                         agfHistorial.push({ role: 'assistant', content: respTexto });
                         if (agfHistorial.length > 30) {
@@ -10741,6 +10822,7 @@
                         <span style="width:6px;height:6px;background:#10B981;border-radius:50%;display:inline-block;"></span>
                         En l&#237;nea
                     </div>
+                    <span id="agente-contador-ia" style="font-size:0.68rem;color:#64748b;margin-left:8px;"></span>
                 </div>
             </div>
             <button onclick="agfAbrir();cerrarPanelAgente();" style="background:#1A1F35;border:1px solid #2D3A52;color:#94a3b8;cursor:pointer;font-size:0.72rem;padding:5px 10px;border-radius:6px;font-family:inherit;transition:all 0.2s;margin-right:6px;" onmouseover="this.style.borderColor='#4F46E5';this.style.color='#fff'" onmouseout="this.style.borderColor='#2D3A52';this.style.color='#94a3b8'" title="Abrir pantalla completa">&#9974; Pantalla completa</button>
