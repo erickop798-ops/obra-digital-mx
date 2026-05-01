@@ -10581,12 +10581,17 @@
 
         function agfUsarSugerencia(boton) {
             var texto = boton.textContent.trim();
-            texto = texto.replace(/^[ -/ -￿\s]+/, '').trim();
-            var input = document.getElementById('agf-input');
-            if (input) {
-                input.value = texto;
-                input.focus();
+            var i = 0;
+            while (i < texto.length) {
+                var code = texto.charCodeAt(i);
+                if ((code >= 65 && code <= 90) || (code >= 97 && code <= 122) ||
+                    (code >= 48 && code <= 57) || code === 63 || code === 191 ||
+                    (code >= 192 && code <= 591)) { break; }
+                i++;
             }
+            texto = texto.slice(i).trim();
+            var input = document.getElementById('agf-input');
+            if (input) { input.value = texto; input.focus(); }
         }
 
         function agfAgregarMensaje(tipo, texto) {
