@@ -1,7 +1,12 @@
 {
   "permissions": {
     "allow": [
-      "Bash(grep -cn \"\\\\`\" \"C:\\\\Users\\\\erick\\\\OneDrive\\\\Escritorio\\\\ObraDigitalMX\\\\index.html\")"
+      "Bash(grep -cn \"\\\\`\" \"C:\\\\Users\\\\erick\\\\OneDrive\\\\Escritorio\\\\ObraDigitalMX\\\\index.html\")",
+      "Bash(grep -v \"//\")",
+      "Bash(python fix_functions.py)",
+      "Bash(awk -F: '$1>3579')",
+      "Bash(python3 -c ' *)",
+      "Bash(python -c ' *)"
     ]
   }
 }
