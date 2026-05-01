@@ -3186,31 +3186,32 @@
 
         /* ── T-4 ASISTENTE DE TESIS E INVESTIGACIÓN ── */
         #screen-tesis { padding: 0 0 80px; }
-        .tesis-hero { text-align:center; padding:32px 20px 24px; }
-        .tesis-hero h1 { font-size:clamp(1.4rem,4vw,2rem); font-weight:900; color:var(--primary); margin-bottom:8px; }
-        .tesis-hero p { font-size:0.9rem; color:var(--text-2); max-width:540px; margin:0 auto; line-height:1.6; }
-        .tesis-tipos { display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:12px; padding:0 20px 24px; max-width:760px; margin:0 auto; }
-        .tesis-tipo-card { background:var(--bg-card); border:2px solid var(--border); border-radius:16px; padding:18px 12px; text-align:center; cursor:pointer; transition:all .2s; }
-        .tesis-tipo-card:hover { border-color:var(--accent); transform:translateY(-2px); }
-        .tesis-tipo-card.selected { border-color:var(--accent); background:var(--accent-soft); }
-        .tesis-tipo-card .tesis-tipo-icon { font-size:1.8rem; margin-bottom:8px; }
-        .tesis-tipo-card .tesis-tipo-name { font-size:0.78rem; font-weight:700; color:var(--text-1); }
-        .tesis-chat-wrap { max-width:720px; margin:0 auto; padding:0 20px 32px; display:none; }
-        .tesis-chat-wrap.visible { display:block; }
+        .tesis-header { text-align:center; padding:32px 20px 20px; }
+        .tesis-header h1 { font-size:clamp(1.4rem,4vw,2rem); font-weight:900; color:var(--primary); margin-bottom:8px; }
+        .tesis-header p { font-size:0.88rem; color:var(--text-2); max-width:540px; margin:0 auto; line-height:1.6; }
+        .tesis-chat-wrap { max-width:720px; margin:0 auto; padding:0 20px; }
         .tesis-chat-box { background:var(--bg-card); border-radius:20px; border:1px solid var(--border); overflow:hidden; }
         .tesis-chat-header { background:var(--primary); color:#fff; padding:14px 20px; display:flex; align-items:center; gap:10px; }
-        .tesis-chat-header span.tesis-chat-titulo { font-size:0.9rem; font-weight:700; flex:1; }
-        .tesis-mensajes { height:340px; overflow-y:auto; padding:16px; display:flex; flex-direction:column; gap:10px; }
+        .tesis-chat-header span { font-size:0.9rem; font-weight:700; }
+        .tesis-mensajes { height:360px; overflow-y:auto; padding:16px; display:flex; flex-direction:column; gap:10px; }
         .tesis-msg { max-width:88%; padding:10px 14px; border-radius:16px; font-size:0.85rem; line-height:1.6; white-space:pre-wrap; }
         .tesis-msg.agente { background:var(--bg-hover,#1e2a3a); color:var(--text-1); border-radius:16px 16px 16px 4px; align-self:flex-start; }
         .tesis-msg.usuario { background:var(--accent); color:#fff; border-radius:16px 16px 4px 16px; align-self:flex-end; }
         .tesis-input-row { display:flex; gap:8px; padding:12px 16px; border-top:1px solid var(--border); }
         .tesis-input { flex:1; background:var(--bg-input,#1a2332); border:1px solid var(--border); border-radius:12px; padding:10px 14px; font-size:0.85rem; color:var(--text-1); font-family:inherit; outline:none; resize:none; }
         .tesis-input:focus { border-color:var(--accent); }
-        .tesis-btn-send { background:var(--accent); color:#fff; border:none; border-radius:12px; padding:10px 18px; font-weight:700; cursor:pointer; font-family:inherit; font-size:0.85rem; white-space:nowrap; }
+        .tesis-btn-send { background:var(--accent); color:#fff; border:none; border-radius:12px; padding:10px 18px; font-weight:700; cursor:pointer; font-family:inherit; font-size:0.85rem; }
         .tesis-btn-send:disabled { opacity:0.45; cursor:not-allowed; }
-        .tesis-btn-nueva { margin-top:12px; padding:10px 20px; background:transparent; border:1.5px solid var(--accent); color:var(--accent); border-radius:12px; font-weight:700; cursor:pointer; font-family:inherit; font-size:0.82rem; display:block; }
-        .tesis-aviso { font-size:0.72rem; color:var(--text-2); text-align:center; padding:8px 20px 0; max-width:720px; margin:0 auto; }
+        .tesis-chips { display:flex; flex-wrap:wrap; gap:8px; padding:16px 20px 8px; max-width:720px; margin:0 auto; }
+        .tesis-chip { background:var(--bg-card); border:1.5px solid var(--border); border-radius:20px; padding:7px 14px; font-size:0.78rem; font-weight:600; color:var(--text-2); cursor:pointer; transition:all .2s; font-family:inherit; }
+        .tesis-chip:hover { border-color:var(--accent); color:var(--accent); }
+        .tesis-capacidades { max-width:720px; margin:16px auto 0; padding:0 20px 40px; display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:10px; }
+        .tesis-cap-item { background:var(--bg-card); border:1px solid var(--border); border-radius:12px; padding:14px; }
+        .tesis-cap-item .tesis-cap-icon { font-size:1.2rem; margin-bottom:6px; }
+        .tesis-cap-item .tesis-cap-titulo { font-size:0.78rem; font-weight:700; color:var(--text-1); margin-bottom:3px; }
+        .tesis-cap-item .tesis-cap-desc { font-size:0.72rem; color:var(--text-2); line-height:1.5; }
+        .tesis-btn-nueva { display:block; margin:12px auto 0; padding:9px 20px; background:transparent; border:1.5px solid var(--accent); color:var(--accent); border-radius:12px; font-weight:700; cursor:pointer; font-family:inherit; font-size:0.82rem; }
+        .tesis-aviso { font-size:0.68rem; color:var(--text-2); text-align:center; padding:8px 20px 0; max-width:720px; margin:0 auto; }
 
     </style>
 </head>
@@ -3586,10 +3587,6 @@
                             <div class="home-tool-card active-tool" id="home-card-remodelacion" onclick="mostrarScreen('screen-remodelacion')">
                                 <div class="home-tool-icon">&#128296;</div>
                                 <div class="home-tool-name">Simulador de Remodelaci&#243;n</div>
-                            </div>
-                            <div class="home-tool-card active-tool" id="home-card-agente" onclick="agfAbrir()">
-                                <div class="home-tool-icon">&#129302;</div>
-                                <div class="home-tool-name">Agente IA</div>
                             </div>
                             <div class="home-tool-card active-tool" id="home-card-tesis" onclick="mostrarScreen('screen-tesis')">
                                 <span class="home-tool-badge available">Disponible</span>
@@ -4115,61 +4112,76 @@
                       &#8592; Volver al inicio
                     </button>
                   </div>
-                  <div class="tesis-hero">
+
+                  <div class="tesis-header">
                     <h1>&#127891; Asistente de Tesis e Investigaci&#243;n</h1>
-                    <p>Describe tu proyecto de titulaci&#243;n y te ayudo a desarrollar la memoria de c&#225;lculo, presupuesto estimado, estructura de cap&#237;tulos y marcos de referencia normativos.</p>
+                    <p>Tu copiloto acad&#233;mico para arquitectura e ingenier&#237;a civil. Pregunta lo que necesitas directamente.</p>
                   </div>
 
-                  <!-- PASO 1: tipo de trabajo -->
-                  <div id="tesis-paso1">
-                    <p style="text-align:center;font-size:0.82rem;font-weight:600;color:var(--text-2);margin-bottom:12px;">&#10102; Selecciona el tipo de trabajo de titulaci&#243;n</p>
-                    <div class="tesis-tipos">
-                      <div class="tesis-tipo-card" onclick="tesisSelTipo('tesis_arq')">
-                        <div class="tesis-tipo-icon">&#127963;</div>
-                        <div class="tesis-tipo-name">Tesis Arquitectura</div>
-                      </div>
-                      <div class="tesis-tipo-card" onclick="tesisSelTipo('tesis_ic')">
-                        <div class="tesis-tipo-icon">&#9881;</div>
-                        <div class="tesis-tipo-name">Tesis Ing. Civil</div>
-                      </div>
-                      <div class="tesis-tipo-card" onclick="tesisSelTipo('memoria')">
-                        <div class="tesis-tipo-icon">&#128196;</div>
-                        <div class="tesis-tipo-name">Memoria de C&#225;lculo</div>
-                      </div>
-                      <div class="tesis-tipo-card" onclick="tesisSelTipo('residencia')">
-                        <div class="tesis-tipo-icon">&#127970;</div>
-                        <div class="tesis-tipo-name">Residencia Profesional</div>
-                      </div>
-                      <div class="tesis-tipo-card" onclick="tesisSelTipo('protocolo')">
-                        <div class="tesis-tipo-icon">&#128203;</div>
-                        <div class="tesis-tipo-name">Protocolo de Investigaci&#243;n</div>
-                      </div>
-                      <div class="tesis-tipo-card" onclick="tesisSelTipo('presupuesto_tesis')">
-                        <div class="tesis-tipo-icon">&#128176;</div>
-                        <div class="tesis-tipo-name">Presupuesto para Tesis</div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <!-- PASO 2: chat -->
-                  <div id="tesis-chat-wrap" class="tesis-chat-wrap">
+                  <!-- Chat directo — sin selector de tipos -->
+                  <div class="tesis-chat-wrap">
                     <div class="tesis-chat-box">
                       <div class="tesis-chat-header">
                         <span>&#127891;</span>
-                        <span id="tesis-chat-titulo" class="tesis-chat-titulo">Asistente de Tesis</span>
+                        <span>Asistente de Tesis e Investigaci&#243;n</span>
                       </div>
                       <div class="tesis-mensajes" id="tesis-mensajes"></div>
                       <div class="tesis-input-row">
                         <textarea class="tesis-input" id="tesis-input"
-                          placeholder="Describe tu proyecto, pregunta sobre normas, c&#225;lculos o estructura..."
+                          placeholder="Describe tu proyecto, pregunta sobre normas, presupuesto o estructura de tu tesis..."
                           rows="2"
                           onkeydown="if(event.key==='Enter'&amp;&amp;!event.shiftKey){event.preventDefault();tesisSendMsg();}"></textarea>
                         <button class="tesis-btn-send" id="tesis-btn-send" onclick="tesisSendMsg()">Enviar</button>
                       </div>
                     </div>
-                    <button class="tesis-btn-nueva" onclick="tesisReset()">&#8617; Nueva consulta</button>
-                    <p class="tesis-aviso">Respuestas basadas en NTC-RCDF 2023, LOPSRM DOF 2025, CMIC 2026 y fuentes acad&#233;micas de ingenier&#237;a civil y arquitectura.</p>
+                    <button class="tesis-btn-nueva" onclick="tesisReset()">&#8617; Limpiar chat</button>
                   </div>
+
+                  <!-- Chips de acceso rápido -->
+                  <div class="tesis-chips">
+                    <button class="tesis-chip" onclick="tesisUsarChip(this)">&#128196; Estructura de tesis</button>
+                    <button class="tesis-chip" onclick="tesisUsarChip(this)">&#9881; Memoria de c&#225;lculo</button>
+                    <button class="tesis-chip" onclick="tesisUsarChip(this)">&#127970; Residencia profesional</button>
+                    <button class="tesis-chip" onclick="tesisUsarChip(this)">&#128176; Presupuesto para proyecto</button>
+                    <button class="tesis-chip" onclick="tesisUsarChip(this)">&#128203; Protocolo de investigaci&#243;n</button>
+                    <button class="tesis-chip" onclick="tesisUsarChip(this)">&#128218; Marco normativo NTC 2023</button>
+                  </div>
+
+                  <!-- Descripción de capacidades -->
+                  <div class="tesis-capacidades">
+                    <div class="tesis-cap-item">
+                      <div class="tesis-cap-icon">&#127963;</div>
+                      <div class="tesis-cap-titulo">Tesis de Arquitectura e Ingenier&#237;a</div>
+                      <div class="tesis-cap-desc">Objetivos, hip&#243;tesis, metodolog&#237;a, marco te&#243;rico y estructura de cap&#237;tulos.</div>
+                    </div>
+                    <div class="tesis-cap-item">
+                      <div class="tesis-cap-icon">&#128196;</div>
+                      <div class="tesis-cap-titulo">Memorias de C&#225;lculo</div>
+                      <div class="tesis-cap-desc">Estructuras, cimentaciones, instalaciones y sistemas constructivos con normas vigentes.</div>
+                    </div>
+                    <div class="tesis-cap-item">
+                      <div class="tesis-cap-icon">&#128176;</div>
+                      <div class="tesis-cap-titulo">Presupuestos Acad&#233;micos</div>
+                      <div class="tesis-cap-desc">Estimados de costo para proyectos de tesis con datos CMIC 2025-2026 zona centro M&#233;xico.</div>
+                    </div>
+                    <div class="tesis-cap-item">
+                      <div class="tesis-cap-icon">&#128218;</div>
+                      <div class="tesis-cap-titulo">Marco Normativo</div>
+                      <div class="tesis-cap-desc">NTC-RCDF 2023, LOPSRM DOF 2025, NOM-001-SEDE, NOM-002-CNA, CMIC, INEGI, CENAPRED.</div>
+                    </div>
+                    <div class="tesis-cap-item">
+                      <div class="tesis-cap-icon">&#127970;</div>
+                      <div class="tesis-cap-titulo">Residencia Profesional</div>
+                      <div class="tesis-cap-desc">Estructura del reporte, conclusiones, log&#237;stica de obra y documentaci&#243;n de intervenci&#243;n.</div>
+                    </div>
+                    <div class="tesis-cap-item">
+                      <div class="tesis-cap-icon">&#128203;</div>
+                      <div class="tesis-cap-titulo">Protocolos de Investigaci&#243;n</div>
+                      <div class="tesis-cap-desc">Planteamiento del problema, justificaci&#243;n, alcances y fuentes bibliogr&#225;ficas acad&#233;micas.</div>
+                    </div>
+                  </div>
+
+                  <p class="tesis-aviso">Respuestas basadas en NTC-RCDF 2023, LOPSRM DOF 2025, CMIC 2026 y fuentes acad&#233;micas de ingenier&#237;a civil y arquitectura.</p>
                 </div>
                 <!-- FIN T-4 -->
 
@@ -6466,6 +6478,7 @@
             window.scrollTo(0, 0);
             if (id === 'screen1') { adaptScreen1ToTipo(); }
             if (id === 'screen5') { calcVentanasRecomendacion(); }
+            if (id === 'screen-tesis') { tesisIniciar(); }
             adaptScreensToTipo();
             var wsRoot = document.getElementById('workspace-root');
             if (wsRoot) {
@@ -10901,75 +10914,39 @@
 
         /* ════════════════════════════════════════════════════
            T-4 — ASISTENTE DE TESIS E INVESTIGACIÓN
+           Chat directo sin selector de tipos.
+           Chips de acceso rápido para iniciar con contexto.
         ═════════════════════════════════════════════════════ */
-        var tesisTipoActual = '';
         var tesisHistorial = [];
         var tesisEsperando = false;
+        var TESIS_MSG_BIENVENIDA = '¡Hola! Soy tu Asistente de Tesis e Investigación. ' +
+            'Puedo ayudarte con:\n' +
+            '• Estructura y capítulos de tesis (arquitectura / ingeniería civil)\n' +
+            '• Memorias de cálculo y justificaciones técnicas\n' +
+            '• Presupuestos estimados para proyectos académicos\n' +
+            '• Marco normativo vigente en México\n' +
+            '• Residencias profesionales y protocolos de investigación\n\n' +
+            'Describe tu proyecto o toca una de las opciones de abajo para empezar.';
 
         var TESIS_SYSTEM = 'Eres el Asistente de Tesis e Investigación de ConstruIA.mx, ' +
             'especializado en proyectos de titulación de arquitectura e ingeniería civil en México. ' +
-            'Tus capacidades: ' +
-            '(1) Ayudar a estructurar tesis, memorias de cálculo, residencias profesionales ' +
+            'Capacidades: (1) Estructurar tesis, memorias de cálculo, residencias profesionales ' +
             'y protocolos de investigación bajo normas mexicanas. ' +
             '(2) Citar correctamente: NTC-RCDF 2023, LOPSRM DOF 2025, NOM-001-SEDE, ' +
-            'NOM-002-CNA, CMIC 2026, INEGI, CENAPRED, RNE. ' +
-            '(3) Generar presupuestos estimados para proyectos de tesis con datos CMIC 2025-2026. ' +
-            '(4) Proponer marcos teóricos, hipótesis y metodología para proyectos de construcción. ' +
-            '(5) Revisar y sugerir mejoras en objetivos, alcances y justificaciones. ' +
-            'REGLAS: ' +
-            'Responde siempre en español mexicano formal. ' +
-            'Usa formato estructurado cuando des listas o secciones (numeradas o con guiones). ' +
-            'Cuando generes presupuestos, usa rangos reales de la zona centro México. ' +
+            'NOM-002-CNA, CMIC 2026, INEGI, CENAPRED. ' +
+            '(3) Presupuestos estimados para proyectos académicos con datos CMIC 2025-2026. ' +
+            '(4) Proponer marcos teóricos, hipótesis y metodología. ' +
+            '(5) Revisar objetivos, alcances y justificaciones. ' +
+            'REGLAS: Responde en español mexicano formal. ' +
+            'Usa formato estructurado (listas numeradas o con guiones) cuando corresponda. ' +
             'Máximo 6 párrafos por respuesta. ' +
-            'NUNCA inventes normas, autores ni fuentes. ' +
-            'Si el estudiante no ha especificado su tema, presúntale primero: ' +
-            '¿Cuál es el tema o título tentativo de tu proyecto?';
+            'NUNCA inventes normas, autores ni fuentes.';
 
-        var TESIS_TIPO_NOMBRES = {
-            tesis_arq:         'Tesis de Arquitectura',
-            tesis_ic:          'Tesis de Ingeniería Civil',
-            memoria:           'Memoria de Cálculo',
-            residencia:        'Residencia Profesional',
-            protocolo:         'Protocolo de Investigación',
-            presupuesto_tesis: 'Presupuesto para Proyecto de Tesis'
-        };
-
-        var TESIS_PRIMER_MENSAJE = {
-            tesis_arq:         '¡Hola! Voy a ayudarte con tu tesis de arquitectura. ¿Cuál es el tema o título tentativo de tu proyecto?',
-            tesis_ic:          '¡Hola! Voy a ayudarte con tu tesis de ingeniería civil. ¿Cuál es el tema o título tentativo de tu proyecto?',
-            memoria:           '¡Hola! Voy a ayudarte a desarrollar tu memoria de cálculo. ¿Qué tipo de estructura o sistema vas a calcular?',
-            residencia:        '¡Hola! Voy a ayudarte con tu reporte de residencia profesional. ¿En qué empresa o proyecto realizaste tu residencia y cuál fue tu área de trabajo?',
-            protocolo:         '¡Hola! Voy a ayudarte a estructurar tu protocolo de investigación. ¿Cuál es el problema o tema que quieres investigar?',
-            presupuesto_tesis: '¡Hola! Voy a ayudarte a generar el presupuesto para tu proyecto de tesis. ¿Qué tipo de construcción o intervención planteas en tu proyecto?'
-        };
-
-        function tesisSelTipo(tipo) {
-            tesisTipoActual = tipo;
-            tesisHistorial = [];
-            tesisEsperando = false;
-
-            var cards = document.querySelectorAll('.tesis-tipo-card');
-            for (var i = 0; i < cards.length; i++) { cards[i].classList.remove('selected'); }
-            if (window.event && window.event.currentTarget) {
-                window.event.currentTarget.classList.add('selected');
+        function tesisIniciar() {
+            if (tesisHistorial.length === 0) {
+                tesisAgregarMensaje('agente', TESIS_MSG_BIENVENIDA);
+                tesisHistorial.push({ role: 'assistant', content: TESIS_MSG_BIENVENIDA });
             }
-
-            var titulo = document.getElementById('tesis-chat-titulo');
-            if (titulo) { titulo.textContent = TESIS_TIPO_NOMBRES[tipo] || tipo; }
-
-            var mensajes = document.getElementById('tesis-mensajes');
-            if (mensajes) { mensajes.innerHTML = ''; }
-
-            var wrap = document.getElementById('tesis-chat-wrap');
-            if (wrap) {
-                wrap.classList.add('visible');
-                wrap.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }
-
-            var primerMsg = TESIS_PRIMER_MENSAJE[tipo] ||
-                ('¡Hola! Cuéntame sobre tu proyecto de ' + (TESIS_TIPO_NOMBRES[tipo] || tipo) + '.');
-            tesisAgregarMensaje('agente', primerMsg);
-            tesisHistorial.push({ role: 'assistant', content: primerMsg });
         }
 
         function tesisAgregarMensaje(tipo, texto) {
@@ -10980,6 +10957,20 @@
             div.innerHTML = texto.replace(/\n/g, '<br>');
             cont.appendChild(div);
             cont.scrollTop = cont.scrollHeight;
+        }
+
+        function tesisUsarChip(boton) {
+            var texto = boton.textContent.trim();
+            var i = 0;
+            while (i < texto.length) {
+                var code = texto.charCodeAt(i);
+                if ((code >= 65 && code <= 90) || (code >= 97 && code <= 122) ||
+                    (code >= 192 && code <= 591)) { break; }
+                i++;
+            }
+            texto = texto.slice(i).trim();
+            var campo = document.getElementById('tesis-input');
+            if (campo) { campo.value = texto; campo.focus(); }
         }
 
         function tesisSendMsg() {
@@ -11008,10 +10999,7 @@
             var btn = document.getElementById('tesis-btn-send');
             if (btn) { btn.disabled = true; }
 
-            var systemFinal = TESIS_SYSTEM +
-                ' TIPO DE TRABAJO: ' + (TESIS_TIPO_NOMBRES[tesisTipoActual] || tesisTipoActual);
-
-            var cuerpo = JSON.stringify({ system: systemFinal, messages: tesisHistorial });
+            var cuerpo = JSON.stringify({ system: TESIS_SYSTEM, messages: tesisHistorial });
 
             var xhr = new XMLHttpRequest();
             xhr.open('POST', '/api/agente', true);
@@ -11022,7 +11010,6 @@
                 if (typingEl) { typingEl.parentNode.removeChild(typingEl); }
                 tesisEsperando = false;
                 if (btn) { btn.disabled = false; }
-
                 if (xhr.status === 200) {
                     try {
                         var resp = JSON.parse(xhr.responseText);
@@ -11037,7 +11024,7 @@
                         tesisAgregarMensaje('agente', 'Error al procesar la respuesta. Inténtalo de nuevo.');
                     }
                 } else if (xhr.status === 429) {
-                    tesisAgregarMensaje('agente', 'El asistente está ocupado. Espera unos segundos e inténtalo de nuevo.');
+                    tesisAgregarMensaje('agente', 'Servicio ocupado. Espera unos segundos e inténtalo de nuevo.');
                 } else {
                     tesisAgregarMensaje('agente', 'Error de conexión. Verifica tu internet e inténtalo de nuevo.');
                 }
@@ -11046,27 +11033,15 @@
         }
 
         function tesisReset() {
-            tesisTipoActual = '';
             tesisHistorial = [];
             tesisEsperando = false;
-
-            var wrap = document.getElementById('tesis-chat-wrap');
-            if (wrap) { wrap.classList.remove('visible'); }
-
-            var mensajes = document.getElementById('tesis-mensajes');
-            if (mensajes) { mensajes.innerHTML = ''; }
-
+            var cont = document.getElementById('tesis-mensajes');
+            if (cont) { cont.innerHTML = ''; }
             var campo = document.getElementById('tesis-input');
             if (campo) { campo.disabled = false; campo.value = ''; }
-
             var btn = document.getElementById('tesis-btn-send');
             if (btn) { btn.disabled = false; }
-
-            var cards = document.querySelectorAll('.tesis-tipo-card');
-            for (var i = 0; i < cards.length; i++) { cards[i].classList.remove('selected'); }
-
-            var paso1 = document.getElementById('tesis-paso1');
-            if (paso1) { paso1.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+            tesisIniciar();
         }
 
     </script>
