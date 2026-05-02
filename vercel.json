@@ -1,7 +1,8 @@
 {
   "functions": {
-    "api/agente.js": {
-      "maxDuration": 30
-    }
+    "api/agente.js":    { "maxDuration": 30 },
+    "api/checkout.js":  { "maxDuration": 15 },
+    "api/webhook.js":   { "maxDuration": 10 },
+    "api/confirmar.js": { "maxDuration": 10 }
   }
 }

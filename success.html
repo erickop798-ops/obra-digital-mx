@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pago exitoso &#8212; ConstruIA.mx</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; background:#0F1623; color:#e2e8f0; min-height:100vh; display:flex; align-items:center; justify-content:center; padding:20px; }
+.card { background:#1A1F35; border:1px solid #2D3A52; border-radius:24px; padding:48px 40px; text-align:center; max-width:480px; width:100%; }
+.icon { font-size:4rem; margin-bottom:24px; }
+h1 { font-size:1.8rem; font-weight:800; color:#fff; margin-bottom:12px; }
+p { color:#94a3b8; line-height:1.6; margin-bottom:32px; }
+.btn { display:inline-block; background:#4F46E5; color:#fff; text-decoration:none; border-radius:12px; padding:14px 32px; font-weight:700; font-size:1rem; }
+.plan-badge { display:inline-block; background:rgba(79,70,229,0.2); border:1px solid #4F46E5; border-radius:20px; padding:6px 16px; color:#818cf8; font-size:0.85rem; font-weight:600; margin-bottom:24px; }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="icon">&#127881;</div>
+  <h1 id="titulo">&#161;Bienvenido a ConstruIA Pro!</h1>
+  <div class="plan-badge" id="plan-nombre">Plan Pro</div>
+  <p>Tu suscripci&#243;n est&#225; activa. Ya tienes acceso completo a todas las herramientas profesionales.</p>
+  <a href="/" class="btn">Ir a ConstruIA &#8594;</a>
+</div>
+<script>
+var params = new URLSearchParams(window.location.search);
+var sessionId = params.get('session_id');
+if (sessionId) {
+    fetch('/api/confirmar?session=' + sessionId)
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+            if (data.token) {
+                localStorage.setItem('construia_token', data.token);
+                localStorage.setItem('construia_plan', data.plan || 'pro');
+            }
+            if (data.plan === 'basico') {
+                document.getElementById('plan-nombre').textContent = 'Plan Básico';
+                document.getElementById('titulo').textContent = '¡Bienvenido a ConstruIA Básico!';
+            }
+        })
+        .catch(function() {});
+}
+</script>
+</body>
+</html>

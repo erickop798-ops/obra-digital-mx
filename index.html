@@ -5588,93 +5588,24 @@
                         <!-- PAYWALL CARD â€” elemento normal en el flujo, NO position:absolute -->
                         <div id="paywall-card" style="background:linear-gradient(135deg,#1a1f35,#1e2640);border:1.5px solid #4F46E5;border-radius:20px;padding:40px 32px;margin:24px 0;text-align:center;box-shadow:0 8px 32px rgba(79,70,229,0.25);display:none;">
                             <div style="font-size:3rem;margin-bottom:16px;">&#128274;</div>
-                            <h2 style="color:#fff;font-size:1.5rem;font-weight:800;margin:0 0 8px 0;font-family:inherit;">Presupuesto Completo Pro</h2>
-                            <p style="color:#94a3b8;font-size:0.9rem;margin:0 0 24px 0;line-height:1.6;">Desbloquea el desglose profesional que necesitas para contratar, licitar o presentar tu proyecto.</p>
-                            <div style="margin:0 0 28px 0;">
-                                <span style="color:#4F46E5;font-size:3rem;font-weight:900;">$199</span>
-                                <span style="color:#94a3b8;font-size:1rem;"> MXN</span>
-                                <div style="color:#64748b;font-size:0.8rem;margin-top:4px;">Pago &#250;nico &#183; Sin suscripci&#243;n</div>
+                            <h2 style="color:#fff;font-size:1.5rem;font-weight:800;margin:0 0 8px 0;font-family:inherit;">Desbloquea el Presupuesto Completo</h2>
+                            <p style="color:#94a3b8;font-size:0.9rem;margin:0 0 28px 0;line-height:1.6;">Accede a PDF Pro LOPSRM, Excel Pro, an&#225;lisis por partidas y todas las herramientas profesionales.</p>
+                            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px;">
+                              <div style="background:#131823;border:1.5px solid #2D3A52;border-radius:16px;padding:20px 16px;text-align:center;">
+                                <div style="color:#94a3b8;font-size:0.72rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;">B&#193;SICO</div>
+                                <div style="color:#fff;font-size:1.8rem;font-weight:900;margin-bottom:4px;">$99 <span style="font-size:0.75rem;color:#64748b;">MXN/mes</span></div>
+                                <div style="color:#64748b;font-size:0.72rem;margin-bottom:16px;line-height:1.5;">5 presupuestos/mes<br>PDF b&#225;sico &#183; 30 consultas IA<br>T-1 &#183; T-2 &#183; T-3</div>
+                                <button id="btn-pago-basico" onclick="iniciarPago('basico')" style="width:100%;background:#2D3A52;color:#e2e8f0;border:none;border-radius:10px;padding:10px;font-weight:700;cursor:pointer;font-family:inherit;font-size:0.82rem;">Suscribirme a B&#225;sico</button>
+                              </div>
+                              <div style="background:linear-gradient(135deg,#1e1b4b,#1e2640);border:2px solid #4F46E5;border-radius:16px;padding:20px 16px;text-align:center;position:relative;">
+                                <div style="position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:#4F46E5;color:#fff;font-size:0.65rem;font-weight:800;padding:3px 12px;border-radius:20px;">RECOMENDADO</div>
+                                <div style="color:#818cf8;font-size:0.72rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;">PRO</div>
+                                <div style="color:#fff;font-size:1.8rem;font-weight:900;margin-bottom:4px;">$199 <span style="font-size:0.75rem;color:#64748b;">MXN/mes</span></div>
+                                <div style="color:#94a3b8;font-size:0.72rem;margin-bottom:16px;line-height:1.5;">Presupuestos ilimitados<br>PDF Pro LOPSRM &#183; Excel Pro<br>IA ilimitada &#183; T-4 Tesis</div>
+                                <button id="btn-pago-pro" onclick="iniciarPago('pro')" style="width:100%;background:#4F46E5;color:#fff;border:none;border-radius:10px;padding:10px;font-weight:700;cursor:pointer;font-family:inherit;font-size:0.82rem;">Suscribirme a Pro</button>
+                              </div>
                             </div>
-                            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 0 28px 0;text-align:left;">
-                                <div style="background:rgba(79,70,229,0.1);border-radius:10px;padding:12px;">
-                                    <div style="color:#818cf8;font-size:1.2rem;">&#128203;</div>
-                                    <div style="color:#e2e8f0;font-size:0.8rem;font-weight:600;margin-top:4px;">Tabla de materiales</div>
-                                    <div style="color:#64748b;font-size:0.72rem;">Cantidades y precios unitarios</div>
-                                </div>
-                                <div style="background:rgba(79,70,229,0.1);border-radius:10px;padding:12px;">
-                                    <div style="color:#818cf8;font-size:1.2rem;">&#128119;</div>
-                                    <div style="color:#e2e8f0;font-size:0.8rem;font-weight:600;margin-top:4px;">Mano de obra</div>
-                                    <div style="color:#64748b;font-size:0.72rem;">Desglose por partida y oficio</div>
-                                </div>
-                                <div style="background:rgba(79,70,229,0.1);border-radius:10px;padding:12px;">
-                                    <div style="color:#818cf8;font-size:1.2rem;">&#128196;</div>
-                                    <div style="color:#e2e8f0;font-size:0.8rem;font-weight:600;margin-top:4px;">PDF profesional</div>
-                                    <div style="color:#64748b;font-size:0.72rem;">Listo para presentar o licitar</div>
-                                </div>
-                                <div style="background:rgba(79,70,229,0.1);border-radius:10px;padding:12px;">
-                                    <div style="color:#818cf8;font-size:1.2rem;">&#128202;</div>
-                                    <div style="color:#e2e8f0;font-size:0.8rem;font-weight:600;margin-top:4px;">Precios CMIC 2026</div>
-                                    <div style="color:#64748b;font-size:0.72rem;">Actualizados zona centro M&#233;xico</div>
-                                </div>
-                            </div>
-                            <!-- Vista previa tabla de materiales -->
-                            <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(79,70,229,0.3);border-radius:12px;padding:16px;margin:0 0 16px 0;text-align:left;">
-                                <div style="color:#64748b;font-size:0.7rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:12px;">Vista previa &#8212; Tabla de materiales</div>
-                                <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:8px;padding:6px 0;border-bottom:1px solid rgba(79,70,229,0.2);margin-bottom:6px;">
-                                    <div style="color:#64748b;font-size:0.7rem;font-weight:600;">CONCEPTO</div>
-                                    <div style="color:#64748b;font-size:0.7rem;font-weight:600;text-align:center;">CANT.</div>
-                                    <div style="color:#64748b;font-size:0.7rem;font-weight:600;text-align:center;">P.U.</div>
-                                    <div style="color:#64748b;font-size:0.7rem;font-weight:600;text-align:right;">IMPORTE</div>
-                                </div>
-                                <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:8px;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.05);filter:blur(2.5px);">
-                                    <div style="color:#e2e8f0;font-size:0.75rem;">Cemento CPC 30R bolsa 50kg</div>
-                                    <div style="color:#94a3b8;font-size:0.75rem;text-align:center;">142</div>
-                                    <div style="color:#94a3b8;font-size:0.75rem;text-align:center;">$255</div>
-                                    <div style="color:#4F46E5;font-size:0.75rem;font-weight:600;text-align:right;">$36,210</div>
-                                </div>
-                                <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:8px;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.05);filter:blur(2.5px);">
-                                    <div style="color:#e2e8f0;font-size:0.75rem;">Varilla corrugada 3/8 pieza 12m</div>
-                                    <div style="color:#94a3b8;font-size:0.75rem;text-align:center;">86</div>
-                                    <div style="color:#94a3b8;font-size:0.75rem;text-align:center;">$195</div>
-                                    <div style="color:#4F46E5;font-size:0.75rem;font-weight:600;text-align:right;">$16,770</div>
-                                </div>
-                                <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:8px;padding:5px 0;filter:blur(2.5px);">
-                                    <div style="color:#e2e8f0;font-size:0.75rem;">Block hueco 15x20x40 cm</div>
-                                    <div style="color:#94a3b8;font-size:0.75rem;text-align:center;">1,840</div>
-                                    <div style="color:#94a3b8;font-size:0.75rem;text-align:center;">$18.50</div>
-                                    <div style="color:#4F46E5;font-size:0.75rem;font-weight:600;text-align:right;">$34,040</div>
-                                </div>
-                                <div style="text-align:center;margin-top:10px;color:#818cf8;font-size:0.78rem;font-weight:600;">&#128274; +47 conceptos m&#225;s al desbloquear</div>
-                            </div>
-
-                            <!-- Vista previa PDF profesional -->
-                            <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(79,70,229,0.3);border-radius:12px;padding:16px;margin:0 0 24px 0;text-align:left;">
-                                <div style="color:#64748b;font-size:0.7rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:12px;">Vista previa &#8212; PDF profesional</div>
-                                <div style="background:#fff;border-radius:8px;padding:16px;filter:blur(2px);">
-                                    <div style="display:flex;justify-content:space-between;align-items:flex-start;padding-bottom:12px;border-bottom:2px solid #4F46E5;margin-bottom:12px;">
-                                        <div>
-                                            <div style="background:#0F1623;color:#fff;font-size:0.8rem;font-weight:800;padding:4px 8px;border-radius:4px;display:inline-block;margin-bottom:4px;">ConstruIA.mx</div>
-                                            <div style="color:#1e293b;font-size:0.85rem;font-weight:700;">PRESUPUESTO DE OBRA</div>
-                                            <div style="color:#64748b;font-size:0.7rem;">Folio: ConstruIA-2026-0001</div>
-                                        </div>
-                                        <div style="text-align:right;">
-                                            <div style="color:#64748b;font-size:0.7rem;">Fecha: 12/04/2026</div>
-                                            <div style="color:#64748b;font-size:0.7rem;">Vigencia: 30 d&#237;as</div>
-                                        </div>
-                                    </div>
-                                    <div style="height:8px;background:#e2e8f0;border-radius:4px;margin-bottom:6px;width:80%;"></div>
-                                    <div style="height:8px;background:#e2e8f0;border-radius:4px;margin-bottom:6px;width:60%;"></div>
-                                    <div style="height:8px;background:#e2e8f0;border-radius:4px;width:70%;"></div>
-                                </div>
-                                <div style="text-align:center;margin-top:10px;color:#818cf8;font-size:0.78rem;font-weight:600;">&#128196; PDF con formato oficial LOPSRM listo para firmar</div>
-                            </div>
-
-                            <button type="button" onclick="iniciarPago()" style="background:linear-gradient(135deg,#4F46E5,#7C3AED);color:#fff;border:none;border-radius:12px;padding:16px 40px;font-size:1.1rem;font-weight:800;cursor:pointer;width:100%;font-family:inherit;box-shadow:0 4px 16px rgba(79,70,229,0.4);">
-                                &#128275; Desbloquear Presupuesto Completo
-                            </button>
-                            <div style="margin-top:16px;color:#64748b;font-size:0.78rem;">
-                                &#10003; Pago seguro &#183; &#10003; Acceso inmediato &#183; &#10003; Un solo pago por presupuesto
-                            </div>
+                            <p style="color:#475569;font-size:0.72rem;">Cancela cuando quieras &#183; Pago seguro con Stripe &#183; Tarjeta, OXXO y SPEI</p>
                         </div>
 
                         <!-- VISTA PREVIA BORROSA â€” visible solo cuando NO desbloqueado -->
@@ -8613,7 +8544,25 @@
            return localStorage.getItem('obraMX_unlocked') === 'true';
            ================================================ */
         function estaDesbloqueado() {
-            return true; /* TEMPORAL - reactivar para producci&#243;n */
+            try {
+                var raw = localStorage.getItem('construia_token');
+                if (!raw) { return false; }
+                var decoded = atob(raw);
+                var parts = decoded.split('|');
+                if (parts.length < 4) { return false; }
+                var expiry = parseInt(parts[2]);
+                var now = Math.floor(Date.now() / 1000);
+                if (isNaN(expiry) || now > expiry) {
+                    localStorage.removeItem('construia_token');
+                    localStorage.removeItem('construia_plan');
+                    return false;
+                }
+                return true;
+            } catch (e) { return false; }
+        }
+
+        function obtenerPlan() {
+            return localStorage.getItem('construia_plan') || 'free';
         }
 
         function aplicarEstadoPaywall() {
@@ -8654,8 +8603,31 @@
             desbloquearApp();
         }
 
-        function iniciarPago() {
-            alert('Procesador de pago pr\u00f3ximamente. Por ahora usa desbloquearDemo() en consola para pruebas.');
+        function iniciarPago(plan) {
+            var planSel = plan || 'pro';
+            var btn = document.getElementById('btn-pago-' + planSel);
+            if (btn) { btn.disabled = true; btn.textContent = 'Redirigiendo...'; }
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '/api/checkout', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState !== 4) { return; }
+                if (xhr.status === 200) {
+                    try {
+                        var resp = JSON.parse(xhr.responseText);
+                        if (resp.url) { window.location.href = resp.url; return; }
+                    } catch (e) {}
+                }
+                if (btn) { btn.disabled = false; btn.textContent = planSel === 'pro' ? 'Suscribirme a Pro' : 'Suscribirme a B\u00e1sico'; }
+                alert('Error al iniciar el pago. Int\u00e9ntalo de nuevo.');
+            };
+            xhr.send(JSON.stringify({ plan: planSel }));
+        }
+
+        function cerrarSesionPro() {
+            localStorage.removeItem('construia_token');
+            localStorage.removeItem('construia_plan');
+            aplicarEstadoPaywall();
         }
 
         /* \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
