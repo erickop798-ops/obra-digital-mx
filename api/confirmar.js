@@ -30,7 +30,7 @@ module.exports = async function handler(req, res) {
                     var session = JSON.parse(data);
                     if (session.payment_status === 'paid') {
                         var email = session.customer_details && session.customer_details.email;
-                        var plan  = (session.subscription_data && session.subscription_data.metadata && session.subscription_data.metadata.plan) || 'pro';
+                        var plan  = (session.metadata && session.metadata.plan) || session.client_reference_id || 'pro';
                         res.status(200).json({ token: crearToken(email || 'usuario', plan), plan: plan });
                     } else { res.status(200).json({ error: 'Pago no completado' }); }
                 } catch (e) { res.status(500).json({ error: 'Error procesando respuesta' }); }

@@ -23,7 +23,8 @@ module.exports = async function handler(req, res) {
         'locale=es',
         'payment_method_types[0]=card',
         'allow_promotion_codes=true',
-        'subscription_data[metadata][plan]=' + plan
+        'metadata[plan]=' + plan,
+        'client_reference_id=' + plan
     ].join('&');
     var postData = Buffer.from(params);
     var auth = Buffer.from(secretKey + ':').toString('base64');
